@@ -1,0 +1,2 @@
+<?php
+return array("#tableName"=>"Moteur","#primaryKeys"=>array("id"),"#manyToOne"=>array(),"#fieldNames"=>array("id"=>"id","libelle"=>"libelle","code"=>"code","etablissements"=>"etablissements","utilisateurs"=>"utilisateurs"),"#nullable"=>array(),"#notSerializable"=>array("etablissements","utilisateurs"),"#oneToMany"=>array("etablissements"=>array("mappedBy"=>"moteur","className"=>"models\Etablissement"),"utilisateurs"=>array("mappedBy"=>"moteur","className"=>"models\Utilisateur")));

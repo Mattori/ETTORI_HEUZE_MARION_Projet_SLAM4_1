@@ -1,0 +1,10 @@
+<form id="frmEdit">
+	<input type='hidden' name='id' value='{{site.getId()}}'>
+	<input type='text' name='nom' value='{{site.getNom()}}'  placeholder='Nom du site'>
+	<input type='text' name='latitude' value='{{site.getLatitude()}}'  placeholder='Latitude du site'>
+	<input type='button' id='btValider' value='Valider'>
+</form>
+
+
+
+{{script_foot | raw}}

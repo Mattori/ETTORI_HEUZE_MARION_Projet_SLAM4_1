@@ -1,0 +1,2 @@
+<?php
+return array("#tableName"=>"Reseau","#primaryKeys"=>array("id"),"#manyToOne"=>array("site"),"#fieldNames"=>array("id"=>"id","ip"=>"ip","site"=>"id_site"),"#nullable"=>array(),"#notSerializable"=>array("site"),"#joinColumn"=>array("site"=>array("className"=>"models\Site","name"=>"id_site","nullable"=>false)),"#invertedJoinColumn"=>array("id_site"=>array("member"=>"site","className"=>"models\Site")));
