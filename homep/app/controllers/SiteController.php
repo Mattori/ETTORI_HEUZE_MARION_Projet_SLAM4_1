@@ -20,7 +20,8 @@ class SiteController extends ControllerBase
         $bts->getOnClick("SiteController/","#divSites",["attr"=>"data-ajax"]);
         //$this->jquery->exec("initMap();",true);
         $this->jquery->compile($this->view);
-        $this->loadView("sites\index.html",["jsMap"=>$this->_generateMap(49.201491, -0.380734)]);
+        $this->loadView("sites\index.html");
+        //$this->loadView("sites\index.html",["jsMap"=>$this->_generateMap(49.201491, -0.380734)]);
     }
     
     public function all(){
@@ -38,10 +39,10 @@ class SiteController extends ControllerBase
     }
     
     public function addSite(){
-        $this->_form(new Site(),"SiteController/newSite/");
+        $this->_form(new Site(),"SiteController/newSite/",49.201491,-0.380734);
     }
     
-    private function _form($site, $action){
+    private function _form($site, $action,$lat,$long){
         $semantic=$this->jquery->semantic();
         $semantic->setLanguage("fr");
         $form=$semantic->dataForm("frmSite", $site);
@@ -49,7 +50,9 @@ class SiteController extends ControllerBase
         $form->setFields(["nom\n","latitude","longitude","ecart\n","fondEcran","couleur\n","ordre","options","submit"]);
         $form->setCaptions(["Nom","Latitude","Longitude","Ecart","Fond d'écran","Couleur", "Ordre", "Options","Valider"]);
         $form->fieldAsSubmit("submit","green",$action,"#divSites");
-        echo _generateMap(3,3);
+        
+        $this->loadView("sites\index.html",["jsMap"=>$this->_generateMap($lat,$long)]);
+        
         echo $form->compile($this->jquery);
         echo $this->jquery->compile();
     }
@@ -97,7 +100,7 @@ class SiteController extends ControllerBase
     public function edit($id){
         //if($site=$this->_getSiteInGet()){
         $site=DAO::getOne("models\Site", $id);
-        $this->_form($site,"SiteController/update/".$id);
+        $this->_form($site,"SiteController/update/".$id,$site->getLatitude(),$site->getLongitude());
         //$site instanceof models\Site && DAO::update($site);
         //$this->jquery->postFormOnClick("#btValider","SiteController/update", "frmEdit","#divSites");
         //$this->jquery->compile($this->view);
