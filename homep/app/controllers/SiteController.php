@@ -50,7 +50,14 @@ class SiteController extends ControllerBase
         $form->setFields(["nom\n","latitude","longitude","ecart\n","fondEcran","couleur\n","ordre","options","submit"]);
         $form->setCaptions(["Nom","Latitude","Longitude","Ecart","Fond d'écran","Couleur", "Ordre", "Options","Valider"]);
         $form->fieldAsSubmit("submit","green",$action,"#divSites");
-        
+        /*$this->jquery->click("#map","
+         console.log(event);
+         var latlong = event.latLng;
+         var lat = latlong.lat();
+         var long = latlong.lng();
+         alert(lat+' - '+lng);
+         ");*/
+        //$this->jquery->change("[name=latitude]","alert('lat change : '+event.target.value);");
         $this->loadView("sites\index.html",["jsMap"=>$this->_generateMap($lat,$long)]);
         
         echo $form->compile($this->jquery);
@@ -64,10 +71,10 @@ class SiteController extends ControllerBase
             echo "Le site ".$site->getNom()." a été ajouté.";
         }
     }
-
+    
     public function delete($id){
         
-      //  if(RequestUtils::isPost())
+        //  if(RequestUtils::isPost())
         {
             //echo " - ".$id." - ";
             $site=DAO::getOne("models\Site", $id);
@@ -75,9 +82,9 @@ class SiteController extends ControllerBase
             $this->forward("controllers\SiteController","all");
             //echo "le site {$site} est supprimé";
             /*if($site instanceof models\Site && DAO::remove($site))
-            {
-                echo "le site {$site} est supprimé";
-            }else{ echo "impossible a supp";}*/
+             {
+             echo "le site {$site} est supprimé";
+             }else{ echo "impossible a supp";}*/
         }
         //else{echo "accés interdit";}
     }
@@ -92,9 +99,9 @@ class SiteController extends ControllerBase
                 return false;
         }
         /*else
-        {
-            return false;
-        }*/
+         {
+         return false;
+         }*/
     }
     
     public function edit($id){
@@ -105,7 +112,7 @@ class SiteController extends ControllerBase
         //$this->jquery->postFormOnClick("#btValider","SiteController/update", "frmEdit","#divSites");
         //$this->jquery->compile($this->view);
         
-//        $this->loadView("SiteController/edit.html");
+        //        $this->loadView("SiteController/edit.html");
         //}else{echo 'accés interdit';}
     }
     
@@ -120,12 +127,19 @@ class SiteController extends ControllerBase
     private function _generateMap($lat,$long){
         return "
         <script>
-            var map;
+            var map={};
             function initMap() {
                 map = new google.maps.Map(document.getElementById('map'), {
                     center: {lat: {$lat}, lng: {$long}},
                     zoom: 17
                 });
+                map.addListener('click',function(event){
+                    document.getElementById('frmSite-latitude').value=event.latLng.lat();
+                    document.getElementById('frmSite-longitude').value=event.latLng.lng();
+                })
+                frmSite-latitude.addListener('change', function(event){
+                    event.target.value=map.latLng.lat();
+                })
             }
         </script>
         <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDxz9dHENw-b-1TlNXw88v3rWtKqCEb2HM&callback=initMap'></script>
