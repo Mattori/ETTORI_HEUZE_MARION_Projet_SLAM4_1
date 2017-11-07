@@ -15,15 +15,14 @@ class Etablissement{
 	private $options;
 
 	/**
-	 * @oneToMany("mappedBy"=>"etablissement","className"=>"models\Lienweb")
+	 * @oneToMany("mappedBy"=>"etablissement","className"=>"models\\Lienweb")
 	*/
 	private $lienwebs;
 
 	/**
-	 * @manyToOne
-	 * @joinColumn("className"=>"models\Moteur","name"=>"id_moteur","nullable"=>false)
+	 * @oneToMany("mappedBy"=>"etablissement","className"=>"models\\Moteur")
 	*/
-	private $moteur;
+	private $moteurs;
 
 	 public function getId(){
 		return $this->id;
@@ -73,12 +72,16 @@ class Etablissement{
 		$this->lienwebs=$lienwebs;
 	}
 
-	 public function getMoteur(){
-		return $this->moteur;
+	 public function getMoteurs(){
+		return $this->moteurs;
 	}
 
-	 public function setMoteur($moteur){
-		$this->moteur=$moteur;
+	 public function setMoteurs($moteurs){
+		$this->moteurs=$moteurs;
+	}
+
+	 public function __toString(){
+		return (isset($this->options))?$this->options:"Etablissement@".\spl_object_hash($this);
 	}
 
 }

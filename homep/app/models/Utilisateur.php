@@ -10,28 +10,35 @@ class Utilisateur{
 
 	private $password;
 
-	/**
-	 * @manyToOne
-	 * @joinColumn("className"=>"models\Moteur","name"=>"id_moteur","nullable"=>false)
-	*/
-	private $moteur;
+	private $elementsMasques;
+
+	private $fondEcran;
+
+	private $couleur;
+
+	private $ordre;
 
 	/**
 	 * @manyToOne
-	 * @joinColumn("className"=>"models\Site","name"=>"id_site","nullable"=>false)
+	 * @joinColumn("className"=>"models\\Site","name"=>"idSite","nullable"=>"")
 	*/
 	private $site;
 
 	/**
 	 * @manyToOne
-	 * @joinColumn("className"=>"models\Statut","name"=>"id_statut","nullable"=>false)
+	 * @joinColumn("className"=>"models\\Statut","name"=>"idStatut","nullable"=>"")
 	*/
 	private $statut;
 
 	/**
-	 * @oneToMany("mappedBy"=>"utilisateur","className"=>"models\Lienweb")
+	 * @oneToMany("mappedBy"=>"utilisateur","className"=>"models\\Lienweb")
 	*/
 	private $lienwebs;
+
+	/**
+	 * @oneToMany("mappedBy"=>"utilisateur","className"=>"models\\Moteur")
+	*/
+	private $moteurs;
 
 	 public function getId(){
 		return $this->id;
@@ -57,12 +64,36 @@ class Utilisateur{
 		$this->password=$password;
 	}
 
-	 public function getMoteur(){
-		return $this->moteur;
+	 public function getElementsMasques(){
+		return $this->elementsMasques;
 	}
 
-	 public function setMoteur($moteur){
-		$this->moteur=$moteur;
+	 public function setElementsMasques($elementsMasques){
+		$this->elementsMasques=$elementsMasques;
+	}
+
+	 public function getFondEcran(){
+		return $this->fondEcran;
+	}
+
+	 public function setFondEcran($fondEcran){
+		$this->fondEcran=$fondEcran;
+	}
+
+	 public function getCouleur(){
+		return $this->couleur;
+	}
+
+	 public function setCouleur($couleur){
+		$this->couleur=$couleur;
+	}
+
+	 public function getOrdre(){
+		return $this->ordre;
+	}
+
+	 public function setOrdre($ordre){
+		$this->ordre=$ordre;
 	}
 
 	 public function getSite(){
@@ -87,6 +118,18 @@ class Utilisateur{
 
 	 public function setLienwebs($lienwebs){
 		$this->lienwebs=$lienwebs;
+	}
+
+	 public function getMoteurs(){
+		return $this->moteurs;
+	}
+
+	 public function setMoteurs($moteurs){
+		$this->moteurs=$moteurs;
+	}
+
+	 public function __toString(){
+		return (isset($this->ordre))?$this->ordre:"Utilisateur@".\spl_object_hash($this);
 	}
 
 }

@@ -14,19 +14,19 @@ class Lienweb{
 
 	/**
 	 * @manyToOne
-	 * @joinColumn("className"=>"models\Etablissement","name"=>"id_etablissement","nullable"=>false)
+	 * @joinColumn("className"=>"models\\Etablissement","name"=>"idEtablissement","nullable"=>"")
 	*/
 	private $etablissement;
 
 	/**
 	 * @manyToOne
-	 * @joinColumn("className"=>"models\Site","name"=>"id_site","nullable"=>false)
+	 * @joinColumn("className"=>"models\\Site","name"=>"idSite","nullable"=>"")
 	*/
 	private $site;
 
 	/**
 	 * @manyToOne
-	 * @joinColumn("className"=>"models\Utilisateur","name"=>"id_utilisateur","nullable"=>false)
+	 * @joinColumn("className"=>"models\\Utilisateur","name"=>"idUtilisateur","nullable"=>"")
 	*/
 	private $utilisateur;
 
@@ -84,6 +84,10 @@ class Lienweb{
 
 	 public function setUtilisateur($utilisateur){
 		$this->utilisateur=$utilisateur;
+	}
+
+	 public function __toString(){
+		return (isset($this->ordre))?$this->ordre:"Lienweb@".\spl_object_hash($this);
 	}
 
 }

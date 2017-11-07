@@ -10,7 +10,7 @@ class Reseau{
 
 	/**
 	 * @manyToOne
-	 * @joinColumn("className"=>"models\Site","name"=>"id_site","nullable"=>false)
+	 * @joinColumn("className"=>"models\\Site","name"=>"idSite","nullable"=>"")
 	*/
 	private $site;
 
@@ -36,6 +36,10 @@ class Reseau{
 
 	 public function setSite($site){
 		$this->site=$site;
+	}
+
+	 public function __toString(){
+		return (isset($this->ip))?$this->ip:"Reseau@".\spl_object_hash($this);
 	}
 
 }

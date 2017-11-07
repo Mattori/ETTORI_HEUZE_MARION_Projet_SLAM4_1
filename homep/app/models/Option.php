@@ -24,4 +24,8 @@ class Option{
 		$this->libelle=$libelle;
 	}
 
+	 public function __toString(){
+		return (isset($this->libelle))?$this->libelle:"Option@".\spl_object_hash($this);
+	}
+
 }

@@ -6,19 +6,27 @@ class Moteur{
 	*/
 	private $id;
 
-	private $libelle;
+	private $nom;
 
 	private $code;
 
 	/**
-	 * @oneToMany("mappedBy"=>"moteur","className"=>"models\Etablissement")
+	 * @manyToOne
+	 * @joinColumn("className"=>"models\\Etablissement","name"=>"idEtablissement","nullable"=>"")
 	*/
-	private $etablissements;
+	private $etablissement;
 
 	/**
-	 * @oneToMany("mappedBy"=>"moteur","className"=>"models\Utilisateur")
+	 * @manyToOne
+	 * @joinColumn("className"=>"models\\Site","name"=>"idSite","nullable"=>"")
 	*/
-	private $utilisateurs;
+	private $site;
+
+	/**
+	 * @manyToOne
+	 * @joinColumn("className"=>"models\\Utilisateur","name"=>"idUtilisateur","nullable"=>"")
+	*/
+	private $utilisateur;
 
 	 public function getId(){
 		return $this->id;
@@ -28,12 +36,12 @@ class Moteur{
 		$this->id=$id;
 	}
 
-	 public function getLibelle(){
-		return $this->libelle;
+	 public function getNom(){
+		return $this->nom;
 	}
 
-	 public function setLibelle($libelle){
-		$this->libelle=$libelle;
+	 public function setNom($nom){
+		$this->nom=$nom;
 	}
 
 	 public function getCode(){
@@ -44,24 +52,32 @@ class Moteur{
 		$this->code=$code;
 	}
 
-	 public function getEtablissements(){
-		return $this->etablissements;
+	 public function getEtablissement(){
+		return $this->etablissement;
 	}
 
-	 public function setEtablissements($etablissements){
-		$this->etablissements=$etablissements;
+	 public function setEtablissement($etablissement){
+		$this->etablissement=$etablissement;
 	}
 
-	 public function getUtilisateurs(){
-		return $this->utilisateurs;
+	 public function getSite(){
+		return $this->site;
 	}
 
-	 public function setUtilisateurs($utilisateurs){
-		$this->utilisateurs=$utilisateurs;
+	 public function setSite($site){
+		$this->site=$site;
 	}
-	
-	public function __toString(){
-	    return $this->libelle;
+
+	 public function getUtilisateur(){
+		return $this->utilisateur;
+	}
+
+	 public function setUtilisateur($utilisateur){
+		$this->utilisateur=$utilisateur;
+	}
+
+	 public function __toString(){
+		return (isset($this->code))?$this->code:"Moteur@".\spl_object_hash($this);
 	}
 
 }

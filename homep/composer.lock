@@ -4,6 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
+    "hash": "7ec55338efab4079724f3e71f4c494ee",
     "content-hash": "7ec55338efab4079724f3e71f4c494ee",
     "packages": [
         {
@@ -27,7 +28,7 @@
             ],
             "description": "jQuery JavaScript Library",
             "homepage": "http://jquery.com",
-            "time": "2015-10-09T00:55:51+00:00"
+            "time": "2015-10-09 00:55:51"
         },
         {
             "name": "mindplay/annotations",
@@ -77,7 +78,7 @@
                 "annotations",
                 "framework"
             ],
-            "time": "2017-06-19T20:19:49+00:00"
+            "time": "2017-06-19 20:19:49"
         },
         {
             "name": "phpmv/php-mv-ui",
@@ -85,12 +86,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpMv/phpMv-UI.git",
-                "reference": "541414153fb54e02bf0073f998779e77d1b148c1"
+                "reference": "db4c081abb0f49a89f24ed073f82ec2591bfd771"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpMv/phpMv-UI/zipball/541414153fb54e02bf0073f998779e77d1b148c1",
-                "reference": "541414153fb54e02bf0073f998779e77d1b148c1",
+                "url": "https://api.github.com/repos/phpMv/phpMv-UI/zipball/db4c081abb0f49a89f24ed073f82ec2591bfd771",
+                "reference": "db4c081abb0f49a89f24ed073f82ec2591bfd771",
                 "shasum": ""
             },
             "require": {
@@ -133,7 +134,7 @@
                 "twitter bootstrap",
                 "yii"
             ],
-            "time": "2017-06-12T22:43:55+00:00"
+            "time": "2017-11-07 02:24:46"
         },
         {
             "name": "twig/twig",
@@ -198,7 +199,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2017-09-27T18:06:46+00:00"
+            "time": "2017-09-27 18:06:46"
         }
     ],
     "packages-dev": [],

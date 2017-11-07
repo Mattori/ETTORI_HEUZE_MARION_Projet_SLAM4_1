@@ -22,20 +22,23 @@ class Site{
 
 	private $options;
 
-	private $id_moteur;
-
 	/**
-	 * @oneToMany("mappedBy"=>"site","className"=>"models\Lienweb")
+	 * @oneToMany("mappedBy"=>"site","className"=>"models\\Lienweb")
 	*/
 	private $lienwebs;
 
 	/**
-	 * @oneToMany("mappedBy"=>"site","className"=>"models\Reseau")
+	 * @oneToMany("mappedBy"=>"site","className"=>"models\\Moteur")
+	*/
+	private $moteurs;
+
+	/**
+	 * @oneToMany("mappedBy"=>"site","className"=>"models\\Reseau")
 	*/
 	private $reseaus;
 
 	/**
-	 * @oneToMany("mappedBy"=>"site","className"=>"models\Utilisateur")
+	 * @oneToMany("mappedBy"=>"site","className"=>"models\\Utilisateur")
 	*/
 	private $utilisateurs;
 
@@ -111,20 +114,20 @@ class Site{
 		$this->options=$options;
 	}
 
-	 public function getId_moteur(){
-		return $this->id_moteur;
-	}
-
-	 public function setId_moteur($id_moteur){
-		$this->id_moteur=$id_moteur;
-	}
-
 	 public function getLienwebs(){
 		return $this->lienwebs;
 	}
 
 	 public function setLienwebs($lienwebs){
 		$this->lienwebs=$lienwebs;
+	}
+
+	 public function getMoteurs(){
+		return $this->moteurs;
+	}
+
+	 public function setMoteurs($moteurs){
+		$this->moteurs=$moteurs;
 	}
 
 	 public function getReseaus(){
@@ -141,6 +144,10 @@ class Site{
 
 	 public function setUtilisateurs($utilisateurs){
 		$this->utilisateurs=$utilisateurs;
+	}
+
+	 public function __toString(){
+		return (isset($this->options))?$this->options:"Site@".\spl_object_hash($this);
 	}
 
 }

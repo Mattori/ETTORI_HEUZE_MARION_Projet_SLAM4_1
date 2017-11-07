@@ -8,14 +8,8 @@ class Statut{
 
 	private $libelle;
 
-	private $elementsMasques;
-
-	private $fondEcran;
-
-	private $ordre;
-
 	/**
-	 * @oneToMany("mappedBy"=>"statut","className"=>"models\Utilisateur")
+	 * @oneToMany("mappedBy"=>"statut","className"=>"models\\Utilisateur")
 	*/
 	private $utilisateurs;
 
@@ -35,36 +29,16 @@ class Statut{
 		$this->libelle=$libelle;
 	}
 
-	 public function getElementsMasques(){
-		return $this->elementsMasques;
-	}
-
-	 public function setElementsMasques($elementsMasques){
-		$this->elementsMasques=$elementsMasques;
-	}
-
-	 public function getFondEcran(){
-		return $this->fondEcran;
-	}
-
-	 public function setFondEcran($fondEcran){
-		$this->fondEcran=$fondEcran;
-	}
-
-	 public function getOrdre(){
-		return $this->ordre;
-	}
-
-	 public function setOrdre($ordre){
-		$this->ordre=$ordre;
-	}
-
 	 public function getUtilisateurs(){
 		return $this->utilisateurs;
 	}
 
 	 public function setUtilisateurs($utilisateurs){
 		$this->utilisateurs=$utilisateurs;
+	}
+
+	 public function __toString(){
+		return (isset($this->libelle))?$this->libelle:"Statut@".\spl_object_hash($this);
 	}
 
 }
