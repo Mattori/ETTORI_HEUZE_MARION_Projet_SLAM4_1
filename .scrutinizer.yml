@@ -2,6 +2,7 @@ filter:
     excluded_paths:
         - homep/app/micro
         - homep/vendor
+        - homep/assets
 checks:
     php:
         code_rating: true
