@@ -1,0 +1,12 @@
+filter:
+    excluded_paths:
+        - homep/app/micro/
+        - homep/vendor/
+        - homep/assets/
+    dependency_paths:
+        - "homep/app/micro/*"
+        - "homep/vendor/*"
+checks:
+    php:
+        code_rating: true
+        duplication: true
