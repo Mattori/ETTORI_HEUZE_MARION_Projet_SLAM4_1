@@ -4,8 +4,8 @@ filter:
         - homep/vendor/
         - homep/assets/
     dependency_paths:
-        - homep/app/micro/
-        - homep/vendor/
+        - "homep/app/micro/*"
+        - "homep/vendor/*"
 checks:
     php:
         code_rating: true
