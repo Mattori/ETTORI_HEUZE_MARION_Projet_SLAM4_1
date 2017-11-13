@@ -1,7 +1,7 @@
 filter:
     excluded_paths:
-        - app/micro
-        - vendor
+        - homep/app/micro
+        - homep/vendor
 checks:
     php:
         code_rating: true
