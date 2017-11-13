@@ -1,6 +1,6 @@
 <?php
 return array(
-		"siteUrl"=>"http://127.0.0.1/projets/homep/",
+		"siteUrl"=>"http://127.0.0.1/Homepage/homep/",
 		"database"=>[
 				"dbName"=>"homepage",
 				"serverName"=>"127.0.0.1",
