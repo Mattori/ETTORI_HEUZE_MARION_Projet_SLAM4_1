@@ -9,6 +9,7 @@ use models;
 use controllers\ControllerBase;
 use Ajax\service\JArray;
 use models\Moteur;
+use Ajax\semantic\html\content\view\HtmlItem;
 use Ajax\semantic\html\collections\form\HtmlFormInput;
 use Ajax\semantic\html\collections\form\HtmlFormDropdown;
 
@@ -19,15 +20,22 @@ use Ajax\semantic\html\collections\form\HtmlFormDropdown;
 
 class AdminSiteController extends ControllerBase
 {
+    public function initialize(){
+        parent::initialize();
+        if(isset($_SESSION["user"])){
+            $user=$_SESSION["user"];
+            echo $user->getLogin();
+        }
+    }
     // (simulation) id du site auquel on est admin
-    private $idDuSite = 5;
+    private $idDuSite = 1;
     
     // dashboard de la page
     public function index(){
         $semantic=$this->jquery->semantic();
         
-        $bts=$semantic->htmlButtonGroups("bts",["Géolocalisation","Éléments web","Moteur de recherche","Positionnement","Fond d'écran","Se déconnecter"]);
-        $bts->setPropertyValues("data-ajax", ["geolocalisation/","elementsWeb/","moteur/","Positionnement/","fondEcran/","seDeconnecter/"]);
+        $bts=$semantic->htmlButtonGroups("bts",["Géolocalisation","Éléments web","Moteur de recherche","Positionnement","Fond d'écran","Se connecter"]);
+        $bts->setPropertyValues("data-ajax", ["geolocalisation/","elementsWeb/","moteur/","Positionnement/","fondEcran/","seConnecter/"]);
         
         $bts->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
         $this->jquery->compile($this->view);
@@ -107,6 +115,37 @@ class AdminSiteController extends ControllerBase
     public function fondEcran(){
         $moteurs=DAO::getOne("models\Site",$this->idDuSite);
         $semantic=$this->jquery->semantic();        
+    }
+
+    public function seConnecter(){
+        $frm=$this->jquery->semantic()->defaultLogin("connect");
+        $frm->fieldAsSubmit("submit","green","AdminSiteController/submit","#div-submit");
+        $frm->removeField("Connection");
+        $frm->setCaption("login", "Identifiant");
+        $frm->setCaption("password", "Mot de passe");
+        $frm->setCaption("remember", "Se souvenir de moi");
+        $frm->setCaption("forget", "Mot de passe oublié ?");
+        $frm->setCaption("submit", "Connexion");
+        echo $frm->asModal();
+        $this->jquery->exec("$('#modal-connect').modal('show');",true);
+        echo $this->jquery->compile($this->view);
+        
+    }
+    
+    public function submit(){
+        // ["login"=>$_POST[login]]
+        var_dump($_POST);
+        $id=RequestUtils::get('id');
+        $user=DAO::getOne("models\Utilisateur", "login='".$_POST["login"]."'");
+        if(isset($user)){
+            echo "Bonjour ".$user->getLogin()." !";
+            $_SESSION["user"] = $user;
+        }
+        
+    }
+    
+    public function testCo(){
+        var_dump($_SESSION["user"]);
     }
     
     // module de la page
