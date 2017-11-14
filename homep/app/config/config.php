@@ -2,6 +2,7 @@
 return array(
 		"siteUrl"=>"http://127.0.0.1/Homepage/homep/",
 		"database"=>[
+		        "type"=>"mysql",// ajout pr admin
 				"dbName"=>"homepage",
 				"serverName"=>"127.0.0.1",
 				"port"=>"3306",

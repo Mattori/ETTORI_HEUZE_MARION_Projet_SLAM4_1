@@ -43,7 +43,6 @@ class AdminSiteController extends ControllerBase
         
         // Récupération des informations du site
         $site=DAO::getOne("models\Site",$this->idDuSite);
-        //$this->loadView("sites\index.html",["jsMap"=>$this->_generateMap($this->idDuSite,$site->getLatitude(),$site->getLongitude())]);
         
         // Affectation du langage français à la 'semantic'
         $semantic->setLanguage("fr");
@@ -66,7 +65,6 @@ class AdminSiteController extends ControllerBase
         // Chargement de la page HTML 'index.html' de la vue 'sites' avec la génération de la carte Google
         // via la fonction privée '_generateMap'
         $this->loadView("AdminSite\index.html",["jsMap"=>$this->_generateMap($site->getLatitude(),$site->getLongitude())]);
-        
         echo $form->compile($this->jquery);
         echo $this->jquery->compile();
     }
@@ -83,16 +81,21 @@ class AdminSiteController extends ControllerBase
         $table=$semantic->dataTable("tblMoteurs", "models\Moteur", $moteurs);
         $table->setIdentifierFunction(function($i,$obj){return $obj->getId();});
         $table->setFields(["id","nom","code"]);
-        $table->setCaptions(["id","nom","code du moteur","selectionner"]);
-        
-        $table->addFieldButton("Sélectionner",false,function(&$bt,$instance){$bt->addClass("select")->addIcon("archive",true,true);});
+        $table->setCaptions(["id","nom","code du moteur","action"]);
+        $table->addEditDeleteButtons(true,["ajaxTransition"=>"random","method"=>"post"]);
+        //$table->addFieldButton("action",false,function(&$bt,$instance){$bt->addClass("select")->addIcon("archive",true,true);});
         $table->setUrls('','AdminSiteController/selectionner');
         $table->setTargetSelector("#divSite");
         
         $this->jquery->getOnClick(".select", "AdminSiteController/select","#divSite",["attr"=>"data-ajax"]);
-        echo $table->compile($this->jquery);
-        echo $this->jquery->compile();
         
+        $bts=$semantic->htmlButtonGroups("bts",["Liste des sites","Ajouter un site"]);
+        
+        $bts->setPropertyValues("data-ajax", ["addMoteur/"]);
+        $bts->getOnClick("AdminSiteController/","#divMoteurs",["attr"=>"data-ajax"]);
+        
+        echo $table->compile($this->jquery);
+        echo $this->jquery->compile();        
     }
     
     // module de la page
@@ -103,9 +106,7 @@ class AdminSiteController extends ControllerBase
     // module de la page
     public function fondEcran(){
         $moteurs=DAO::getOne("models\Site",$this->idDuSite);
-        $semantic=$this->jquery->semantic();
-        
-        
+        $semantic=$this->jquery->semantic();        
     }
     
     // module de la page
