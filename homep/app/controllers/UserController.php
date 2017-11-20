@@ -20,12 +20,10 @@ class UserController extends ControllerBase
         if(isset($_SESSION["user"])){
             $user=$_SESSION["user"];
             //echo $user->getLogin();
-            
         }
     }
-
     
-    // dashboard de la page
+    // Tableau de bord de la page
     public function index(){
         $semantic=$this->jquery->semantic();
         if(!isset($_SESSION["user"])) {
@@ -50,10 +48,10 @@ class UserController extends ControllerBase
     private function _listeFavoris() {
         $semantic=$this->jquery->semantic();
         
-        $liens=DAO::getAll("models\Lienweb","idUtilisateur=".$this->idDuUser);
+        $liens=DAO::getAll("models\Lienweb","idUtilisateur=".$_SESSION["user"]->getId());
         
         $table=$semantic->dataTable("tblLiens", "models\Utilisateur", $liens);
-        //$table->setIdentifierFunction(function($i,$obj){return $obj->getId();});
+        $table->setIdentifierFunction("getId");
         $table->setFields(["id","libelle","url"]);
         $table->setCaptions(["ID","Nom du lien","URL","Action"]);
         $table->addEditDeleteButtons(true,["ajaxTransition"=>"random","method"=>"post"]);
@@ -134,7 +132,7 @@ class UserController extends ControllerBase
     
     public function preferences(){
         //if($site=$this->_getSiteInGet()){
-        $_SESSION["user"]=DAO::getOne("models\Utilisateur",1);
+        //$_SESSION["user"]=DAO::getOne("models\Utilisateur",1);
         $this->_preferences($user, "UserController/updateUser/".$id, $user->getLogin(), $user->getPassword());
         //$site instanceof models\Site && DAO::update($site);
         //$this->jquery->postFormOnClick("#btValider","SiteController/update", "frmEdit","#divSites");
@@ -172,26 +170,17 @@ class UserController extends ControllerBase
     }
     
     // Fonction publique permettant l'exécution de la requête de suppression d'un nouveau site
-    public function delete($id){
-        //  if(RequestUtils::isPost())
-        //{
-        //echo " - ".$id." - ";
-        
+    public function deleteLink($id){
+        //var_dump($_SESSION["user"]);
+        var_dump($id);
         // Variable 'site' récupérant toutes les données d'un site selon son id et le modèle 'Site'
-        $site=DAO::getOne("models\Utilisateur", $id);
+        $liens=DAO::getOne("models\Lienweb", "id=".$id);
         
         // Instanciation du modèle 'Site' sur le site récupéré et exécution de la requête de suppression
-        $site instanceof models\Utilisateur && DAO::remove($user);
+        $liens instanceof models\Lienweb && DAO::remove($liens);
         
         // Retour sur la page d'affichage de tous les sites
         $this->forward("controllers\UserController","listeFavoris");
-        //echo "le site {$site} est supprimé";
-        /*if($site instanceof models\Site && DAO::remove($site))
-         {
-         echo "le site {$site} est supprimé";
-         }else{ echo "impossible a supp";}*/
-        //}
-        //else{echo "accés interdit";}
     }
     
         // Fonction publique permettant
@@ -213,7 +202,7 @@ class UserController extends ControllerBase
     public function editLink($id){
         //if($site=$this->_getSiteInGet()){
         $user=DAO::getOne("models\Utilisateur", $id);
-        $this->_formUser($user, "UserController/update/".$id, $user->getLogin(), $user->getPassword(), $user->getElementsMasques(), $user->getLFondEcran(), $user->getCouleur(), $user->getOrdre());
+        $this->_listeFavoris($user, "UserController/update/".$id, $user->getLogin(), $user->getPassword(), $user->getElementsMasques(), $user->getLFondEcran(), $user->getCouleur(), $user->getOrdre());
         //$site instanceof models\Site && DAO::update($site);
         //$this->jquery->postFormOnClick("#btValider","SiteController/update", "frmEdit","#divSites");
         //$this->jquery->compile($this->view);
@@ -224,7 +213,7 @@ class UserController extends ControllerBase
     
     public function updateLink($id){
         $user=DAO::getOne("models\Utilisateur", $id);
-        RequestUtils::setValuesToObject($site,$_POST);
+        RequestUtils::setValuesToObject($user,$_POST);
         if(DAO::update($site)){
             echo "L'utilisateur ".$user->getLogin()." a été modifié.";
         }
@@ -252,10 +241,9 @@ class UserController extends ControllerBase
         $id=RequestUtils::get('id');
         $user=DAO::getOne("models\Utilisateur", "login='".$_POST["login"]."'");
         if(isset($user)){
-            echo "Bonjour ".$user->getLogin()." !";
             $_SESSION["user"] = $user;
             $this->jquery->get("UserController/index","body");
-            echo $this->jquery->compile();
+            echo $this->jquery->compile($this->view);
         }
     }
     
