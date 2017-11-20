@@ -103,7 +103,7 @@ class AdminSiteController extends ControllerBase
         $bts->getOnClick("AdminSiteController/","#divMoteurs",["attr"=>"data-ajax"]);
         
         echo $table->compile($this->jquery);
-        echo $this->jquery->compile();        
+        echo $this->jquery->compile();
     }
     
     // module de la page

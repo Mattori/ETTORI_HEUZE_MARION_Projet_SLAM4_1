@@ -11,7 +11,7 @@ return array(
 				"cache"=>false
 		],
 		"sessionToken"=>"%temporaryToken%",
-		"namespaces"=>[],
+		"namespaces"=>["libraries"],
 		"templateEngine"=>'micro\views\engine\Twig',
 		"templateEngineOptions"=>array("cache"=>false),
 		"test"=>false,
