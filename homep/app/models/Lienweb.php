@@ -3,13 +3,23 @@ namespace models;
 class Lienweb{
 	/**
 	 * @id
+	 * @column("name"=>"id","nullable"=>"","dbType"=>"int(11)")
 	*/
 	private $id;
 
+	/**
+	 * @column("name"=>"libelle","nullable"=>1,"dbType"=>"varchar(150)")
+	*/
 	private $libelle;
 
+	/**
+	 * @column("name"=>"url","nullable"=>1,"dbType"=>"varchar(255)")
+	*/
 	private $url;
 
+	/**
+	 * @column("name"=>"ordre","nullable"=>1,"dbType"=>"int(11)")
+	*/
 	private $ordre;
 
 	/**
@@ -87,7 +97,7 @@ class Lienweb{
 	}
 
 	 public function __toString(){
-		return (isset($this->ordre))?$this->ordre:"Lienweb@".\spl_object_hash($this);
+		return $this->id;
 	}
 
 }

@@ -3,9 +3,13 @@ namespace models;
 class Statut{
 	/**
 	 * @id
+	 * @column("name"=>"id","nullable"=>"","dbType"=>"int(11)")
 	*/
 	private $id;
 
+	/**
+	 * @column("name"=>"libelle","nullable"=>"","dbType"=>"varchar(75)")
+	*/
 	private $libelle;
 
 	/**
@@ -38,7 +42,7 @@ class Statut{
 	}
 
 	 public function __toString(){
-		return (isset($this->libelle))?$this->libelle:"Statut@".\spl_object_hash($this);
+		return $this->libelle;
 	}
 
 }

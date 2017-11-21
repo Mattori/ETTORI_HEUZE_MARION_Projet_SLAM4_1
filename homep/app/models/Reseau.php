@@ -3,9 +3,13 @@ namespace models;
 class Reseau{
 	/**
 	 * @id
+	 * @column("name"=>"id","nullable"=>"","dbType"=>"int(11)")
 	*/
 	private $id;
 
+	/**
+	 * @column("name"=>"ip","nullable"=>1,"dbType"=>"varchar(15)")
+	*/
 	private $ip;
 
 	/**
@@ -39,7 +43,7 @@ class Reseau{
 	}
 
 	 public function __toString(){
-		return (isset($this->ip))?$this->ip:"Reseau@".\spl_object_hash($this);
+		return $this->id;
 	}
 
 }

@@ -3,34 +3,60 @@ namespace models;
 class Site{
 	/**
 	 * @id
+	 * @column("name"=>"id","nullable"=>"","dbType"=>"int(11)")
 	*/
 	private $id;
 
+	/**
+	 * @column("name"=>"nom","nullable"=>1,"dbType"=>"varchar(45)")
+	*/
 	private $nom;
 
+	/**
+	 * @column("name"=>"latitude","nullable"=>1,"dbType"=>"double")
+	*/
 	private $latitude;
 
+	/**
+	 * @column("name"=>"longitude","nullable"=>1,"dbType"=>"double")
+	*/
 	private $longitude;
 
+	/**
+	 * @column("name"=>"ecart","nullable"=>1,"dbType"=>"double")
+	*/
 	private $ecart;
 
+	/**
+	 * @column("name"=>"fondEcran","nullable"=>1,"dbType"=>"varchar(255)")
+	*/
 	private $fondEcran;
 
+	/**
+	 * @column("name"=>"couleur","nullable"=>1,"dbType"=>"varchar(10)")
+	*/
 	private $couleur;
 
+	/**
+	 * @column("name"=>"ordre","nullable"=>1,"dbType"=>"varchar(255)")
+	*/
 	private $ordre;
 
+	/**
+	 * @column("name"=>"options","nullable"=>1,"dbType"=>"varchar(255)")
+	*/
 	private $options;
+
+	/**
+	 * @manyToOne
+	 * @joinColumn("className"=>"models\\Moteur","name"=>"idMoteur","nullable"=>"")
+	*/
+	private $moteur;
 
 	/**
 	 * @oneToMany("mappedBy"=>"site","className"=>"models\\Lienweb")
 	*/
 	private $lienwebs;
-
-	/**
-	 * @oneToMany("mappedBy"=>"site","className"=>"models\\Moteur")
-	*/
-	private $moteurs;
 
 	/**
 	 * @oneToMany("mappedBy"=>"site","className"=>"models\\Reseau")
@@ -114,20 +140,20 @@ class Site{
 		$this->options=$options;
 	}
 
+	 public function getMoteur(){
+		return $this->moteur;
+	}
+
+	 public function setMoteur($moteur){
+		$this->moteur=$moteur;
+	}
+
 	 public function getLienwebs(){
 		return $this->lienwebs;
 	}
 
 	 public function setLienwebs($lienwebs){
 		$this->lienwebs=$lienwebs;
-	}
-
-	 public function getMoteurs(){
-		return $this->moteurs;
-	}
-
-	 public function setMoteurs($moteurs){
-		$this->moteurs=$moteurs;
 	}
 
 	 public function getReseaus(){
@@ -147,7 +173,7 @@ class Site{
 	}
 
 	 public function __toString(){
-		return (isset($this->options))?$this->options:"Site@".\spl_object_hash($this);
+		return $this->id;
 	}
 
 }

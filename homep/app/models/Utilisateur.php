@@ -3,20 +3,45 @@ namespace models;
 class Utilisateur{
 	/**
 	 * @id
+	 * @column("name"=>"id","nullable"=>"","dbType"=>"int(11)")
 	*/
 	private $id;
 
+	/**
+	 * @column("name"=>"login","nullable"=>1,"dbType"=>"varchar(45)")
+	*/
 	private $login;
 
+	/**
+	 * @column("name"=>"password","nullable"=>1,"dbType"=>"varchar(45)")
+	*/
 	private $password;
 
+	/**
+	 * @column("name"=>"elementsMasques","nullable"=>1,"dbType"=>"varchar(255)")
+	*/
 	private $elementsMasques;
 
+	/**
+	 * @column("name"=>"fondEcran","nullable"=>1,"dbType"=>"varchar(255)")
+	*/
 	private $fondEcran;
 
+	/**
+	 * @column("name"=>"couleur","nullable"=>1,"dbType"=>"varchar(10)")
+	*/
 	private $couleur;
 
+	/**
+	 * @column("name"=>"ordre","nullable"=>1,"dbType"=>"varchar(255)")
+	*/
 	private $ordre;
+
+	/**
+	 * @manyToOne
+	 * @joinColumn("className"=>"models\\Moteur","name"=>"idMoteur","nullable"=>"")
+	*/
+	private $moteur;
 
 	/**
 	 * @manyToOne
@@ -34,11 +59,6 @@ class Utilisateur{
 	 * @oneToMany("mappedBy"=>"utilisateur","className"=>"models\\Lienweb")
 	*/
 	private $lienwebs;
-
-	/**
-	 * @oneToMany("mappedBy"=>"utilisateur","className"=>"models\\Moteur")
-	*/
-	private $moteurs;
 
 	 public function getId(){
 		return $this->id;
@@ -96,6 +116,14 @@ class Utilisateur{
 		$this->ordre=$ordre;
 	}
 
+	 public function getMoteur(){
+		return $this->moteur;
+	}
+
+	 public function setMoteur($moteur){
+		$this->moteur=$moteur;
+	}
+
 	 public function getSite(){
 		return $this->site;
 	}
@@ -120,16 +148,8 @@ class Utilisateur{
 		$this->lienwebs=$lienwebs;
 	}
 
-	 public function getMoteurs(){
-		return $this->moteurs;
-	}
-
-	 public function setMoteurs($moteurs){
-		$this->moteurs=$moteurs;
-	}
-
 	 public function __toString(){
-		return (isset($this->ordre))?$this->ordre:"Utilisateur@".\spl_object_hash($this);
+		return $this->id;
 	}
 
 }

@@ -3,15 +3,28 @@ namespace models;
 class Etablissement{
 	/**
 	 * @id
+	 * @column("name"=>"id","nullable"=>"","dbType"=>"int(11)")
 	*/
 	private $id;
 
+	/**
+	 * @column("name"=>"fondEcran","nullable"=>1,"dbType"=>"varchar(255)")
+	*/
 	private $fondEcran;
 
+	/**
+	 * @column("name"=>"couleur","nullable"=>1,"dbType"=>"varchar(10)")
+	*/
 	private $couleur;
 
+	/**
+	 * @column("name"=>"ordre","nullable"=>1,"dbType"=>"varchar(255)")
+	*/
 	private $ordre;
 
+	/**
+	 * @column("name"=>"options","nullable"=>1,"dbType"=>"varchar(255)")
+	*/
 	private $options;
 
 	/**
@@ -20,9 +33,10 @@ class Etablissement{
 	private $lienwebs;
 
 	/**
-	 * @oneToMany("mappedBy"=>"etablissement","className"=>"models\\Moteur")
+	 * @manyToOne
+	 * @joinColumn("className"=>"models\\Moteur","name"=>"idMoteur","nullable"=>"")
 	*/
-	private $moteurs;
+	private $moteur;
 
 	 public function getId(){
 		return $this->id;
@@ -72,16 +86,16 @@ class Etablissement{
 		$this->lienwebs=$lienwebs;
 	}
 
-	 public function getMoteurs(){
-		return $this->moteurs;
+	 public function getMoteur(){
+		return $this->moteur;
 	}
 
-	 public function setMoteurs($moteurs){
-		$this->moteurs=$moteurs;
+	 public function setMoteur($moteur){
+		$this->moteur=$moteur;
 	}
 
 	 public function __toString(){
-		return (isset($this->options))?$this->options:"Etablissement@".\spl_object_hash($this);
+		return $this->id;
 	}
 
 }

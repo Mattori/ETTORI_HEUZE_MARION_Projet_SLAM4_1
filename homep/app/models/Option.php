@@ -3,9 +3,13 @@ namespace models;
 class Option{
 	/**
 	 * @id
+	 * @column("name"=>"id","nullable"=>"","dbType"=>"int(11)")
 	*/
 	private $id;
 
+	/**
+	 * @column("name"=>"libelle","nullable"=>"","dbType"=>"varchar(45)")
+	*/
 	private $libelle;
 
 	 public function getId(){
@@ -25,7 +29,7 @@ class Option{
 	}
 
 	 public function __toString(){
-		return (isset($this->libelle))?$this->libelle:"Option@".\spl_object_hash($this);
+		return $this->libelle;
 	}
 
 }
