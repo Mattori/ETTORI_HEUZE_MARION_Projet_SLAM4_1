@@ -27,40 +27,35 @@ class AdminSiteController extends ControllerBase
         parent::initialize();
         if(isset($_SESSION["user"])){
             $user=$_SESSION["user"];
-            echo $user->getLogin();
+            //echo $user->getLogin();
         }
     }
     
     // dashboard de la page
     public function index(){
         
-        // /!\ il manque la gestion de l'accès si on est connecté ou pas /!\
-        
         $semantic=$this->jquery->semantic();
         echo "ici, on administre le site qui a pour identifiant: ".$this->idDuSite;
-        
-        // création de 3 boutons (edits des models (site, moteur) et la connexion:
-        $bts=$semantic->htmlButtonGroups("bts",["Configuration","Moteur de recherche","Se connecter"]);
-        // on leurs associe une donnée renvoyant à des méthodes du controller:
-        $bts->setPropertyValues("data-ajax", ["editSite/","moteur/","SeConnecter"]);
-        // au clic des boutons, est associé la redirection vers la methode indiqué en data-ajax:
-        $bts->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
-        // on compile les informations de cette fonction puis on affiche nos boutons:
-        $this->jquery->compile($this->view);
-        $this->loadView("AdminSite\index.html");
-        
+        if(!isset($_SESSION["user"])) {            
+            $bts=$semantic->htmlButtonGroups("bts",["Connexion"]);
+            $bts->setPropertyValues("data-ajax", ["connexion/"]);
+            $bts->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
+            
+            $this->jquery->compile($this->view);
+            $this->loadView("AdminSite\index.html");
+        } else {           
+            $bts=$semantic->htmlButtonGroups("bts",["Configuration","Moteur de recherche","Deconnexion"]);
+            $bts->setPropertyValues("data-ajax", ["configuration/","moteur/","deconnexion/"]);
+            $bts->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
+            
+            $this->jquery->compile($this->view);
+            $this->loadView("AdminSite\index.html");
+        }        
     }
     
     // ------- METHODES CONCERNANT LA CONNEXION D'UN UTILISATEUR -------
     
-    public function seDeconnecter(){
-        if(isset($_SESSION["user"])){
-            unset($_SESSION["user"]);
-            $this->loadView("AdminSite\index.html");
-        }else{ echo "erreur: vous netes pas sensé pouvoir vous deconnecter sans  etre connecté";}
-    }
-    
-    public function seConnecter(){
+    public function connexion () {
         $frm=$this->jquery->semantic()->defaultLogin("connect");
         $frm->fieldAsSubmit("submit","green","AdminSiteController/submit","#div-submit");
         $frm->removeField("Connection");
@@ -72,12 +67,41 @@ class AdminSiteController extends ControllerBase
         echo $frm->asModal();
         $this->jquery->exec("$('#modal-connect').modal('show');",true);
         echo $this->jquery->compile($this->view);
-        
+    }
+    
+    public function submit(){
+        $id=RequestUtils::get('id');
+        $user=DAO::getOne("models\Utilisateur", "login='".$_POST["login"]."'");
+        if(isset($user)){
+            $_SESSION["user"] = $user;
+            $this->jquery->get("AdminSiteController/index","body");
+            echo $this->jquery->compile($this->view);
+        }
+    }
+    
+    public function testCo(){
+        var_dump($_SESSION["user"]);
+    }
+    
+    public function deconnexion() {
+        session_unset();
+        session_destroy();
+        $this->jquery->get("AdminSiteController/index","body");
+        echo $this->jquery->compile();
     }
     
     // ------- METHODES PRINCIPALES DU CONTROLLER -------
     
-    public function geolocalisation(){
+    public function configuration() {
+        // Affectation de _all à la classe actuelle de variable 'this'
+        $this->_configuration();
+        // Génération du JavaScript/JQuery en tant que variable à l'intérieur de la vue
+        $this->jquery->compile($this->view);
+        // Affiliation à la vue d'URL 'sites\index.html'
+        $this->loadView("AdminSite\index.html");
+    }
+    
+    private function _configuration(){
         // Déclaration d'une nouvelle Semantic-UI
         $semantic=$this->jquery->semantic();
         // Récupération des informations du site
@@ -98,16 +122,19 @@ class AdminSiteController extends ControllerBase
         // via la fonction privée '_generateMap'
         $this->loadView("AdminSite\index.html",["jsMap"=>$this->_generateMap($site->getLatitude(),$site->getLongitude())]);
         echo $form->compile($this->jquery);
-        echo $this->jquery->compile();
+    }
+    
+    public function moteur() {
+        // Affectation de _all à la classe actuelle de variable 'this'
+        $this->_moteur();
+        // Génération du JavaScript/JQuery en tant que variable à l'intérieur de la vue
+        $this->jquery->compile($this->view);
+        // Affiliation à la vue d'URL 'sites\index.html'
+        $this->loadView("AdminSite\index.html");
     }
     
     // module de la page
-    public function elementsWeb(){
-        
-    }
-    
-    // module de la page
-    public function moteur(){
+    private function _moteur(){
         $semantic=$this->jquery->semantic();
         
         // ---------- LISTE DES MOTEURS ------------
@@ -139,25 +166,23 @@ class AdminSiteController extends ControllerBase
             }
         });
             // on attribue une couleur à notre moteur et la possibilité de selectionner un des autres moteurs à la place
-            $table->onNewRow(function($row,$instance) use($moteurSelected){
-                if($instance->getId()===$moteurSelected->getId()){
-                    $row->setProperty("style","background-color:#949da5;");
-                }
-            });
-                $this->jquery->getOnClick("._toSelect", "AdminSiteController/selectionner","#divSite",["attr"=>"data-ajax"]);
-                
-                // ---------- AJOUTER MOTEUR  ------------
-                
-                $bts=$semantic->htmlButtonGroups("bts",["Ajouter un moteur"]);
-                $bts->setPropertyValues("data-ajax", ["addMoteur/"]);
-                
-                // ---------- POSSIBILITÉ OU NON QUE UTILISATEUR MODIFIE -------
-                
-                // à faire
-                
-                echo $table->compile($this->jquery);
-                echo $bts->compile($this->jquery);
-                echo $this->jquery->compile();
+        $table->onNewRow(function($row,$instance) use($moteurSelected){
+            if($instance->getId()===$moteurSelected->getId()){
+            $row->setProperty("style","background-color:#949da5;");
+            }
+        });
+        $this->jquery->getOnClick("._toSelect", "AdminSiteController/selectionner","#divSite",["attr"=>"data-ajax"]);
+                        
+        // ---------- AJOUTER MOTEUR  ------------
+                        
+        $bts=$semantic->htmlButtonGroups("bts",["Ajouter un moteur"]);
+        $bts->setPropertyValues("data-ajax", ["addMoteur/"]);
+                        
+        // ---------- POSSIBILITÉ OU NON QUE UTILISATEUR MODIFIE -------
+                        
+        // à faire
+                        
+        echo $table->compile($this->jquery);
     }
     
     // module de la page
@@ -170,26 +195,6 @@ class AdminSiteController extends ControllerBase
         $moteurs=DAO::getOne("models\Site",$this->idDuSite);
         $semantic=$this->jquery->semantic();
     }
-    
-    
-    
-    public function submit(){
-        // ["login"=>$_POST[login]]
-        var_dump($_POST);
-        $id=RequestUtils::get('id');
-        $user=DAO::getOne("models\Utilisateur", "login='".$_POST["login"]."'");
-        if(isset($user)){
-            echo "Bonjour ".$user->getLogin()." !";
-            $_SESSION["user"] = $user;
-        }
-        
-    }
-    
-    public function testCo(){
-        // var_dump($_SESSION["user"]);
-    }
-    
-    
     
     // ----------- les actioins liés au site -------
     
