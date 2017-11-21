@@ -64,7 +64,6 @@ class UserController extends ControllerBase
         echo $this->jquery->compile();   
     }
     
-    
     // Fonction publique permettant l'exécution, la compilation et l'affichage de la fonction _all en publique
     public function listeFavoris() {
         // Affectation de _all à la classe actuelle de variable 'this'
@@ -76,6 +75,46 @@ class UserController extends ControllerBase
         // Affiliation à la vue d'URL 'sites\index.html'
         $this->loadView("Utilisateur\index.html");
     }
+    
+    // Fonction privée permettant l'ajout des données des sites écrites dans le formulaire
+    private function _formFavoris($liens, $action, $libelle, $url, $ordre){
+        // Déclaration d'une nouvelle Semantic-UI
+        $semantic=$this->jquery->semantic();
+        
+        // Affectation du langage français à la 'semantic'
+        $semantic->setLanguage("fr");
+        
+        // Variable 'form' affectant la 'semantic' locale au formulaire d'id 'frmSite' au paramètre '$site'
+        $form=$semantic->dataForm("frmLink", $liens);
+        
+        // Envoi des paramètres du formulaire lors de sa validation
+        $form->setValidationParams(["on"=>"blur", "inline"=>true]);
+        
+        // Envoi des champs de chaque élément de la table 'Site' à 'form'
+        $form->setFields(["libelle","url","ordre","submit"]);
+        
+        // Envoi des titres à chaque champ des éléments de la table 'Site' à 'table'
+        $form->setCaptions(["Libelle","URL","Ordre","Valider"]);
+        
+        // Ajout d'un bouton de validation 'submit' de couleur verte 'green' récupérant l'action et l'id du bloc '#divSites'
+        $form->fieldAsSubmit("submit","green",$action,"#divUsers");
+        /*$this->jquery->click("#map","
+         console.log(event);
+         var latlong = event.latLng;
+         var lat = latlong.lat();
+         var long = latlong.lng();
+         alert(lat+' - '+lng);
+         ");*/
+        //$this->jquery->change("[name=latitude]","alert('lat change : '+event.target.value);");
+        
+        // Chargement de la page HTML 'index.html' de la vue 'sites' avec la génération de la carte Google
+        // via la fonction privée '_generateMap'
+        $this->loadView("Utilisateur\index.html");
+        
+        echo $form->compile($this->jquery);
+        echo $this->jquery->compile();
+    }
+    
     
     
     // Fonction privée permettant l'ajout des données des sites écrites dans le formulaire
@@ -133,13 +172,19 @@ class UserController extends ControllerBase
     public function preferences(){
         //if($site=$this->_getSiteInGet()){
         //$_SESSION["user"]=DAO::getOne("models\Utilisateur",1);
-        $this->_preferences($user, "UserController/updateUser/".$id, $user->getLogin(), $user->getPassword());
+        $this->_preferences($_SESSION["user"], "UserController/updateUser/", $_SESSION["user"]->getLogin(), $_SESSION["user"]->getPassword());
         //$site instanceof models\Site && DAO::update($site);
         //$this->jquery->postFormOnClick("#btValider","SiteController/update", "frmEdit","#divSites");
         //$this->jquery->compile($this->view);
         
         //        $this->loadView("SiteController/edit.html");
         //}else{echo 'accés interdit';}
+    }
+    
+    public function editUser($id){
+        //if($site=$this->_getSiteInGet()){
+        $user=DAO::getOne("models\Utilisateur", $id);
+        $this->_preferences($liens,"UserController/updateUser/".$id."/Utilisateur",$user->getLogin(),$liens->getPassword());
     }
     
     public function updateUser($id){
@@ -183,26 +228,10 @@ class UserController extends ControllerBase
         $this->forward("controllers\UserController","listeFavoris");
     }
     
-        // Fonction publique permettant
-    public function _getLinkInGet(){
-        //if(RequestUtils::isPost())
-        {
-            $id=RequestUtils::get('id');
-            $lien=DAO::getOne("models\Lienweb", $id);
-            if($site instanceof models\Lienweb)
-                return $lien;
-                return false;
-        }
-        /*else
-         {
-         return false;
-         }*/
-    }
-    
     public function editLink($id){
         //if($site=$this->_getSiteInGet()){
-        $user=DAO::getOne("models\Utilisateur", $id);
-        $this->_listeFavoris($user, "UserController/update/".$id, $user->getLogin(), $user->getPassword(), $user->getElementsMasques(), $user->getLFondEcran(), $user->getCouleur(), $user->getOrdre());
+        $liens=DAO::getOne("models\Lienweb", $id);
+        $this->_formFavoris($liens,"UserController/updateLink/".$id."/Lienweb",$liens->getLibelle(),$liens->getUrl(),$liens->getOrdre());
         //$site instanceof models\Site && DAO::update($site);
         //$this->jquery->postFormOnClick("#btValider","SiteController/update", "frmEdit","#divSites");
         //$this->jquery->compile($this->view);
@@ -212,10 +241,10 @@ class UserController extends ControllerBase
     }
     
     public function updateLink($id){
-        $user=DAO::getOne("models\Utilisateur", $id);
-        RequestUtils::setValuesToObject($user,$_POST);
-        if(DAO::update($site)){
-            echo "L'utilisateur ".$user->getLogin()." a été modifié.";
+        $liens=DAO::getOne("models\Lienweb", $id);
+        RequestUtils::setValuesToObject($liens,$_POST);
+        if(DAO::update($liens)){
+            echo "Le lien ".$liens->getLibelle()." a été modifié.";
         }
     }
     
