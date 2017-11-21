@@ -30,7 +30,6 @@ class UserController extends ControllerBase
             $bts=$semantic->htmlButtonGroups("bts",["Connexion"]);
             $bts->setPropertyValues("data-ajax", ["connexion/"]);
             $bts->getOnClick("UserController/","#divUsers",["attr"=>"data-ajax"]);
-            //$bts->getOnClick("UserController/","#divUsers",["attr"=>"data-ajax"]);
             
             $this->jquery->compile($this->view);
             $this->loadView("Utilisateur\index.html");
@@ -38,7 +37,6 @@ class UserController extends ControllerBase
             $bts=$semantic->htmlButtonGroups("bts",["Liste des liens web", "Préférences", "Choix du site", "Déconnexion"]);
             $bts->setPropertyValues("data-ajax", ["listeFavoris/", "preferences/", "choixSite/", "deconnexion/"]);
             $bts->getOnClick("UserController/","#divUsers",["attr"=>"data-ajax"]);
-            //$bts->getOnClick("UserController/","#divUsers",["attr"=>"data-ajax"]);
             
             $this->jquery->compile($this->view);
             $this->loadView("Utilisateur\index.html");
@@ -55,8 +53,6 @@ class UserController extends ControllerBase
         $table->setFields(["id","libelle","url"]);
         $table->setCaptions(["ID","Nom du lien","URL","Action"]);
         $table->addEditDeleteButtons(true,["ajaxTransition"=>"random","method"=>"post"]);
-        //$table->addFieldButton("action",false,function(&$bt,$instance){$bt->addClass("select")->addIcon("archive",true,true);});
-        //$table->setTargetSelector("#divUsers");
         $table->setUrls(["","UserController/editLink","UserController/deleteLink"]);
         $table->setTargetSelector("#divUsers");
         
@@ -98,17 +94,8 @@ class UserController extends ControllerBase
         
         // Ajout d'un bouton de validation 'submit' de couleur verte 'green' récupérant l'action et l'id du bloc '#divSites'
         $form->fieldAsSubmit("submit","green",$action,"#divUsers");
-        /*$this->jquery->click("#map","
-         console.log(event);
-         var latlong = event.latLng;
-         var lat = latlong.lat();
-         var long = latlong.lng();
-         alert(lat+' - '+lng);
-         ");*/
-        //$this->jquery->change("[name=latitude]","alert('lat change : '+event.target.value);");
         
-        // Chargement de la page HTML 'index.html' de la vue 'sites' avec la génération de la carte Google
-        // via la fonction privée '_generateMap'
+        // Chargement de la page HTML 'index.html' de la vue
         $this->loadView("Utilisateur\index.html");
         
         echo $form->compile($this->jquery);
@@ -139,62 +126,36 @@ class UserController extends ControllerBase
         
         // Ajout d'un bouton de validation 'submit' de couleur verte 'green' récupérant l'action et l'id du bloc '#divSites'
         $form->fieldAsSubmit("submit", "green", $action, "#divUsers");
-        /*$this->jquery->click("#map","
-         console.log(event);
-         var latlong = event.latLng;
-         var lat = latlong.lat();
-         var long = latlong.lng();
-         alert(lat+' - '+lng);
-         ");*/
-        //$this->jquery->change("[name=latitude]","alert('lat change : '+event.target.value);");
         
-        // Chargement de la page HTML 'index.html' de la vue 'sites' avec la génération de la carte Google
-        // via la fonction privée '_generateMap'
+        // Chargement de la page HTML 'index.html' de la vue
         $this->loadView("Utilisateur\index.html");
         
         echo $form->compile($this->jquery);
         echo $this->jquery->compile();
     }
     
-    // Fonction publique permettant l'exécution, la compilation et l'affichage de la fonction _all en publique
-    /*public function formUser() {
-        // Affectation de _all à la classe actuelle de variable 'this'
-        $this->_formUser();
-        
-        // Génération du JavaScript/JQuery en tant que variable à l'intérieur de la vue
-        $this->jquery->compile($this->view);
-        
-        // Affiliation à la vue d'URL 'sites\index.html'
-        $this->loadView("Utilisateur\index.html");
-    }*/
-    
     
     public function preferences(){
-        //if($site=$this->_getSiteInGet()){
-        //$_SESSION["user"]=DAO::getOne("models\Utilisateur",1);
-        $this->_preferences($_SESSION["user"], "UserController/updateUser/", $_SESSION["user"]->getLogin(), $_SESSION["user"]->getPassword());
-        //$site instanceof models\Site && DAO::update($site);
-        //$this->jquery->postFormOnClick("#btValider","SiteController/update", "frmEdit","#divSites");
-        //$this->jquery->compile($this->view);
-        
-        //        $this->loadView("SiteController/edit.html");
-        //}else{echo 'accés interdit';}
+        $id=$_SESSION["user"]->getId();
+        $user=DAO::getOne("models\Utilisateur", $id);
+        $this->_preferences($user, "UserController/updateUser/".$id."/Utilisateur", $user->getLogin(), $user->getPassword());
     }
     
-    public function editUser($id){
-        //if($site=$this->_getSiteInGet()){
+    /*public function editUser($id){
         $user=DAO::getOne("models\Utilisateur", $id);
-        $this->_preferences($liens,"UserController/updateUser/".$id."/Utilisateur",$user->getLogin(),$liens->getPassword());
-    }
+        $this->_preferences($user,"UserController/updateUser/".$id."/Utilisateur",$user->getLogin(),$user->getPassword());
+    }*/
     
     public function updateUser($id){
         $user=DAO::getOne("models\Utilisateur", $id);
         RequestUtils::setValuesToObject($user,$_POST);
         if(DAO::update($user)){
             echo "L'utilisateur ".$user->getLogin()." a été modifié.";
+            $_SESSION["user"] = $user;
+            echo $this->jquery->compile($this->view);
+            var_dump($_SESSION["user"]);
         }
     }
-    
     
     
     
@@ -229,15 +190,8 @@ class UserController extends ControllerBase
     }
     
     public function editLink($id){
-        //if($site=$this->_getSiteInGet()){
         $liens=DAO::getOne("models\Lienweb", $id);
         $this->_formFavoris($liens,"UserController/updateLink/".$id."/Lienweb",$liens->getLibelle(),$liens->getUrl(),$liens->getOrdre());
-        //$site instanceof models\Site && DAO::update($site);
-        //$this->jquery->postFormOnClick("#btValider","SiteController/update", "frmEdit","#divSites");
-        //$this->jquery->compile($this->view);
-        
-        //        $this->loadView("SiteController/edit.html");
-        //}else{echo 'accés interdit';}
     }
     
     public function updateLink($id){
