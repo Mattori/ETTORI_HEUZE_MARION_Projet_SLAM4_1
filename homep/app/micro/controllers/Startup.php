@@ -108,7 +108,7 @@ class Startup {
 
 	private static function callController(Controller $controller, $u) {
 		$urlSize=sizeof($u);
-		try {
+		
 			switch($urlSize) {
 				case 1:
 					$controller->index();
@@ -127,9 +127,7 @@ class Startup {
 					\call_user_func_array(array ($controller,$u[1] ), array_slice($u, 2));
 					break;
 			}
-		} catch ( \Exception $e ) {
-			print "Error!: " . $e->getMessage() . "<br/>";
-		}
+		
 	}
 
 	public static function getConfig() {

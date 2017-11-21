@@ -1,7 +1,9 @@
-<style>
- #map {
-   width: 100%;
-   height: 400px;
-   background-color: grey;
- }
-</style>
+#map {
+	width: 100%;
+	height: 400px;
+	background-color: grey;
+}
+ 
+body {
+	background:url('https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/calm-reflective-water-background_bjnehswwh__F0000.png');
+}

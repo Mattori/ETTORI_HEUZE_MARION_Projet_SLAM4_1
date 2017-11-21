@@ -39,5 +39,6 @@ class Connecte extends ControllerBase{
 	    $this->jquery->compile($this->view);
 	    $this->loadView('Connecte.html');
 	    
+	    
 	}
 }

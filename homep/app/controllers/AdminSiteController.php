@@ -156,8 +156,12 @@ class AdminSiteController extends ControllerBase
         // à faire
         
         echo $table->compile($this->jquery);
+<<<<<<< HEAD
         echo $bts->compile($this->jquery);
         echo $this->jquery->compile();        
+=======
+        echo $this->jquery->compile();
+>>>>>>> f8a208912f0fd37adf5c0d42480a10f9ba07acaa
     }
     
     // module de la page
