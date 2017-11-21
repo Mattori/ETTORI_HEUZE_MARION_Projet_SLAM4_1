@@ -39,13 +39,13 @@ class AdminSiteController extends ControllerBase
         $semantic=$this->jquery->semantic();
         echo "ici, on administre le site qui a pour identifiant: ".$this->idDuSite;
         
-        // création de 3 boutons (edits des models (site, moteur) et la connexion: 
+        // création de 3 boutons (edits des models (site, moteur) et la connexion:
         $bts=$semantic->htmlButtonGroups("bts",["Configuration","Moteur de recherche","Se connecter"]);
-        // on leurs associe une donnée renvoyant à des méthodes du controller:  
+        // on leurs associe une donnée renvoyant à des méthodes du controller:
         $bts->setPropertyValues("data-ajax", ["editSite/","moteur/","SeConnecter"]);
-        // au clic des boutons, est associé la redirection vers la methode indiqué en data-ajax: 
+        // au clic des boutons, est associé la redirection vers la methode indiqué en data-ajax:
         $bts->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
-        // on compile les informations de cette fonction puis on affiche nos boutons: 
+        // on compile les informations de cette fonction puis on affiche nos boutons:
         $this->jquery->compile($this->view);
         $this->loadView("AdminSite\index.html");
         
@@ -113,9 +113,9 @@ class AdminSiteController extends ControllerBase
         // ---------- LISTE DES MOTEURS ------------
         // on cherche le moteur que l'on a selectionnée afin de l'indiqué:
         $site=DAO::getOne("models\Site",$this->idDuSite);
-        // recupération du moteur selectionnée: 
+        // recupération du moteur selectionnée:
         $moteurSelected=$site->getMoteur();
-        // recuperation de tout les moteurs: 
+        // recuperation de tout les moteurs:
         $moteurs=DAO::getAll("models\Moteur");
         // on met ces moteurs dans un tableau
         $table=$semantic->dataTable("tblMoteurs", "models\Moteur", $moteurs);
@@ -138,30 +138,26 @@ class AdminSiteController extends ControllerBase
                 $bt->addClass("_toSelect");
             }
         });
-        // on attribue une couleur à notre moteur et la possibilité de selectionner un des autres moteurs à la place
-        $table->onNewRow(function($row,$instance) use($moteurSelected){
-            if($instance->getId()===$moteurSelected->getId()){
-                $row->setProperty("style","background-color:#949da5;");
-            }
-        });
-        $this->jquery->getOnClick("._toSelect", "AdminSiteController/selectionner","#divSite",["attr"=>"data-ajax"]);
-        
-        // ---------- AJOUTER MOTEUR  ------------
-        
-        $bts=$semantic->htmlButtonGroups("bts",["Ajouter un moteur"]);
-        $bts->setPropertyValues("data-ajax", ["addMoteur/"]);
-        
-        // ---------- POSSIBILITÉ OU NON QUE UTILISATEUR MODIFIE -------
-        
-        // à faire
-        
-        echo $table->compile($this->jquery);
-<<<<<<< HEAD
-        echo $bts->compile($this->jquery);
-        echo $this->jquery->compile();        
-=======
-        echo $this->jquery->compile();
->>>>>>> f8a208912f0fd37adf5c0d42480a10f9ba07acaa
+            // on attribue une couleur à notre moteur et la possibilité de selectionner un des autres moteurs à la place
+            $table->onNewRow(function($row,$instance) use($moteurSelected){
+                if($instance->getId()===$moteurSelected->getId()){
+                    $row->setProperty("style","background-color:#949da5;");
+                }
+            });
+                $this->jquery->getOnClick("._toSelect", "AdminSiteController/selectionner","#divSite",["attr"=>"data-ajax"]);
+                
+                // ---------- AJOUTER MOTEUR  ------------
+                
+                $bts=$semantic->htmlButtonGroups("bts",["Ajouter un moteur"]);
+                $bts->setPropertyValues("data-ajax", ["addMoteur/"]);
+                
+                // ---------- POSSIBILITÉ OU NON QUE UTILISATEUR MODIFIE -------
+                
+                // à faire
+                
+                echo $table->compile($this->jquery);
+                echo $bts->compile($this->jquery);
+                echo $this->jquery->compile();
     }
     
     // module de la page
@@ -172,9 +168,9 @@ class AdminSiteController extends ControllerBase
     // module de la page
     public function fondEcran(){
         $moteurs=DAO::getOne("models\Site",$this->idDuSite);
-        $semantic=$this->jquery->semantic();        
+        $semantic=$this->jquery->semantic();
     }
-
+    
     
     
     public function submit(){
@@ -198,7 +194,7 @@ class AdminSiteController extends ControllerBase
     // ----------- les actioins liés au site -------
     
     public function editSite()
-    {   
+    {
         $site=DAO::getOne("models\Site", $this->idDuSite);
         $this->_form($site,"SiteController/update/".$id,$site->getLatitude(),$site->getLongitude());
     }
@@ -289,12 +285,7 @@ class AdminSiteController extends ControllerBase
     
     public function addMoteur_End()
     {
-        $moteur=new Moteur();
-        RequestUtils::setValuesToObject($moteur,$_POST);
         
-        if(DAO::insert($moteur)){
-            echo "Le moteur ".$site->getNom()." a été ajouté.";
-        }
     }
     
     public function editMoteur_End()
@@ -314,9 +305,9 @@ class AdminSiteController extends ControllerBase
     }
     
     // ----------- MAP -----------
-     
-     private function _generateMap($lat,$long){
-         return "
+    
+    private function _generateMap($lat,$long){
+        return "
         <script>
             // Déclaration de la carte Google Maps
             var map={};
@@ -359,6 +350,6 @@ class AdminSiteController extends ControllerBase
         </script>
         <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDxz9dHENw-b-1TlNXw88v3rWtKqCEb2HM&callback=initMap'></script>
         ";
-     }
+    }
 }
 
