@@ -20,8 +20,6 @@ use Ajax\semantic\html\collections\form\HtmlFormDropdown;
 
 class AdminSiteController extends ControllerBase
 {
-    // (simulation) id du site auquel on est admin
-    private $idDuSite = 1;
     
     public function initialize(){
         parent::initialize();
@@ -29,13 +27,14 @@ class AdminSiteController extends ControllerBase
             $user=$_SESSION["user"];
             //echo $user->getLogin();
         }
+
     }
     
     // dashboard de la page
     public function index(){
         
         $semantic=$this->jquery->semantic();
-        echo "ici, on administre le site qui a pour identifiant: ".$this->idDuSite;
+        //echo "ici, on administre le site qui a pour identifiant: ".$_SESSION["user"]->getSite()->getId();
         if(!isset($_SESSION["user"])) {            
             $bts=$semantic->htmlButtonGroups("bts",["Connexion"]);
             $bts->setPropertyValues("data-ajax", ["connexion/"]);
@@ -43,14 +42,25 @@ class AdminSiteController extends ControllerBase
             
             $this->jquery->compile($this->view);
             $this->loadView("AdminSite\index.html");
-        } else {           
+        } 
+        elseif($_SESSION["user"]->getStatut()->getId() < 2) 
+        {
+            echo "t co mais t'a pas les droits";
+            $bts=$semantic->htmlButtonGroups("bts",["Deconnexion"]);
+            $bts->setPropertyValues("data-ajax", ["deconnexion/"]);
+            $bts->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
+            
+            $this->jquery->compile($this->view);
+            $this->loadView("AdminSite\index.html");
+        }
+        else{
             $bts=$semantic->htmlButtonGroups("bts",["Configuration","Moteur de recherche","Deconnexion"]);
             $bts->setPropertyValues("data-ajax", ["configuration/","moteur/","deconnexion/"]);
             $bts->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
             
             $this->jquery->compile($this->view);
             $this->loadView("AdminSite\index.html");
-        }        
+        }
     }
     
     // ------- METHODES CONCERNANT LA CONNEXION D'UN UTILISATEUR -------
@@ -74,6 +84,10 @@ class AdminSiteController extends ControllerBase
         $user=DAO::getOne("models\Utilisateur", "login='".$_POST["login"]."'");
         if(isset($user)){
             $_SESSION["user"] = $user;
+            
+            //$_SESSION['']=;
+            
+            
             $this->jquery->get("AdminSiteController/index","body");
             echo $this->jquery->compile($this->view);
         }
@@ -105,7 +119,7 @@ class AdminSiteController extends ControllerBase
         // Déclaration d'une nouvelle Semantic-UI
         $semantic=$this->jquery->semantic();
         // Récupération des informations du site
-        $site=DAO::getOne("models\Site",$this->idDuSite);
+        $site=DAO::getOne("models\Site",$_SESSION["user"]->getSite()->getId());
         // Affectation du langage français à la 'semantic'
         $semantic->setLanguage("fr");
         // Variable 'form' affectant la 'semantic' locale au formulaire d'id 'frmSite' au paramètre '$site'
@@ -125,7 +139,7 @@ class AdminSiteController extends ControllerBase
     }
     
     public function moteur() {
-        // Affectation de _all à la classe actuelle de variable 'this'
+        // Affectation de _moteur à la classe actuelle de variable 'this'
         $this->_moteur();
         // Génération du JavaScript/JQuery en tant que variable à l'intérieur de la vue
         $this->jquery->compile($this->view);
@@ -139,7 +153,7 @@ class AdminSiteController extends ControllerBase
         
         // ---------- LISTE DES MOTEURS ------------
         // on cherche le moteur que l'on a selectionnée afin de l'indiqué:
-        $site=DAO::getOne("models\Site",$this->idDuSite);
+        $site=DAO::getOne("models\Site",$_SESSION["user"]->getSite()->getId());
         // recupération du moteur selectionnée:
         $moteurSelected=$site->getMoteur();
         // recuperation de tout les moteurs:
@@ -192,7 +206,7 @@ class AdminSiteController extends ControllerBase
     
     // module de la page
     public function fondEcran(){
-        $moteurs=DAO::getOne("models\Site",$this->idDuSite);
+        $moteurs=DAO::getOne("models\Site",$_SESSION["user"]->getSite()->getId());
         $semantic=$this->jquery->semantic();
     }
     
@@ -200,7 +214,7 @@ class AdminSiteController extends ControllerBase
     
     public function editSite()
     {
-        $site=DAO::getOne("models\Site", $this->idDuSite);
+        $site=DAO::getOne("models\Site", $_SESSION["user"]->getSite()->getId());
         $this->_form($site,"SiteController/update/".$id,$site->getLatitude(),$site->getLongitude());
     }
     
@@ -243,7 +257,7 @@ class AdminSiteController extends ControllerBase
         // je récupère l'id du moteur que l'on veut selectionner avec un explode de l'url où il s'y trouve en tant que paramètre:
         $recupId = explode('/', $_GET['c']);
         // je recupère le site que j'administre:
-        $site=DAO::getOne("models\Site", $this->idDuSite);
+        $site=DAO::getOne("models\Site", $_SESSION["user"]->getSite()->getId());
         // je recupère le moteur que je souhaite selectionner:
         $moteur=DAO::getOne("models\Moteur", "id=".$recupId[2]);
         // je modifie le moteur du site:
@@ -256,7 +270,6 @@ class AdminSiteController extends ControllerBase
     
     public function addMoteur()
     {
-        
         $this->_form(new Moteur(),"SiteController/newMoteur_End/");
     }
     
