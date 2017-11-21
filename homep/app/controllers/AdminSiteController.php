@@ -285,7 +285,12 @@ class AdminSiteController extends ControllerBase
     
     public function addMoteur_End()
     {
+        $moteur=new Moteur();
+        RequestUtils::setValuesToObject($moteur,$_POST);
         
+        if(DAO::insert($moteur)){
+            echo "Le moteur ".$site->getNom()." a été ajouté.";
+        }
     }
     
     public function editMoteur_End()
