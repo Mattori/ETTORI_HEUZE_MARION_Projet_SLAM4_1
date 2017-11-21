@@ -51,7 +51,32 @@ class AdminSiteController extends ControllerBase
         
     }
     
-    // module de la page
+    // ------- METHODES CONCERNANT LA CONNEXION D'UN UTILISATEUR -------
+    
+    public function seDeconnecter(){
+        if(isset($_SESSION["user"])){
+            unset($_SESSION["user"]);
+            $this->loadView("AdminSite\index.html");
+        }else{ echo "erreur: vous netes pas sensé pouvoir vous deconnecter sans  etre connecté";}
+    }
+    
+    public function seConnecter(){
+        $frm=$this->jquery->semantic()->defaultLogin("connect");
+        $frm->fieldAsSubmit("submit","green","AdminSiteController/submit","#div-submit");
+        $frm->removeField("Connection");
+        $frm->setCaption("login", "Identifiant");
+        $frm->setCaption("password", "Mot de passe");
+        $frm->setCaption("remember", "Se souvenir de moi");
+        $frm->setCaption("forget", "Mot de passe oublié ?");
+        $frm->setCaption("submit", "Connexion");
+        echo $frm->asModal();
+        $this->jquery->exec("$('#modal-connect').modal('show');",true);
+        echo $this->jquery->compile($this->view);
+        
+    }
+    
+    // ------- METHODES PRINCIPALES DU CONTROLLER -------
+    
     public function geolocalisation(){
         // Déclaration d'une nouvelle Semantic-UI
         $semantic=$this->jquery->semantic();
@@ -146,20 +171,7 @@ class AdminSiteController extends ControllerBase
         $semantic=$this->jquery->semantic();        
     }
 
-    public function seConnecter(){
-        $frm=$this->jquery->semantic()->defaultLogin("connect");
-        $frm->fieldAsSubmit("submit","green","AdminSiteController/submit","#div-submit");
-        $frm->removeField("Connection");
-        $frm->setCaption("login", "Identifiant");
-        $frm->setCaption("password", "Mot de passe");
-        $frm->setCaption("remember", "Se souvenir de moi");
-        $frm->setCaption("forget", "Mot de passe oublié ?");
-        $frm->setCaption("submit", "Connexion");
-        echo $frm->asModal();
-        $this->jquery->exec("$('#modal-connect').modal('show');",true);
-        echo $this->jquery->compile($this->view);
-        
-    }
+    
     
     public function submit(){
         // ["login"=>$_POST[login]]
@@ -177,13 +189,7 @@ class AdminSiteController extends ControllerBase
         // var_dump($_SESSION["user"]);
     }
     
-    // module de la page
-    public function seDeconnecter(){
-        if(isset($_SESSION["user"])){
-            unset($_SESSION["user"]);
-            $this->loadView("AdminSite\index.html");
-        }else{ echo "erreur: vous netes pas sensé pouvoir vous deconnecter sans  etre connecté";}
-    }
+    
     
     // ----------- les actioins liés au site -------
     
