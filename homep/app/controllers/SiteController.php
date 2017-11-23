@@ -299,7 +299,7 @@ class SiteController extends ControllerBase
                 var optionsCercle = {
 					map: map,
 					center: map.getCenter(),
-					radius: 200
+					radius: 50
 				}
                 // Affectation du cercle
 				var cercle = new google.maps.Circle(optionsCercle);
@@ -308,6 +308,9 @@ class SiteController extends ControllerBase
                 map.addListener('click',function(event){
                     // Affectation de la valeur de la div d'id 'frmSite-latitude' à la valeur de la latitude de l'évènement
                     document.getElementById('frmSite-latitude').value=event.latLng.lat();
+
+                    // Affectation de la valeur de la div d'id 'frmSite-latitude' à la valeur de la longitude de l'évènement
+                    document.getElementById('frmSite-longitude').value=event.latLng.lng();
 
                     // Affectation de la valeur de la div d'id 'frmSite-latitude' à la valeur de la longitude de l'évènement
                     document.getElementById('frmSite-longitude').value=event.latLng.lng();
