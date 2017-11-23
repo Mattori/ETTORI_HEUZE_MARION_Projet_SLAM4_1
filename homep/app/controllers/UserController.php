@@ -46,9 +46,7 @@ class UserController extends ControllerBase
     public function afficheMoteur() {
         $moteur=DAO::getOne("models\Moteur","idUtilisateur=".$_SESSION["user"]->getId());
         //var_dump($moteur);
-        if($moteur == 1) {
-            echo $moteur->getCode();
-        }
+        echo $moteur->getCode();
     }
     
     private function _listeFavoris() {
