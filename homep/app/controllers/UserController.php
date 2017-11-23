@@ -34,12 +34,20 @@ class UserController extends ControllerBase
             $this->jquery->compile($this->view);
             $this->loadView("Utilisateur\index.html");
         } else {
-            $bts=$semantic->htmlButtonGroups("bts",["Liste des liens web", "Préférences", "Choix du site", "Déconnexion"]);
-            $bts->setPropertyValues("data-ajax", ["listeFavoris/", "preferences/", "choixSite/", "deconnexion/"]);
+            $bts=$semantic->htmlButtonGroups("bts",["Liste des liens web", "Préférences", "Choix du moteur", "Déconnexion", "Recherche"]);
+            $bts->setPropertyValues("data-ajax", ["listeFavoris/", "preferences/", "choixMoteur/", "deconnexion/", "afficheMoteur/"]);
             $bts->getOnClick("UserController/","#divUsers",["attr"=>"data-ajax"]);
             
             $this->jquery->compile($this->view);
             $this->loadView("Utilisateur\index.html");
+        }
+    }
+    
+    public function afficheMoteur() {
+        $moteur=DAO::getOne("models\Moteur","idUtilisateur=".$_SESSION["user"]->getId());
+        //var_dump($moteur);
+        if($moteur == 1) {
+            echo $moteur->getCode();
         }
     }
     
@@ -202,7 +210,7 @@ class UserController extends ControllerBase
         }
     }
     
-    public function choixSite() {
+    public function choixMoteur() {
         
     }
     
