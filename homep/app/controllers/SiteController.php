@@ -14,29 +14,60 @@ use models\Site;
 // Déclaration de la classe SiteController héritant de ControllerBase
 class SiteController extends ControllerBase
 {
+    public function initialize(){
+        parent::initialize();
+        if(isset($_SESSION["user"])){
+            $user=$_SESSION["user"];
+            //echo $user->getLogin();
+        }
+    }
+    
+    
     // Fonction publique permettant de déterminer les éléments et les évènements de la page 'index.html'
     public function index(){
-        // Variable 'semantic' déclarant une nouvelle Semantic-UI
         $semantic=$this->jquery->semantic();
-        
-        // Variable 'bts' affectant la 'semantic' locale a un groupe de boutons
-        $bts=$semantic->htmlButtonGroups("bts",["Liste des sites","Ajouter un site"]);
-        
-        // Attribution des propriétés 'all' et 'addSite' respectivement aux boutons de 'bts' :
-        // 1) 'Liste des sites' => 'all/'
-        // 2) 'Ajouter un site' => 'addSite/'
-        $bts->setPropertyValues("data-ajax", ["all/","addSite/"]);
-        
-        // Récupération du clic fait dans 'SiteController' en renvoyant la réponse dans la div '#divSites'
-        $bts->getOnClick("SiteController/","#divSites",["attr"=>"data-ajax"]);
-        //$this->jquery->exec("initMap();",true);
-        
-        // Génération du JavaScript/JQuery en tant que variable à l'intérieur de la vue
-        $this->jquery->compile($this->view);
-        
-        // Affiliation à la vue d'URL 'sites\index.html'
-        $this->loadView("sites\index.html");
-        //$this->loadView("sites\index.html",["jsMap"=>$this->_generateMap(49.201491, -0.380734)]);
+        //echo "ici, on administre le site qui a pour identifiant: ".$_SESSION["user"]->getSite()->getId();
+        if(!isset($_SESSION["user"])) {
+            $bts=$semantic->htmlButtonGroups("bts",["Connexion"]);
+            $bts->setPropertyValues("data-ajax", ["connexion/"]);
+            $bts->getOnClick("SiteController/","#divSites",["attr"=>"data-ajax"]);
+            
+            $this->jquery->compile($this->view);
+            $this->loadView("sites\index.html");
+        }
+        elseif($_SESSION["user"]->getStatut()->getId() < 3)
+        {
+            echo "Vous êtes connectés mais vous n'avez pas les droits.";
+            $bts=$semantic->htmlButtonGroups("bts",["Deconnexion"]);
+            $bts->setPropertyValues("data-ajax", ["deconnexion/"]);
+            $bts->getOnClick("SiteController/","#divSites",["attr"=>"data-ajax"]);
+            
+            $this->jquery->compile($this->view);
+            $this->loadView("sites\index.html");
+        }
+        else{
+            // Variable 'semantic' déclarant une nouvelle Semantic-UI
+            $semantic=$this->jquery->semantic();
+            
+            // Variable 'bts' affectant la 'semantic' locale a un groupe de boutons
+            $bts=$semantic->htmlButtonGroups("bts",["Liste des sites","Ajouter un site", "Déconnexion"]);
+            
+            // Attribution des propriétés 'all' et 'addSite' respectivement aux boutons de 'bts' :
+            // 1) 'Liste des sites' => 'all/'
+            // 2) 'Ajouter un site' => 'addSite/'
+            $bts->setPropertyValues("data-ajax", ["all/","addSite/", "deconnexion/"]);
+            
+            // Récupération du clic fait dans 'SiteController' en renvoyant la réponse dans la div '#divSites'
+            $bts->getOnClick("SiteController/","#divSites",["attr"=>"data-ajax"]);
+            //$this->jquery->exec("initMap();",true);
+            
+            // Génération du JavaScript/JQuery en tant que variable à l'intérieur de la vue
+            $this->jquery->compile($this->view);
+            
+            // Affiliation à la vue d'URL 'sites\index.html'
+            $this->loadView("sites\index.html");
+            //$this->loadView("sites\index.html",["jsMap"=>$this->_generateMap(49.201491, -0.380734)]);
+        }
     }
 
     
@@ -212,6 +243,41 @@ class SiteController extends ControllerBase
         }
     }
     
+    public function connexion () {
+        $frm=$this->jquery->semantic()->defaultLogin("connect");
+        $frm->fieldAsSubmit("submit","green","UserController/submit","#div-submit");
+        $frm->removeField("Connection");
+        $frm->setCaption("login", "Identifiant");
+        $frm->setCaption("password", "Mot de passe");
+        $frm->setCaption("remember", "Se souvenir de moi");
+        $frm->setCaption("forget", "Mot de passe oublié ?");
+        $frm->setCaption("submit", "Connexion");
+        echo $frm->asModal();
+        $this->jquery->exec("$('#modal-connect').modal('show');",true);
+        echo $this->jquery->compile($this->view);
+    }
+    
+    public function submit(){
+        $id=RequestUtils::get('id');
+        $user=DAO::getOne("models\Utilisateur", "login='".$_POST["login"]."'");
+        if(isset($user)){
+            $_SESSION["user"] = $user;
+            $this->jquery->get("UserController/index","body");
+            echo $this->jquery->compile($this->view);
+        }
+    }
+    
+    public function testCo(){
+        var_dump($_SESSION["user"]);
+    }
+    
+    public function deconnexion() {
+        session_unset();
+        session_destroy();
+        $this->jquery->get("UserController/index","body");
+        echo $this->jquery->compile();
+    }
+    
     private function _generateMap($lat,$long){
         return "
         <script>
@@ -233,7 +299,7 @@ class SiteController extends ControllerBase
                 var optionsCercle = {
 					map: map,
 					center: map.getCenter(),
-					radius: 200
+					radius: 50
 				}
                 // Affectation du cercle
 				var cercle = new google.maps.Circle(optionsCercle);
@@ -243,6 +309,9 @@ class SiteController extends ControllerBase
                     // Affectation de la valeur de la div d'id 'frmSite-latitude' à la valeur de la latitude de l'évènement
                     document.getElementById('frmSite-latitude').value=event.latLng.lat();
                     
+                    // Affectation de la valeur de la div d'id 'frmSite-latitude' à la valeur de la longitude de l'évènement
+                    document.getElementById('frmSite-longitude').value=event.latLng.lng();
+
                     // Affectation de la valeur de la div d'id 'frmSite-latitude' à la valeur de la longitude de l'évènement
                     document.getElementById('frmSite-longitude').value=event.latLng.lng();
                 })
