@@ -14,6 +14,7 @@ return array(
   'HtmlItem' => 'Ajax\\semantic\\html\\content\\view\\HtmlItem',
   'HtmlFormInput' => 'Ajax\\semantic\\html\\collections\\form\\HtmlFormInput',
   'HtmlFormDropdown' => 'Ajax\\semantic\\html\\collections\\form\\HtmlFormDropdown',
+  'HtmlButton' => 'Ajax\\semantic\\html\\elements\\HtmlButton',
 ),
   '#traitMethodOverrides' => array (
   'controllers\\AdminSiteController' => 
