@@ -46,8 +46,11 @@ class UserController extends ControllerBase
     public function afficheMoteur() {
         $moteur=DAO::getOne("models\Moteur","idUtilisateur=".$_SESSION["user"]->getId());
         $frm=$this->jquery->semantic()->htmlForm("frm-search");
+        
         $input=$frm->addInput("q");
-        $frm->setProperty("action","https://www.google.fr/search");
+        $input->labeled($moteur->getNom());
+        
+        $frm->setProperty("action",$moteur->getCode());
         $frm->setProperty("method","get");
         $frm->setProperty("target","_new");
         $bt=$input->addAction("Rechercher");
