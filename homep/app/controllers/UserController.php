@@ -16,10 +16,14 @@ use models\Lienweb;
 class UserController extends ControllerBase
 {
     public function initialize(){
-        parent::initialize();
+        $fond="";
         if(isset($_SESSION["user"])){
             $user=$_SESSION["user"];
+            $fond=$user->getFondEcran();
             //echo $user->getLogin();
+        }
+        if(!RequestUtils::isAjax()){
+            $this->loadView("main/vHeader.html",["fond"=>$fond]);
         }
     }
     
@@ -30,17 +34,13 @@ class UserController extends ControllerBase
             $bts=$semantic->htmlButtonGroups("bts",["Connexion"]);
             $bts->setPropertyValues("data-ajax", ["connexion/"]);
             $bts->getOnClick("UserController/","#divUsers",["attr"=>"data-ajax"]);
-            
-            $this->jquery->compile($this->view);
-            $this->loadView("Utilisateur\index.html");
         } else {
             $bts=$semantic->htmlButtonGroups("bts",["Liste des liens web", "Préférences", "Choix du moteur", "Déconnexion", "Recherche"]);
             $bts->setPropertyValues("data-ajax", ["listeFavoris/", "preferences/", "choixMoteur/", "deconnexion/", "afficheMoteur/"]);
             $bts->getOnClick("UserController/","#divUsers",["attr"=>"data-ajax"]);
-            
-            $this->jquery->compile($this->view);
-            $this->loadView("Utilisateur\index.html");
         }
+        $this->jquery->compile($this->view);
+        $this->loadView("Utilisateur\index.html");
     }
     
     public function afficheMoteur() {
@@ -220,9 +220,13 @@ class UserController extends ControllerBase
         
     }
     
-    public function connexion () {
+    public function fondEcran() {
+        
+    }
+    
+    public function connexion() {
         $frm=$this->jquery->semantic()->defaultLogin("connect");
-        $frm->fieldAsSubmit("submit","green","UserController/submit","#div-submit");
+        $frm->fieldAsSubmit("submit","green","UserController/submit","body");
         $frm->removeField("Connection");
         $frm->setCaption("login", "Identifiant");
         $frm->setCaption("password", "Mot de passe");
@@ -239,9 +243,9 @@ class UserController extends ControllerBase
         $user=DAO::getOne("models\Utilisateur", "login='".$_POST["login"]."'");
         if(isset($user)){
             $_SESSION["user"] = $user;
-            $this->jquery->get("UserController/index","body");
-            echo $this->jquery->compile($this->view);
+            $this->jquery->exec("$('body').attr('style','background: url(".$user->getFondEcran().")');",true);
         }
+        $this->index();
     }
     
     public function testCo(){
@@ -252,6 +256,7 @@ class UserController extends ControllerBase
         session_unset();
         session_destroy();
         $this->jquery->get("UserController/index","body");
-        echo $this->jquery->compile();
+        $this->jquery->exec("$('body').attr('style','');",true);
+        $this->index();
     }
 }
