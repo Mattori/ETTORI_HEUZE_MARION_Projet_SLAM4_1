@@ -37,72 +37,26 @@ class AdminSiteController extends ControllerBase
         //echo "ici, on administre le site qui a pour identifiant: ".$_SESSION["user"]->getSite()->getId();
         if(!isset($_SESSION["user"])) {            
             $bts=$semantic->htmlButtonGroups("bts",["Connexion"]);
-            $bts->setPropertyValues("data-ajax", ["connexion/"]);
-            $bts->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
-            
-            $this->jquery->compile($this->view);
-            $this->loadView("AdminSite\index.html");
+            $bts->postOnClick("AdminSiteController/connexion/","{action:'AdminSiteController/submit'}","#divSite",["attr"=>""]);
         } 
         elseif($_SESSION["user"]->getStatut()->getId() < 2) 
         {
             echo "t co mais t'a pas les droits";
             $bts=$semantic->htmlButtonGroups("bts",["Deconnexion"]);
-            $bts->setPropertyValues("data-ajax", ["deconnexion/"]);
+            $bts->setPropertyValues("data-ajax", ["deconnexion/AdminSiteController/index"]);
             $bts->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
-            
-            $this->jquery->compile($this->view);
-            $this->loadView("AdminSite\index.html");
         }
         else{
             $bts=$semantic->htmlButtonGroups("bts",["Configuration","Moteur de recherche","Deconnexion"]);
-            $bts->setPropertyValues("data-ajax", ["configuration/","moteur/","deconnexion/"]);
+            $bts->setPropertyValues("data-ajax", ["configuration/","moteur/","deconnexion/AdminSiteController/index"]);
             $bts->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
             
-            $this->jquery->compile($this->view);
-            $this->loadView("AdminSite\index.html");
+            
         }
+        $this->jquery->compile($this->view);
+        $this->loadView("AdminSite\index.html");
     }
     
-    // ------- METHODES CONCERNANT LA CONNEXION D'UN UTILISATEUR -------
-    
-    public function connexion () {
-        $frm=$this->jquery->semantic()->defaultLogin("connect");
-        $frm->fieldAsSubmit("submit","green","AdminSiteController/submit","#div-submit");
-        $frm->removeField("Connection");
-        $frm->setCaption("login", "Identifiant");
-        $frm->setCaption("password", "Mot de passe");
-        $frm->setCaption("remember", "Se souvenir de moi");
-        $frm->setCaption("forget", "Mot de passe oublié ?");
-        $frm->setCaption("submit", "Connexion");
-        echo $frm->asModal();
-        $this->jquery->exec("$('#modal-connect').modal('show');",true);
-        echo $this->jquery->compile($this->view);
-    }
-    
-    public function submit(){
-        $id=RequestUtils::get('id');
-        $user=DAO::getOne("models\Utilisateur", "login='".$_POST["login"]."'");
-        if(isset($user)){
-            $_SESSION["user"] = $user;
-            
-            //$_SESSION['']=;
-            
-            
-            $this->jquery->get("AdminSiteController/index","body");
-            echo $this->jquery->compile($this->view);
-        }
-    }
-    
-    public function testCo(){
-        var_dump($_SESSION["user"]);
-    }
-    
-    public function deconnexion() {
-        session_unset();
-        session_destroy();
-        $this->jquery->get("AdminSiteController/index","body");
-        echo $this->jquery->compile();
-    }
     
     // ------- METHODES PRINCIPALES DU CONTROLLER -------
     

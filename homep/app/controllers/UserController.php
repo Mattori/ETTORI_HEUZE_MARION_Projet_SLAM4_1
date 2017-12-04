@@ -31,12 +31,11 @@ class UserController extends ControllerBase
     public function index(){
         $semantic=$this->jquery->semantic();
         if(!isset($_SESSION["user"])) {
-            $bts=$semantic->htmlButtonGroups("bts",["Connexion"]);
-            $bts->setPropertyValues("data-ajax", ["connexion/"]);
-            $bts->getOnClick("UserController/","#divUsers",["attr"=>"data-ajax"]);
+            $bt=$semantic->htmlButton("bts","Connexion");
+            $bt->postOnClick("UserController/connexion/","{action:'UserController/submit'}","#divUsers",["attr"=>""]);
         } else {
             $bts=$semantic->htmlButtonGroups("bts",["Liste des liens web", "Préférences", "Choix du moteur", "Déconnexion", "Recherche"]);
-            $bts->setPropertyValues("data-ajax", ["listeFavoris/", "preferences/", "choixMoteur/", "deconnexion/", "afficheMoteur/"]);
+            $bts->setPropertyValues("data-ajax", ["listeFavoris/", "preferences/", "choixMoteur/", "deconnexion/UserController/index", "afficheMoteur/"]);
             $bts->getOnClick("UserController/","#divUsers",["attr"=>"data-ajax"]);
         }
         $this->jquery->compile($this->view);
@@ -44,7 +43,7 @@ class UserController extends ControllerBase
     }
     
     public function afficheMoteur() {
-        $moteur=DAO::getOne("models\Moteur","idUtilisateur=".$_SESSION["user"]->getId());
+        $moteur=DAO::getOne("models\Utilisateur","idUtilisateur=".$_SESSION["user"]->getMoteur());
         $frm=$this->jquery->semantic()->htmlForm("frm-search");
         
         $input=$frm->addInput("q");
@@ -222,41 +221,5 @@ class UserController extends ControllerBase
     
     public function fondEcran() {
         
-    }
-    
-    public function connexion() {
-        $frm=$this->jquery->semantic()->defaultLogin("connect");
-        $frm->fieldAsSubmit("submit","green","UserController/submit","body");
-        $frm->removeField("Connection");
-        $frm->setCaption("login", "Identifiant");
-        $frm->setCaption("password", "Mot de passe");
-        $frm->setCaption("remember", "Se souvenir de moi");
-        $frm->setCaption("forget", "Mot de passe oublié ?");
-        $frm->setCaption("submit", "Connexion");
-        echo $frm->asModal();
-        $this->jquery->exec("$('#modal-connect').modal('show');",true);
-        echo $this->jquery->compile($this->view);
-    }
-    
-    public function submit(){
-        $id=RequestUtils::get('id');
-        $user=DAO::getOne("models\Utilisateur", "login='".$_POST["login"]."'");
-        if(isset($user)){
-            $_SESSION["user"] = $user;
-            $this->jquery->exec("$('body').attr('style','background: url(".$user->getFondEcran().")');",true);
-        }
-        $this->index();
-    }
-    
-    public function testCo(){
-        var_dump($_SESSION["user"]);
-    }
-    
-    public function deconnexion() {
-        session_unset();
-        session_destroy();
-        $this->jquery->get("UserController/index","body");
-        $this->jquery->exec("$('body').attr('style','');",true);
-        $this->index();
     }
 }
