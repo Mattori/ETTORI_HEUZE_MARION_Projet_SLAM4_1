@@ -12,6 +12,7 @@ use models\Moteur;
 use Ajax\semantic\html\content\view\HtmlItem;
 use Ajax\semantic\html\collections\form\HtmlFormInput;
 use Ajax\semantic\html\collections\form\HtmlFormDropdown;
+use Ajax\semantic\html\elements\HtmlButton;
 
 /**
  * Controller AdminSiteController
@@ -22,30 +23,53 @@ class AdminSiteController extends ControllerBase
 {
     
     public function initialize(){
-        parent::initialize();
+        $fond="";
         if(isset($_SESSION["user"])){
             $user=$_SESSION["user"];
+            $fond=$user->getFondEcran();
             //echo $user->getLogin();
         }
-
+        if(!RequestUtils::isAjax()){
+            $this->loadView("main/vHeader.html",["fond"=>$fond]);
+        }
     }
     
-    // dashboard de la page
+    // --------- INDEX DE LA PAGE ADMINISTRATION DU SITE ----------
     public function index(){
-        
+        if(isset($_SESSION["user"])){
+            $this->_isConnect();
+        }else{
+            $this->_isNotConnect();
+        }
+    }
+    
+    private function _isConnect()
+    {
         $semantic=$this->jquery->semantic();
+<<<<<<< HEAD
         //echo "ici, on administre le site qui a pour identifiant: ".$_SESSION["user"]->getSite()->getId();
         if(!isset($_SESSION["user"])) {            
             $bts=$semantic->htmlButtonGroups("bts",["Connexion"]);
             $bts->postOnClick("AdminSiteController/connexion/","{action:'AdminSiteController/submit'}","#divSite",["attr"=>""]);
         } 
         elseif($_SESSION["user"]->getStatut()->getId() < 2) 
+=======
+        
+        if($_SESSION["user"]->getStatut()->getId() > 1)
         {
-            echo "t co mais t'a pas les droits";
+            $bts=$semantic->htmlButtonGroups("bts",["Configuration","Moteur de recherche","Deconnexion"]);
+            $bts->setPropertyValues("data-ajax", ["configuration/","moteur/","deconnexion/"]);
+            $bts->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
+        }
+        else
+>>>>>>> 92ba5b5f015f29afb0aa094b6eee20f52f553eed
+        {
+            echo "t'es connecté mais tu n'a pas accès à la page d'administration du site";
             $bts=$semantic->htmlButtonGroups("bts",["Deconnexion"]);
             $bts->setPropertyValues("data-ajax", ["deconnexion/AdminSiteController/index"]);
             $bts->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
         }
+<<<<<<< HEAD
         else{
             $bts=$semantic->htmlButtonGroups("bts",["Configuration","Moteur de recherche","Deconnexion"]);
             $bts->setPropertyValues("data-ajax", ["configuration/","moteur/","deconnexion/AdminSiteController/index"]);
@@ -55,21 +79,54 @@ class AdminSiteController extends ControllerBase
         }
         $this->jquery->compile($this->view);
         $this->loadView("AdminSite\index.html");
+=======
+        
+        $this->jquery->compile($this->view);
+        $this->loadView("AdminSite\index.html");
+    }
+    
+    private function _isNotConnect()
+    {
+        $semantic=$this->jquery->semantic();
+        $bts=$semantic->htmlButtonGroups("bts",["Connexion"]);
+        $bts->setPropertyValues("data-ajax", ["connexion/"]);
+        $bts->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
+        
+        $this->jquery->compile($this->view);
+        $this->loadView("AdminSite\index.html");
+    }
+    
+    // ------- METHODES CONCERNANT LA CONNEXION D'UN UTILISATEUR -------
+    
+    public function connexion () {
+        $frm=$this->jquery->semantic()->defaultLogin("connect");
+        $frm->fieldAsSubmit("submit","green","AdminSiteController/submit","#div-submit");
+        $frm->removeField("Connection");
+        $frm->setCaption("login", "Identifiant");
+        $frm->setCaption("password", "Mot de passe");
+        $frm->setCaption("remember", "Se souvenir de moi");
+        $frm->setCaption("forget", "Mot de passe oublié ?");
+        $frm->setCaption("submit", "Connexion");
+        echo $frm->asModal();
+        $this->jquery->exec("$('#modal-connect').modal('show');",true);
+        echo $this->jquery->compile($this->view);
+    }
+    
+    public function submit(){
+        $id=RequestUtils::get('id');
+        $user=DAO::getOne("models\Utilisateur", "login='".$_POST["login"]."'");
+        if(isset($user)){
+            $_SESSION["user"] = $user;
+            $this->jquery->exec("$('body').attr('style','background: url(".$user->getFondEcran().")');",true);
+        }
+        $this->index();
+>>>>>>> 92ba5b5f015f29afb0aa094b6eee20f52f553eed
     }
     
     
     // ------- METHODES PRINCIPALES DU CONTROLLER -------
     
     public function configuration() {
-        // Affectation de _all à la classe actuelle de variable 'this'
-        $this->_configuration();
-        // Génération du JavaScript/JQuery en tant que variable à l'intérieur de la vue
-        $this->jquery->compile($this->view);
-        // Affiliation à la vue d'URL 'sites\index.html'
-        $this->loadView("AdminSite\index.html");
-    }
-    
-    private function _configuration(){
         // Déclaration d'une nouvelle Semantic-UI
         $semantic=$this->jquery->semantic();
         // Récupération des informations du site
@@ -81,31 +138,24 @@ class AdminSiteController extends ControllerBase
         // Envoi des paramètres du formulaire lors de sa validation
         $form->setValidationParams(["on"=>"blur", "inline"=>true]);
         // Envoi des champs de chaque élément de la table 'Site' à 'form'
-        $form->setFields(["latitude","longitude","ecart\n","submit"]);
+        $form->setFields(["nom\n","latitude","longitude","ecart\n","fondEcran","couleur\n","ordre","options\n","submit"]);
         // Envoi des titres à chaque champ des éléments de la table 'Site' à 'table'
-        $form->setCaptions(["Latitude","Longitude","Ecart","Valider"]);
+        $form->setCaptions(["Nom","Latitude","Longitude","Ecart","Fond d'écran","Couleur", "Ordre", "Options","Valider"]);
         // Ajout d'un bouton de validation 'submit' de couleur verte 'green' récupérant l'action et l'id du bloc '#divSite'
-        $form->fieldAsSubmit("submit","green","update","#divSite");
+        $form->fieldAsSubmit("submit","green fluid","AdminSiteController/editSiteConfirm","#divSite");
         // Chargement de la page HTML 'index.html' de la vue 'sites' avec la génération de la carte Google
-        // via la fonction privée '_generateMap'
-        $this->loadView("AdminSite\index.html",["jsMap"=>$this->_generateMap($site->getLatitude(),$site->getLongitude())]);
-        echo $form->compile($this->jquery);
-    }
-    
-    public function moteur() {
-        // Affectation de _moteur à la classe actuelle de variable 'this'
-        $this->_moteur();
-        // Génération du JavaScript/JQuery en tant que variable à l'intérieur de la vue
+        // via la fonction privée 'generateMap'
         $this->jquery->compile($this->view);
-        // Affiliation à la vue d'URL 'sites\index.html'
-        $this->loadView("AdminSite\index.html");
+        $this->loadView("AdminSite\configuration.html",["jsMap"=>$this->_generateMap($site->getLatitude(),$site->getLongitude())]);
+      
     }
     
     // module de la page
-    private function _moteur(){
+    public function moteur(){
         $semantic=$this->jquery->semantic();
         
         // ---------- LISTE DES MOTEURS ------------
+        
         // on cherche le moteur que l'on a selectionnée afin de l'indiqué:
         $site=DAO::getOne("models\Site",$_SESSION["user"]->getSite()->getId());
         // recupération du moteur selectionnée:
@@ -121,8 +171,8 @@ class AdminSiteController extends ControllerBase
         $table->setCaptions(["id","nom","code du moteur","action","Selectioner"]);
         
         $table->addEditDeleteButtons(true,["ajaxTransition"=>"random","method"=>"post"]);
-        //$table->setUrls('','AdminSiteController/edit/','AdminSiteController/delete/');
-        
+        $table->setUrls(['','AdminSiteController/editMoteur/','AdminSiteController/deleteMoteur/']);
+        $table->setTargetSelector("#divSite");
         // ----------- SELECTIONNER UN MOTEUR POUR NOTRE SITE -----------
         
         // on différencie le moteur déjà selectionné des autres
@@ -140,66 +190,31 @@ class AdminSiteController extends ControllerBase
             }
         });
         $this->jquery->getOnClick("._toSelect", "AdminSiteController/selectionner","#divSite",["attr"=>"data-ajax"]);
-                        
+        
         // ---------- AJOUTER MOTEUR  ------------
-                        
-        $bts=$semantic->htmlButtonGroups("bts",["Ajouter un moteur"]);
-        $bts->setPropertyValues("data-ajax", ["addMoteur/"]);
-                        
+        
+        $btAdd=$semantic->htmlButton('btAdd','ajouter un moteur');
+        $btAdd->getOnClick("AdminSiteController/newMoteur","#divSite");
+        
         // ---------- POSSIBILITÉ OU NON QUE UTILISATEUR MODIFIE -------
-                        
+        
         // à faire
-                        
+        
         echo $table->compile($this->jquery);
-    }
-    
-    // module de la page
-    public function Positionnement(){
-        
-    }
-    
-    // module de la page
-    public function fondEcran(){
-        $moteurs=DAO::getOne("models\Site",$_SESSION["user"]->getSite()->getId());
-        $semantic=$this->jquery->semantic();
-    }
-    
-    // ----------- les actioins liés au site -------
-    
-    public function editSite()
-    {
-        $site=DAO::getOne("models\Site", $_SESSION["user"]->getSite()->getId());
-        $this->_form($site,"SiteController/update/".$id,$site->getLatitude(),$site->getLongitude());
-    }
-    
-    private function _frmSite($site, $action,$lat,$long){
-        // Déclaration d'une nouvelle Semantic-UI
-        $semantic=$this->jquery->semantic();
-        // Affectation du langage français à la 'semantic'
-        $semantic->setLanguage("fr");
-        // Variable 'form' affectant la 'semantic' locale au formulaire d'id 'frmSite' au paramètre '$site'
-        $form=$semantic->dataForm("frmSite", $site);
-        // Envoi des paramètres du formulaire lors de sa validation
-        $form->setValidationParams(["on"=>"blur", "inline"=>true]);
-        // Envoi des champs de chaque élément de la table 'Site' à 'form'
-        $form->setFields(["nom\n","latitude","longitude","ecart\n","fondEcran","couleur\n","ordre","options","submit"]);
-        // Envoi des titres à chaque champ des éléments de la table 'Site' à 'table'
-        $form->setCaptions(["Nom","Latitude","Longitude","Ecart","Fond d'écran","Couleur", "Ordre", "Options","Valider"]);
-        // Ajout d'un bouton de validation 'submit' de couleur verte 'green' récupérant l'action et l'id du bloc '#divSites'
-        $form->fieldAsSubmit("submit","green",$action,"#divSites");
-        // Chargement de _generateMap
-        $this->loadView("sites\index.html",["jsMap"=>$this->_generateMap($lat,$long)]);
-        
-        echo $form->compile($this->jquery);
+        echo $btAdd->compile($this->jquery);
         echo $this->jquery->compile();
     }
     
-    public function editSite_End()
+    // ----------- les actions liés au site -------
+    
+    public function editSiteConfirm()
     {
-        $site=DAO::getOne("models\Site", $id);
+        $recupId = explode('/', $_GET['c']);
+        $site=DAO::getOne("models\Site", $site=DAO::getOne("models\Site", $_SESSION["user"]->getSite()->getId()));
         RequestUtils::setValuesToObject($site,$_POST);
         if(DAO::update($site)){
             echo "Le site ".$site->getId()."->".$site->getNom()." a été modifié.";
+            $this->forward("controllers\AdminSiteController","configuration");
         }
     }
     
@@ -222,58 +237,97 @@ class AdminSiteController extends ControllerBase
         $this->forward("controllers\AdminSiteController","moteur");
     }
     
-    public function addMoteur()
+    public function newMoteur()
     {
-        $this->_form(new Moteur(),"SiteController/newMoteur_End/");
+        $this->_frmMoteur(null,"AdminSiteController/newMoteurConfirm/");
     }
     
-    public function editMoteur($idM)
+    public function editMoteur()
     {
-        $this->_form(new Moteur(),"SiteController/editMoteur_End/");
+        // je récupère l'id du moteur que l'on veut selectionner avec un explode de l'url où il s'y trouve en tant que paramètre:
+        $recupId = explode('/', $_GET['c']);
+        // $recupId[2] représente l'identifiant du moteur
+        $this->_frmMoteur($recupId[2],"AdminSiteController/editMoteurConfirm/");
     }
     
-    public function deleteMoteur($idM)
+    public function deleteMoteur()
     {
-        $this->_form(new Moteur(),"SiteController/deleteMoteur_End/");
+        $recupId = explode('/', $_GET['c']);
+        // $recupId[2] représente l'identifiant du moteur
+        $this->_frmMoteur($recupId[2],"AdminSiteController/deleteMoteurConfirm/");
     }
     
-    private function _frmMoteur($action)
+    private function _frmMoteur($idM,$action)
     {
+        if($idM != null){
+            $moteur=DAO::getOne("models\Moteur", $idM);
+        }
+        else
+        {
+            $moteur=new Moteur();
+        }
+        
         $semantic=$this->jquery->semantic();
         // Affectation du langage français à la 'semantic'
         $semantic->setLanguage("fr");
         // Variable 'form' affectant la 'semantic' locale au formulaire d'id 'frmMoteur' au paramètre instance de moteur
-        $form=$semantic->dataForm("frmMoteur", new Moteur());
+        $form=$semantic->dataForm("frmMoteur",$moteur);
         // Envoi des paramètres du formulaire lors de sa validation
         $form->setValidationParams(["on"=>"blur", "inline"=>true]);
-        $form->setFields(["nom","code","submit"]);
-        $form->setCaptions(["Nom","Code","Valider"]);
+        $form->setFields(["id","nom","code","submit"]);
+        $form->setCaptions(["id","Nom","Code","Valider"]);
+        $form->fieldAsHidden("id");
         // Ajout d'un bouton de validation 'submit' de couleur verte 'green' récupérant l'action et l'id du bloc '#divSites'
-        $form->fieldAsSubmit("submit","green",$action,"#divSites");
+        $form->fieldAsSubmit("submit","green",$action,"#divSite");
         
         echo $form->compile($this->jquery);
         echo $this->jquery->compile();
     }
     
-    public function addMoteur_End()
+    public function newMoteurConfirm()
     {
-        
-    }
-    
-    public function editMoteur_End()
-    {
-        $moteur=DAO::getOne("models\Moteur", $id);
+        $moteur= new Moteur();
         RequestUtils::setValuesToObject($moteur,$_POST);
-        if(DAO::update($moteur)){
-            echo "Le moteur ".$moteur->getId()."->".$moteur->getNom()." a été modifié.";
+        if(DAO::insert($moteur)){
+            echo "Le moteur ".$moteur->getId().": ".$moteur->getNom()." a été ajouté.";
+            $this->forward("controllers\AdminSiteController","moteur");
         }
     }
     
-    public function deleteMoteur_End()
+    public function editMoteurConfirm()
     {
-        $site=DAO::getOne("models\Moteur", $id);
-        $site instanceof models\Moteur && DAO::remove($site);
-        $this->forward("controllers\AdminSiteController","all");
+        $moteur=DAO::getOne("models\Moteur", $_POST['id']);
+        RequestUtils::setValuesToObject($moteur,$_POST);
+        if(DAO::update($moteur)){
+            echo "Le moteur ".$moteur->getId().": ".$moteur->getNom()." a été modifié.";
+            $this->forward("controllers\AdminSiteController","moteur");
+        }
+    }
+    
+    public function deleteMoteurConfirm()
+    {
+        $idMoteur=$_POST['id'];
+        
+        $moteur=DAO::getOne("models\Moteur", 'id='.$idMoteur);
+        /* 
+        $etablissement = DAO::getAll("models\Etablissement", $moteur);;
+        $site = DAO::getAll("models\Site", $moteur);
+        $utilisateur = DAO::getAll("models\Utilisateur", $moteur);
+        
+        $moteurVide= new Moteur();
+        
+        RequestUtils::setValuesToObject($etablissement,$moteurVide);
+        RequestUtils::setValuesToObject($site,$moteurVide);
+        RequestUtils::setValuesToObject($utilisateur,$moteurVide);
+        
+        if(DAO::update($etablissement) && DAO::update($site) && DAO::update($utilisateur)){
+            echo "Le moteur ".$idMoteur." n'est plus accocié aux établissement, sites et utilisateurs";
+        }
+        */
+        if(DAO::remove($moteur)){
+            echo "Le moteur ".$moteur->getId().": ".$moteur->getNom()." a été supprimé.";
+            $this->forward("controllers\AdminSiteController","moteur");
+        }
     }
     
     // ----------- MAP -----------

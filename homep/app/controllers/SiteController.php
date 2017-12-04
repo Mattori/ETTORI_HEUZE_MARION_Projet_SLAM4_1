@@ -246,7 +246,7 @@ class SiteController extends ControllerBase
         <script>
             // Déclaration de la carte Google Maps
             var map={};
-
+            
             // Fonction d'initialisation de la carte, de ses éléments et de ses évènements
             function initMap() {
                 // Options de la carte
@@ -266,19 +266,19 @@ class SiteController extends ControllerBase
 				}
                 // Affectation du cercle
 				var cercle = new google.maps.Circle(optionsCercle);
-                
+				
                 // Ajout d'un évènement lorsque l'on clique sur la carte
                 map.addListener('click',function(event){
                     // Affectation de la valeur de la div d'id 'frmSite-latitude' à la valeur de la latitude de l'évènement
                     document.getElementById('frmSite-latitude').value=event.latLng.lat();
-
+                    
                     // Affectation de la valeur de la div d'id 'frmSite-latitude' à la valeur de la longitude de l'évènement
                     document.getElementById('frmSite-longitude').value=event.latLng.lng();
 
                     // Affectation de la valeur de la div d'id 'frmSite-latitude' à la valeur de la longitude de l'évènement
                     document.getElementById('frmSite-longitude').value=event.latLng.lng();
                 })
-
+                
                 // Ajout d'un évènement lorsque l'on change la latitude de la div d'id 'frmSite-latitude'
                 frmSite-latitude.addListener('change', function(event){
                     // Affectation de la valeur de la cible de l'évènement à la valeur de la latitude de la carte
