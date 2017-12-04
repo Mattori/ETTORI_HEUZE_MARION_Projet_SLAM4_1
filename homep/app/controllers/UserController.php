@@ -34,8 +34,8 @@ class UserController extends ControllerBase
             $bt=$semantic->htmlButton("bts","Connexion");
             $bt->postOnClick("UserController/connexion/","{action:'UserController/submit'}","#divUsers",["attr"=>""]);
         } else {
-            $bts=$semantic->htmlButtonGroups("bts",["Liste des liens web", "Préférences", "Choix du moteur", "Déconnexion", "Recherche"]);
-            $bts->setPropertyValues("data-ajax", ["listeFavoris/", "preferences/", "choixMoteur/", "deconnexion/UserController/index", "afficheMoteur/"]);
+            $bts=$semantic->htmlButtonGroups("bts",["Liste des liens web", "Préférences", "Choix du moteur", "Recherche", "Déconnexion"]);
+            $bts->setPropertyValues("data-ajax", ["listeFavoris/", "preferences/", "choixMoteur/", "afficheMoteur/", "deconnexion/UserController/index"]);
             $bts->getOnClick("UserController/","#divUsers",["attr"=>"data-ajax"]);
         }
         $this->jquery->compile($this->view);
@@ -43,13 +43,13 @@ class UserController extends ControllerBase
     }
     
     public function afficheMoteur() {
-        $moteur=DAO::getOne("models\Utilisateur","idUtilisateur=".$_SESSION["user"]->getMoteur());
+        $moteur=DAO::getOne("models\Utilisateur","idMoteur=".$_SESSION["user"]->getMoteur());
+        
         $frm=$this->jquery->semantic()->htmlForm("frm-search");
-        
         $input=$frm->addInput("q");
-        $input->labeled($moteur->getNom());
+        $input->labeled($moteur->getMoteur()->getNom());
         
-        $frm->setProperty("action",$moteur->getCode());
+        $frm->setProperty("action",$moteur->getMoteur()->getCode());
         $frm->setProperty("method","get");
         $frm->setProperty("target","_new");
         $bt=$input->addAction("Rechercher");
@@ -132,10 +132,10 @@ class UserController extends ControllerBase
         $form->setValidationParams(["on"=>"blur", "inline"=>true]);
         
         // Envoi des champs de chaque élément de la table 'Site' à 'form'
-        $form->setFields(["login", "password\n", "elementsMasques", "fondEcran", "couleur\n", "ordre", "options", "submit"]);
+        $form->setFields(["login", "password\n", "elementsMasques", "fondEcran", "couleur\n", "ordre", "submit"]);
         
         // Envoi des titres à chaque champ des éléments de la table 'Site' à 'table'
-        $form->setCaptions(["Login","Mot de passe","Éléments masqués","Fond d'écran","Couleur", "Ordre", "Options","Valider"]);
+        $form->setCaptions(["Login","Mot de passe","Éléments masqués","Fond d'écran","Couleur", "Ordre","Valider"]);
         
         // Ajout d'un bouton de validation 'submit' de couleur verte 'green' récupérant l'action et l'id du bloc '#divSites'
         $form->fieldAsSubmit("submit", "green", $action, "#divUsers");
@@ -166,7 +166,7 @@ class UserController extends ControllerBase
             echo "L'utilisateur ".$user->getLogin()." a été modifié.";
             $_SESSION["user"] = $user;
             echo $this->jquery->compile($this->view);
-            var_dump($_SESSION["user"]);
+            //var_dump($_SESSION["user"]);
         }
     }
     
@@ -191,7 +191,7 @@ class UserController extends ControllerBase
     // Fonction publique permettant l'exécution de la requête de suppression d'un nouveau site
     public function deleteLink($id){
         //var_dump($_SESSION["user"]);
-        var_dump($id);
+        //var_dump($id);
         // Variable 'site' récupérant toutes les données d'un site selon son id et le modèle 'Site'
         $liens=DAO::getOne("models\Lienweb", "id=".$id);
         
