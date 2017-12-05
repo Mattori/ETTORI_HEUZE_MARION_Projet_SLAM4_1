@@ -3,6 +3,7 @@ namespace controllers;
 
 use micro\orm\DAO;
 use micro\utils\RequestUtils;
+
  /**
  * Controller Main
  **/
@@ -24,23 +25,27 @@ class Main extends ControllerBase{
 		$semantic=$this->jquery->semantic();
 
 		if(isset($_SESSION["user"])){
-		    echo "test cnx";
-		    
-		    $semantic->htmlHeader("header",1,"HOMEPAGE");
-		    $bt=$semantic->htmlButtonGroups("menu",["Deconnexion"]);
-		    $bt->setPropertyValues("data-ajax", ["deconnexion/"]);
-		    $bt->getOnClick("Main/","#menu",["attr"=>"data-ajax"]);
+		    $semantic->htmlHeader("header",1,"HOMEPAGE du site ".$_SESSION["user"]->getSite()->getNom());
 		    if($_SESSION["user"]->getStatut()->getId() > 1)
 		    {
-		        
+		        $bt=$semantic->htmlButtonGroups("menu",["Administration du site","Administration globale","Deconnexion"]);
+		        $bt->setPropertyValues("data-ajax", ["AdminSiteController/","SiteController/","deconnexion/"]);
+		        $bt->getOnClick("","#menu",["attr"=>"data-ajax"]);
 		    }
-		    if($_SESSION["user"]->getStatut()->getId() > 2)
+		    elseif($_SESSION["user"]->getStatut()->getId() > 2)
 		    {
-		        
+		        $bt=$semantic->htmlButtonGroups("menu",["Page AdminSite","Deconnexion"]);
+		        $bt->setPropertyValues("data-ajax", ["AdminSiteController/","deconnexion/"]);
+		        $bt->getOnClick("","#menu",["attr"=>"data-ajax"]);
+		    }
+		    else 
+		    {
+		        $bt=$semantic->htmlButtonGroups("menu",["Deconnexion"]);
+		        $bt->setPropertyValues("data-ajax", ["deconnexion/"]);
+		        $bt->getOnClick("Main/","#menu",["attr"=>"data-ajax"]);
 		    }
 
 		}else{
-		    $semantic->htmlHeader("header",1,"HOMEPAGE");
 		    $bt=$semantic->htmlButtonGroups("menu",["Connexion"]);
 		    $bt->setPropertyValues("data-ajax", ["connexion/"]);
 		    $bt->getOnClick("Main/","#menu",["attr"=>"data-ajax"]);
