@@ -22,15 +22,13 @@ class SiteController extends ControllerBase
         }
     }
     
-    
     // Fonction publique permettant de déterminer les éléments et les évènements de la page 'index.html'
     public function index(){
         $semantic=$this->jquery->semantic();
         //echo "ici, on administre le site qui a pour identifiant: ".$_SESSION["user"]->getSite()->getId();
         if(!isset($_SESSION["user"])) {
             $bts=$semantic->htmlButtonGroups("bts",["Connexion"]);
-            $bts->setPropertyValues("data-ajax", ["connexion/"]);
-            $bts->getOnClick("SiteController/","#divSites",["attr"=>"data-ajax"]);
+            $bts->postOnClick("SiteController/connexion/","{action:'SiteController/submit'}","#divSites",["attr"=>""]);
             
             $this->jquery->compile($this->view);
             $this->loadView("sites\index.html");
@@ -39,7 +37,7 @@ class SiteController extends ControllerBase
         {
             echo "Vous êtes connectés mais vous n'avez pas les droits.";
             $bts=$semantic->htmlButtonGroups("bts",["Deconnexion"]);
-            $bts->setPropertyValues("data-ajax", ["deconnexion/"]);
+            $bts->setPropertyValues("data-ajax", ["deconnexion/SiteController/index"]);
             $bts->getOnClick("SiteController/","#divSites",["attr"=>"data-ajax"]);
             
             $this->jquery->compile($this->view);
@@ -241,41 +239,6 @@ class SiteController extends ControllerBase
         if(DAO::update($site)){
             echo "Le site ".$site->getNom()." a été modifié.";
         }
-    }
-    
-    public function connexion () {
-        $frm=$this->jquery->semantic()->defaultLogin("connect");
-        $frm->fieldAsSubmit("submit","green","UserController/submit","#div-submit");
-        $frm->removeField("Connection");
-        $frm->setCaption("login", "Identifiant");
-        $frm->setCaption("password", "Mot de passe");
-        $frm->setCaption("remember", "Se souvenir de moi");
-        $frm->setCaption("forget", "Mot de passe oublié ?");
-        $frm->setCaption("submit", "Connexion");
-        echo $frm->asModal();
-        $this->jquery->exec("$('#modal-connect').modal('show');",true);
-        echo $this->jquery->compile($this->view);
-    }
-    
-    public function submit(){
-        $id=RequestUtils::get('id');
-        $user=DAO::getOne("models\Utilisateur", "login='".$_POST["login"]."'");
-        if(isset($user)){
-            $_SESSION["user"] = $user;
-            $this->jquery->get("UserController/index","body");
-            echo $this->jquery->compile($this->view);
-        }
-    }
-    
-    public function testCo(){
-        var_dump($_SESSION["user"]);
-    }
-    
-    public function deconnexion() {
-        session_unset();
-        session_destroy();
-        $this->jquery->get("UserController/index","body");
-        echo $this->jquery->compile();
     }
     
     private function _generateMap($lat,$long){
