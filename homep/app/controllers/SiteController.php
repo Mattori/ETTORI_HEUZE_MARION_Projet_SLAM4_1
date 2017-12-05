@@ -1,6 +1,5 @@
 <?php
 namespace controllers;
-use Ajax\JsUtils;
 use micro\orm\DAO;
 use micro\utils\RequestUtils;
 use models;
@@ -67,13 +66,17 @@ class SiteController extends ControllerBase
             //$this->loadView("sites\index.html",["jsMap"=>$this->_generateMap(49.201491, -0.380734)]);
         }
     }
-
     
     // Fonction privée permettant d'afficher le contenu de la table 'Site' de la BDD 'homepage'
     private function _all(){
         // Variable 'sites' récupérant toutes les données de la table 'Site' à partir du modèle d'URL 'models\Site'
         // sous forme de tableau
         $sites=DAO::getAll("models\Site");
+        $tab = array_map(function($site){return $site->getOrdre();}, $sites);
+        asort($tab);
+        foreach ($tab as $key => $val) {
+            echo "$key = $val\n";
+        }
         
         // Déclaration d'une nouvelle Semantic-UI
         $semantic=$this->jquery->semantic();
@@ -85,13 +88,13 @@ class SiteController extends ControllerBase
         $table=$semantic->dataTable("tblSites", "models\Site", $sites);
         
         // Envoi de l'identifiant de la fonction récupérant chaque id sous forme d'objet au tableau de données 'table'
-        $table->setIdentifierFunction(function($i,$obj){return $obj->getId();});
+        //$table->setIdentifierFunction(function($i,$obj){return $obj->getId();});
         
         // Envoi des champs de chaque élément de la table 'Site' à 'table'
-        $table->setFields(["id","nom","latitude","longitude","ecart","fondEcran","couleur","ordre","options"]);
+        $table->setFields(["nom","latitude","longitude","ecart","fondEcran","couleur","ordre","options"]);
         
         // Envoi des titres à chaque champ des éléments de la table 'Site' à 'table'
-        $table->setCaptions(["Id","Nom","Latitude","Longitude","Ecart","Fond d'écran","Couleur", "Ordre", "Options", "Actions"]);
+        $table->setCaptions(["Nom","Latitude","Longitude","Ecart","Fond d'écran","Couleur", "Ordre", "Options", "Actions"]);
         
         // Ajout d'un bouton d'édition et d'un bouton de suppression à chaque ligne renvoyé de 'table'
         $table->addEditDeleteButtons(true,["ajaxTransition"=>"random","method"=>"post"]);
@@ -103,6 +106,7 @@ class SiteController extends ControllerBase
         
         // Envoi du tableau de données à l'intérieur de la div '#divSites' dans 'index.html'
         $table->setTargetSelector("#divSites");
+        $table->setSortable(1);
         
         echo $table->compile($this->jquery);
         echo $this->jquery->compile();

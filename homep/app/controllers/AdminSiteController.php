@@ -1,18 +1,10 @@
 <?php
 namespace controllers;
 
-use Ajax\JsUtils;
 use micro\orm\DAO;
 use micro\utils\RequestUtils;
-use models\Site;
 use models;
-use controllers\ControllerBase;
-use Ajax\service\JArray;
 use models\Moteur;
-use Ajax\semantic\html\content\view\HtmlItem;
-use Ajax\semantic\html\collections\form\HtmlFormInput;
-use Ajax\semantic\html\collections\form\HtmlFormDropdown;
-use Ajax\semantic\html\elements\HtmlButton;
 
 /**
  * Controller AdminSiteController
@@ -51,7 +43,7 @@ class AdminSiteController extends ControllerBase
             $bts=$semantic->htmlButtonGroups("bts",["Connexion"]);
             $bts->postOnClick("AdminSiteController/connexion/","{action:'AdminSiteController/submit'}","#divSite",["attr"=>""]);
         } 
-        elseif($_SESSION["user"]->getStatut()->getId() < 2) 
+        elseif($_SESSION["user"]->getStatut()->getId() < 2)
         
         if($_SESSION["user"]->getStatut()->getId() > 1)
         {
@@ -70,8 +62,6 @@ class AdminSiteController extends ControllerBase
             $bts=$semantic->htmlButtonGroups("bts",["Configuration","Moteur de recherche","Deconnexion"]);
             $bts->setPropertyValues("data-ajax", ["configuration/","moteur/","deconnexion/AdminSiteController/index"]);
             $bts->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
-            
-            
         }
         $this->jquery->compile($this->view);
         $this->loadView("AdminSite\index.html");
