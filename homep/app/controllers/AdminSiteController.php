@@ -4,7 +4,15 @@ namespace controllers;
 use micro\orm\DAO;
 use micro\utils\RequestUtils;
 use models;
+<<<<<<< HEAD
 use models\Moteur;
+=======
+
+use models\Moteur;
+use Ajax\Semantic;
+use Ajax\JsUtils;
+use Ajax\semantic\html\collections\form\HtmlFormCheckbox;
+>>>>>>> 95b7c2a05882a4f80dc7bc3a0bf4da435729600e
 
 /**
  * Controller AdminSiteController
@@ -47,8 +55,8 @@ class AdminSiteController extends ControllerBase
         
         if($_SESSION["user"]->getStatut()->getId() > 1)
         {
-            $bts=$semantic->htmlButtonGroups("bts",["Configuration","Moteur de recherche","Deconnexion"]);
-            $bts->setPropertyValues("data-ajax", ["configuration/","moteur/","deconnexion/"]);
+            $bts=$semantic->htmlButtonGroups("bts",["Configuration","Moteur de recherche","Options utilisateur","Options établissement","Deconnexion"]);
+            $bts->setPropertyValues("data-ajax", ["configuration/","moteur/","optionsUtilisateur/","optionsEtablissement/","deconnexion/"]);
             $bts->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
         }
         else
@@ -105,7 +113,36 @@ class AdminSiteController extends ControllerBase
         // via la fonction privée 'generateMap'
         $this->jquery->compile($this->view);
         $this->loadView("AdminSite\configuration.html",["jsMap"=>$this->_generateMap($site->getLatitude(),$site->getLongitude())]);
-      
+    }
+    
+    public function optionsUtilisateur(){
+        $semantic=$this->jquery->semantic();
+        
+        $options=DAO::getAll("models\Option");
+        
+        $form=$semantic->dataTable("tblOptionsU", "models\Option", $options);
+        $form->setFields(["id","libelle"]);
+        $form->setCaptions(["id","libelle",'personnalisable']);
+        
+        $optionSelect = DAO::getOne('models\Site',$_SESSION["user"]->getSite()->getOptions());
+        $optionsSelect = explode(',',$_SESSION["user"]->getSite()->getOptions());
+        /*$form->setValueFunction(2, function ($o,$instance,$index) use($optionsSelect){
+            $o=new HtmlFormCheckbox("bt".$instance->getId(),"");
+            $o->setChecked(array_search($instance->getId(),$optionsSelect)!==false,false);
+            return $o;});
+        */
+        $form->addFieldButtons(['personnalisable','non-perso'],true,'');
+        
+        echo $form->compile($this->jquery);
+    }
+    
+    public function checked(){
+        var_dump($_POST);
+        var_dump($_GET);
+    }
+    
+    public function optionsEtablissement(){
+        
     }
     
     // module de la page
@@ -141,12 +178,6 @@ class AdminSiteController extends ControllerBase
                 $bt->addClass("_toSelect");
             }
         });
-            // on attribue une couleur à notre moteur et la possibilité de selectionner un des autres moteurs à la place
-        $table->onNewRow(function($row,$instance) use($moteurSelected){
-            if($instance->getId()===$moteurSelected->getId()){
-            $row->setProperty("style","background-color:#949da5;");
-            }
-        });
         $this->jquery->getOnClick("._toSelect", "AdminSiteController/selectionner","#divSite",["attr"=>"data-ajax"]);
         
         // ---------- AJOUTER MOTEUR  ------------
@@ -154,12 +185,11 @@ class AdminSiteController extends ControllerBase
         $btAdd=$semantic->htmlButton('btAdd','ajouter un moteur');
         $btAdd->getOnClick("AdminSiteController/newMoteur","#divSite");
         
-        // ---------- POSSIBILITÉ OU NON QUE UTILISATEUR MODIFIE -------
-        
-        // à faire
+        // ------------
         
         echo $table->compile($this->jquery);
         echo $btAdd->compile($this->jquery);
+        
         echo $this->jquery->compile();
     }
     
