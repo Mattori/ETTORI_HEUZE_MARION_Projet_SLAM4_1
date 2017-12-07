@@ -4,15 +4,7 @@ namespace controllers;
 use micro\orm\DAO;
 use micro\utils\RequestUtils;
 use models;
-<<<<<<< HEAD
 use models\Moteur;
-=======
-
-use models\Moteur;
-use Ajax\Semantic;
-use Ajax\JsUtils;
-use Ajax\semantic\html\collections\form\HtmlFormCheckbox;
->>>>>>> 95b7c2a05882a4f80dc7bc3a0bf4da435729600e
 
 /**
  * Controller AdminSiteController
@@ -36,55 +28,22 @@ class AdminSiteController extends ControllerBase
     
     // --------- INDEX DE LA PAGE ADMINISTRATION DU SITE ----------
     public function index(){
-        if(isset($_SESSION["user"])){
-            $this->_isConnect();
-        }else{
-            $this->_isNotConnect();
-        }
-    }
-    
-    private function _isConnect()
-    {
         $semantic=$this->jquery->semantic();
-        //echo "ici, on administre le site qui a pour identifiant: ".$_SESSION["user"]->getSite()->getId();
-        if(!isset($_SESSION["user"])) {            
-            $bts=$semantic->htmlButtonGroups("bts",["Connexion"]);
-            $bts->postOnClick("AdminSiteController/connexion/","{action:'AdminSiteController/submit'}","#divSite",["attr"=>""]);
-        } 
-        elseif($_SESSION["user"]->getStatut()->getId() < 2)
-        
-        if($_SESSION["user"]->getStatut()->getId() > 1)
-        {
-            $bts=$semantic->htmlButtonGroups("bts",["Configuration","Moteur de recherche","Options utilisateur","Options établissement","Deconnexion"]);
-            $bts->setPropertyValues("data-ajax", ["configuration/","moteur/","optionsUtilisateur/","optionsEtablissement/","deconnexion/"]);
-            $bts->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
+        if(!isset($_SESSION["user"])) {
+            $bt=$semantic->htmlButton("bts","Connexion");
+            $bt->postOnClick("AdminSiteController/connexion/","{action:'AdminSiteController/submit'}","#divSite",["attr"=>""]);
+        } else {
+            if($_SESSION["user"]->getStatut()->getId() >=2) {
+                $bts=$semantic->htmlButtonGroups("bts",["Configuration","Moteur de recherche","Options utilisateur","Options établissement","Deconnexion"]);
+                $bts->setPropertyValues("data-ajax", ["configuration/","moteur/","optionsUtilisateur/","optionsEtablissement/","deconnexion/AdminSiteController/index"]);
+                $bts->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
+            } else {
+                echo "t'es connecté mais tu n'a pas accès à la page d'administration du site";
+                $bts=$semantic->htmlButtonGroups("bts",["Deconnexion"]);
+                $bts->setPropertyValues("data-ajax", ["deconnexion/AdminSiteController/index"]);
+                $bts->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
+            }
         }
-        else
-        {
-            echo "t'es connecté mais tu n'a pas accès à la page d'administration du site";
-            $bts=$semantic->htmlButtonGroups("bts",["Deconnexion"]);
-            $bts->setPropertyValues("data-ajax", ["deconnexion/AdminSiteController/index"]);
-            $bts->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
-        }
-        else{
-            $bts=$semantic->htmlButtonGroups("bts",["Configuration","Moteur de recherche","Deconnexion"]);
-            $bts->setPropertyValues("data-ajax", ["configuration/","moteur/","deconnexion/AdminSiteController/index"]);
-            $bts->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
-        }
-        $this->jquery->compile($this->view);
-        $this->loadView("AdminSite\index.html");
-        
-        $this->jquery->compile($this->view);
-        $this->loadView("AdminSite\index.html");
-    }
-    
-    private function _isNotConnect()
-    {
-        $semantic=$this->jquery->semantic();
-        $bts=$semantic->htmlButtonGroups("bts",["Connexion"]);
-        $bts->setPropertyValues("data-ajax", ["connexion/"]);
-        $bts->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
-        
         $this->jquery->compile($this->view);
         $this->loadView("AdminSite\index.html");
     }
@@ -145,6 +104,19 @@ class AdminSiteController extends ControllerBase
         
     }
     
+    // ----------- les actions liés au site -------
+    
+    public function editSiteConfirm()
+    {
+        $recupId = explode('/', $_GET['c']);
+        $site=DAO::getOne("models\Site", $site=DAO::getOne("models\Site", $_SESSION["user"]->getSite()->getId()));
+        RequestUtils::setValuesToObject($site,$_POST);
+        if(DAO::update($site)){
+            echo "Le site ".$site->getId()."->".$site->getNom()." a été modifié.";
+            $this->forward("controllers\AdminSiteController","configuration");
+        }
+    }
+    
     // module de la page
     public function moteur(){
         $semantic=$this->jquery->semantic();
@@ -191,19 +163,6 @@ class AdminSiteController extends ControllerBase
         echo $btAdd->compile($this->jquery);
         
         echo $this->jquery->compile();
-    }
-    
-    // ----------- les actions liés au site -------
-    
-    public function editSiteConfirm()
-    {
-        $recupId = explode('/', $_GET['c']);
-        $site=DAO::getOne("models\Site", $site=DAO::getOne("models\Site", $_SESSION["user"]->getSite()->getId()));
-        RequestUtils::setValuesToObject($site,$_POST);
-        if(DAO::update($site)){
-            echo "Le site ".$site->getId()."->".$site->getNom()." a été modifié.";
-            $this->forward("controllers\AdminSiteController","configuration");
-        }
     }
     
     // ----------- les actioins liés aux moteurs -------

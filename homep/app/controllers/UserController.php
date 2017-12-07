@@ -35,7 +35,7 @@ class UserController extends ControllerBase
             $bt->postOnClick("UserController/connexion/","{action:'UserController/submit'}","#divUsers",["attr"=>""]);
         } else {
             $bts=$semantic->htmlButtonGroups("bts",["Liste des liens web", "Préférences", "Choix du moteur", "Recherche", "Déconnexion"]);
-            $bts->setPropertyValues("data-ajax", ["listeFavoris/", "preferences/", "choixMoteur/", "afficheMoteur/", "deconnexion/UserController/index"]);
+            $bts->setPropertyValues("data-ajax", ["listeFavoris/", "preferences/", "moteur/", "afficheMoteur/", "deconnexion/UserController/index"]);
             $bts->getOnClick("UserController/","#divUsers",["attr"=>"data-ajax"]);
         }
         $this->jquery->compile($this->view);
@@ -216,11 +216,55 @@ class UserController extends ControllerBase
         }
     }
     
-    public function choixMoteur() {
+    // module de la page
+    public function moteur(){
+        $semantic=$this->jquery->semantic();
         
+        // ---------- LISTE DES MOTEURS ------------
+        
+        // recupération du moteur selectionnée:
+        $moteurSelected=$_SESSION['user']->getMoteur();
+        // recuperation de tout les moteurs:
+        $moteurs=DAO::getAll("models\Moteur");
+        // on met ces moteurs dans un tableau
+        $table=$semantic->dataTable("tblMoteurs", "models\Moteur", $moteurs);
+        // identifiant du moteur en identifieur
+        $table->setIdentifierFunction("getId");
+        
+        $table->setFields(["id", "nom", "code"]);
+        $table->setCaptions(["id", "nom", "code du moteur", "Selectioner"]);
+        
+        $table->setTargetSelector("#divUsers");
+        // ----------- SELECTIONNER UN MOTEUR POUR NOTRE SITE -----------
+        
+        // on différencie le moteur déjà selectionné des autres
+        $table->addFieldButton("Sélectionner",false,function(&$bt,$instance) use($moteurSelected){
+            if($instance->getId()==$moteurSelected->getId()){
+                $bt->addClass("disabled");
+            }else{
+                $bt->addClass("_toSelect");
+            }
+        });
+            $this->jquery->getOnClick("._toSelect", "UserController/selectionner","#divUsers",["attr"=>"data-ajax"]);
+            
+            echo $table->compile($this->jquery);
+            echo $this->jquery->compile();
     }
     
-    public function fondEcran() {
-        
+    // ----------- les actioins liés aux moteurs -------
+    
+    // Selection du moteur pour notre site
+    public function selectionner()
+    {
+        // je récupère l'id du moteur que l'on veut selectionner avec un explode de l'url où il s'y trouve en tant que paramètre:
+        $recupId = explode('/', $_GET['c']);
+        // je recupère le moteur que je souhaite selectionner:
+        $moteur=DAO::getOne("models\Moteur", "id=".$recupId[2]);
+        // je modifie le moteur du site:
+        $_SESSION["user"]->setMoteur($moteur);
+        // j'envoi la requete qui modifie le moteur selectioné pour mon site
+        //RequestUtils::setValuesToObject($site);
+        $_SESSION["user"] instanceof models\Utilisateur && DAO::update($_SESSION["user"]);
+        $this->forward("controllers\UserController","moteur");
     }
 }
