@@ -144,7 +144,7 @@ class AdminSiteController extends ControllerBase
         
         // on différencie le moteur déjà selectionné des autres
         $table->addFieldButton("Selectionner",false,function(&$bt,$instance) use($moteurSelected){
-            if($instance->getId()==$moteurSelected->getId()){
+            if($instance->getId()==$moteurSelected){
                 $bt->addClass("disabled");
             }else{
                 $bt->addClass("_toSelect");

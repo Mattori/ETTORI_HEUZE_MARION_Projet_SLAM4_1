@@ -3,8 +3,6 @@ namespace controllers;
 use micro\orm\DAO;
 use micro\utils\RequestUtils;
 use micro\controllers\Controller;
-use models\Moteur;
-use models;
  /**
  * ControllerBase
  * @property JsUtils $jquery

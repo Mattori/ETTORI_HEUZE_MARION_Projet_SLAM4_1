@@ -4,6 +4,7 @@ use micro\orm\DAO;
 use micro\utils\RequestUtils;
 use models;
 use models\Site;
+use Ajax\JsUtils;
 
 /**
  * Controller SiteController
@@ -71,9 +72,8 @@ class SiteController extends ControllerBase
     private function _all(){
         // Variable 'sites' récupérant toutes les données de la table 'Site' à partir du modèle d'URL 'models\Site'
         // sous forme de tableau
-        $sites=DAO::getAll("models\Site");
+        $sites=DAO::getAll("models\Site","1=1 ORDER BY ordre DESC");
         $tab = array_map(function($site){return $site->getOrdre();}, $sites);
-        asort($tab);
         foreach ($tab as $key => $val) {
             echo "$key = $val\n";
         }
@@ -106,7 +106,6 @@ class SiteController extends ControllerBase
         
         // Envoi du tableau de données à l'intérieur de la div '#divSites' dans 'index.html'
         $table->setTargetSelector("#divSites");
-        $table->setSortable(1);
         
         echo $table->compile($this->jquery);
         echo $this->jquery->compile();

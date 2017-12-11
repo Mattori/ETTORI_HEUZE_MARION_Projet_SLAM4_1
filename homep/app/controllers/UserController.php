@@ -6,6 +6,7 @@ use micro\utils\RequestUtils;
 
 use models;
 use models\Lienweb;
+use Ajax\JsUtils;
 
 
 /**
@@ -30,16 +31,55 @@ class UserController extends ControllerBase
     // Tableau de bord de la page
     public function index(){
         $semantic=$this->jquery->semantic();
+        
         if(!isset($_SESSION["user"])) {
             $bt=$semantic->htmlButton("bts","Connexion");
             $bt->postOnClick("UserController/connexion/","{action:'UserController/submit'}","#divUsers",["attr"=>""]);
         } else {
-            $bts=$semantic->htmlButtonGroups("bts",["Liste des liens web", "Préférences", "Choix du moteur", "Recherche", "Déconnexion"]);
-            $bts->setPropertyValues("data-ajax", ["listeFavoris/", "preferences/", "moteur/", "afficheMoteur/", "deconnexion/UserController/index"]);
+            $bts=$semantic->htmlButtonGroups("bts",["Liste des liens web", "Préférences", "Choix du moteur", "Recherche", "Éléments masqués", "Déconnexion"]);
+            $bts->setPropertyValues("data-ajax", ["listeFavoris/", "preferences/", "moteur/", "afficheMoteur/", "elementsMasques/", "deconnexion/UserController/index"]);
             $bts->getOnClick("UserController/","#divUsers",["attr"=>"data-ajax"]);
         }
+        
+        $frm=$this->jquery->semantic()->htmlForm("frm-search");
+        $input=$frm->addInput("q");
+        $input->labeled("Google");
+        
+        $frm->setProperty("action","https://www.google.fr/search?q=");
+        $frm->setProperty("method","get");
+        $frm->setProperty("target","_new");
+        $bt=$input->addAction("Rechercher");
+        echo $frm;
+        
         $this->jquery->compile($this->view);
         $this->loadView("Utilisateur\index.html");
+    }
+    
+    public function elementsMasques() {
+        // Déclaration d'une nouvelle Semantic-UI
+        $semantic=$this->jquery->semantic();
+        
+        // Affectation du langage français à la 'semantic'
+        $semantic->setLanguage("fr");
+        
+        $btt1=$semantic->htmlButton("btt1","Activer l'image de fond");
+        $btt1->onClick("$('body').css('background-image', 'url(". $_SESSION["user"]->getFondEcran() .")');");
+        
+        $btt2=$semantic->htmlButton("btt2","Désactiver l'image de fond");
+        $btt2->onClick("$('body').css('background-image', 'none');");
+        
+        $btt3=$semantic->htmlButton("btt3","Activer la couleur de fond");
+        $btt3->onClick("$('body').css('background-color', 'red');");
+        
+        $btt4=$semantic->htmlButton("btt4","Désactiver la couleur de fond");
+        $btt4->onClick("$('body').css('background-color', 'white');");
+        
+        echo $btt1->compile($this->jquery);
+        echo $btt2->compile($this->jquery);
+        echo $btt3->compile($this->jquery);
+        echo $btt4->compile($this->jquery);
+        
+        echo $this->jquery->compile();
     }
     
     public function afficheMoteur() {
