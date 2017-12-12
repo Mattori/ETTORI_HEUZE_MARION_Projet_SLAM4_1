@@ -129,7 +129,7 @@ class AdminSiteController extends ControllerBase
         $i = 0;
         
         // conditon recréant les options attribués avec la nouvelle interdiction: 
-        while($i<count($siteOptions)-1)
+        while($i<count($siteOptions))
         {
             // si les options du site ne comporte pas l'option selectioné: 
             if($siteOptions[$i]!=$recupId[2])
