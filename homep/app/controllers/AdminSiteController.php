@@ -5,6 +5,7 @@ use micro\orm\DAO;
 use micro\utils\RequestUtils;
 use models;
 use models\Moteur;
+use Ajax\JsUtils;
 
 /**
  * Controller AdminSiteController
@@ -13,20 +14,20 @@ use models\Moteur;
 
 class AdminSiteController extends ControllerBase
 {
-    
+    /* Méthode d'initialisation de l'utilisateur connecté et de son fond d'écran */
     public function initialize(){
-        $fond="";
-        if(isset($_SESSION["user"])){
-            $user=$_SESSION["user"];
-            $fond=$user->getFondEcran();
-            //echo $user->getLogin();
+        $fond=""; // Initialisation d'une chaîne de caractère 'fond' vide
+        if(isset($_SESSION["user"])){ // Condition vérifiant si l'utilisateur est connecté
+            $user=$_SESSION["user"]; // Affectation de l'utilisateur connecté dans une variable '$user'
+            $fond=$user->getFondEcran(); // Affectation du fond choisi par l'utilisateur connecté à la variable '$fond'
         }
-        if(!RequestUtils::isAjax()){
-            $this->loadView("main/vHeader.html",["fond"=>$fond]);
+        if(!RequestUtils::isAjax()){ // Condition vérifiant si la requête n'est pas en Ajax
+            $this->loadView("main/vHeader.html",["fond"=>$fond]); // Chargement de la vue 'vHeader.html avec le fond
         }
     }
     
-    // --------- INDEX DE LA PAGE ADMINISTRATION DU SITE ----------
+    
+    /* Méthode affichant l'index de la page d'administration du site */
     public function index(){
         $semantic=$this->jquery->semantic();
         if(!isset($_SESSION["user"])) {
@@ -49,33 +50,29 @@ class AdminSiteController extends ControllerBase
     }
     
     
-    // ------- METHODES PRINCIPALES DU CONTROLLER -------
-    
+    /* Méthode affichant la configuration du site de l'utilisateur connecté */
     public function configuration() {
-        // Déclaration d'une nouvelle Semantic-UI
-        $semantic=$this->jquery->semantic();
-        // Récupération des informations du site
-        $site=DAO::getOne("models\Site",$_SESSION["user"]->getSite()->getId());
-        // Affectation du langage français à la 'semantic'
-        $semantic->setLanguage("fr");
-        // Variable 'form' affectant la 'semantic' locale au formulaire d'id 'frmSite' au paramètre '$site'
-        $form=$semantic->dataForm("frmSite", $site);
-        // Envoi des paramètres du formulaire lors de sa validation
-        $form->setValidationParams(["on"=>"blur", "inline"=>true]);
-        // Envoi des champs de chaque élément de la table 'Site' à 'form'
-        $form->setFields(["nom\n","latitude","longitude","ecart\n","fondEcran","couleur\n","ordre","options\n","submit"]);
-        // Envoi des titres à chaque champ des éléments de la table 'Site' à 'table'
-        $form->setCaptions(["Nom","Latitude","Longitude","Ecart","Fond d'écran","Couleur", "Ordre", "Options","Valider"]);
-        // Ajout d'un bouton de validation 'submit' de couleur verte 'green' récupérant l'action et l'id du bloc '#divSite'
-        $form->fieldAsSubmit("submit","green fluid","AdminSiteController/editSiteConfirm","#divSite");
-        // Chargement de la page HTML 'index.html' de la vue 'sites' avec la génération de la carte Google
-        // via la fonction privée 'generateMap'
-        $this->jquery->compile($this->view);
+        
+        
+        $semantic=$this->jquery->semantic(); // Déclaration d'un nouvel accesseur
+        $semantic->setLanguage("fr"); // Affectation du langage français à la 'semantic'
+
+        $site=DAO::getOne("models\Site",$_SESSION["user"]->getSite()->getId()); // Récupération des informations du site depuis l'id de l'utilisateur connecté
+        
+        $form=$semantic->dataForm("frmSite", $site); // Variable 'form' affectant la 'semantic' locale au formulaire d'id 'frmSite' à la variable '$site'
+        $form->setValidationParams(["on"=>"blur", "inline"=>true]); // Envoi des paramètres du formulaire lors de sa validation
+        $form->setFields(["nom\n","latitude","longitude","ecart\n","fondEcran","couleur\n","ordre","options\n","submit"]); // Envoi des champs de chaque élément de la table 'Site' à 'form'
+        $form->setCaptions(["Nom","Latitude","Longitude","Ecart","Fond d'écran","Couleur", "Ordre", "Options","Valider"]); // Envoi des titres à chaque champ des éléments de la table 'Site' à 'table'
+        $form->fieldAsSubmit("submit","green fluid","AdminSiteController/editSiteConfirm","#divSite"); // Ajout d'un bouton de validation 'submit' de couleur verte 'green' récupérant l'action et l'id du bloc '#divSite'
+        
+        $this->jquery->compile($this->view); // Chargement de la page HTML 'index.html' de la vue 'configuration.html' avec la génération de la carte Google via la fonction privée 'generateMap'
         $this->loadView("AdminSite\configuration.html",["jsMap"=>$this->_generateMap($site->getLatitude(),$site->getLongitude())]);
     }
     
+    
+    /* Méthode affichant les options données à l'utilisateur connecté par l'administrateur du site */
     public function optionsUtilisateur(){
-        $semantic=$this->jquery->semantic();
+        $semantic=$this->jquery->semantic(); // Déclaration d'un nouvel accesseur
         
         $options=DAO::getAll("models\Option");
         
@@ -85,27 +82,27 @@ class AdminSiteController extends ControllerBase
         
         $optionSelect = DAO::getOne('models\Site',$_SESSION["user"]->getSite()->getOptions());
         $optionsSelect = explode(',',$_SESSION["user"]->getSite()->getOptions());
-        /*$form->setValueFunction(2, function ($o,$instance,$index) use($optionsSelect){
-            $o=new HtmlFormCheckbox("bt".$instance->getId(),"");
-            $o->setChecked(array_search($instance->getId(),$optionsSelect)!==false,false);
-            return $o;});
-        */
+
         $form->addFieldButtons(['personnalisable','non-perso'],true,'');
         
         echo $form->compile($this->jquery);
     }
     
+    
+    /* Méthode de tests des GET et des POST */
     public function checked(){
         var_dump($_POST);
         var_dump($_GET);
     }
     
+    
     public function optionsEtablissement(){
         
     }
     
-    // ----------- les actions liés au site -------
     
+
+    /* Méthode permettant de confirmer l'édition des actions liés au site */
     public function editSiteConfirm()
     {
         $recupId = explode('/', $_GET['c']);
@@ -117,70 +114,53 @@ class AdminSiteController extends ControllerBase
         }
     }
     
-    // module de la page
+    
+    /* Méthode permettant d'afficher la liste des moteurs */
     public function moteur(){
-        $semantic=$this->jquery->semantic();
+        $semantic=$this->jquery->semantic(); // Déclaration d'un nouvel accesseur
+        $site=DAO::getOne("models\Site",$_SESSION["user"]->getSite()->getId()); // Récupération de l'id du site à partir de l'utilisateur connecté
         
-        // ---------- LISTE DES MOTEURS ------------
+        $moteurSelected=$site->getMoteur(); // Recupération du moteur du site selectionné
+        $moteurs=DAO::getAll("models\Moteur"); // Recuperation de tous les moteurs
         
-        // on cherche le moteur que l'on a selectionnée afin de l'indiqué:
-        $site=DAO::getOne("models\Site",$_SESSION["user"]->getSite()->getId());
-        // recupération du moteur selectionnée:
-        $moteurSelected=$site->getMoteur();
-        // recuperation de tout les moteurs:
-        $moteurs=DAO::getAll("models\Moteur");
-        // on met ces moteurs dans un tableau
-        $table=$semantic->dataTable("tblMoteurs", "models\Moteur", $moteurs);
-        // identifiant du moteur en identifieur
-        $table->setIdentifierFunction("getId");
         
-        $table->setFields(["id","nom","code"]);
-        $table->setCaptions(["id","nom","code du moteur","action","Selectioner"]);
+        $table=$semantic->dataTable("tblMoteurs", "models\Moteur", $moteurs); // Ajout de tous les moteurs dans un nouveau tableau
+        $table->setIdentifierFunction("getId"); // Identification du moteur en tant qu'identifiant
+        $table->setFields(["id","nom","code"]); // Détermination des champs du moteur à afficher
+        $table->setCaptions(["Id","Nom","Code du moteur","action","Sélectioner"]); // Détermination des noms de colonnes correspondants aux champs affichés
+        $table->addEditDeleteButtons(true,["ajaxTransition"=>"random","method"=>"post"]); // Ajout des boutons d'éditions et de suppression à chaque moteur
+        $table->setUrls(['','AdminSiteController/editMoteur/','AdminSiteController/deleteMoteur/']); // Assignation des méthodes aux boutons d'édition et de suppression
+        $table->setTargetSelector("#divSite"); // Assignation du bloc/de la div dans laquelle renvoyer 
         
-        $table->addEditDeleteButtons(true,["ajaxTransition"=>"random","method"=>"post"]);
-        $table->setUrls(['','AdminSiteController/editMoteur/','AdminSiteController/deleteMoteur/']);
-        $table->setTargetSelector("#divSite");
-        // ----------- SELECTIONNER UN MOTEUR POUR NOTRE SITE -----------
-        
-        // on différencie le moteur déjà selectionné des autres
-        $table->addFieldButton("Selectionner",false,function(&$bt,$instance) use($moteurSelected){
+        $table->addFieldButton("Selectionner",false,function(&$bt,$instance) use($moteurSelected) { // Différenciation du moteur déjà selectionné par rapport aux autres
             if($instance->getId()==$moteurSelected){
                 $bt->addClass("disabled");
             }else{
                 $bt->addClass("_toSelect");
             }
         });
-        $this->jquery->getOnClick("._toSelect", "AdminSiteController/selectionner","#divSite",["attr"=>"data-ajax"]);
         
-        // ---------- AJOUTER MOTEUR  ------------
+        $this->jquery->getOnClick("._toSelect", "AdminSiteController/selectionner","#divSite",["attr"=>"data-ajax"]); // Affectation du clic sur le bouton Sélectionner
         
-        $btAdd=$semantic->htmlButton('btAdd','ajouter un moteur');
-        $btAdd->getOnClick("AdminSiteController/newMoteur","#divSite");
-        
-        
+        $btAdd=$semantic->htmlButton('btAdd','Ajouter un moteur'); // Initialisation d'une variable du bouton "Ajouter un moteur" d'id 'btAdd'
+        $btAdd->getOnClick("AdminSiteController/newMoteur","#divSite"); // Affectation du clic sur la variable du bouton '$btAdd'
+
         echo $table->compile($this->jquery);
         echo $btAdd->compile($this->jquery);
         
         echo $this->jquery->compile();
     }
+
     
-    // ----------- les actioins liés aux moteurs -------
-    
-    // Selection du moteur pour notre site
+    // Sélection du moteur pour le site
     public function selectionner()
     {
-        // je récupère l'id du moteur que l'on veut selectionner avec un explode de l'url où il s'y trouve en tant que paramètre:
-        $recupId = explode('/', $_GET['c']);
-        // je recupère le site que j'administre:
-        $site=DAO::getOne("models\Site", $_SESSION["user"]->getSite()->getId());
-        // je recupère le moteur que je souhaite selectionner:
-        $moteur=DAO::getOne("models\Moteur", "id=".$recupId[2]);
-        // je modifie le moteur du site:
-        $site->setMoteur($moteur);
-        // j'envoi la requete qui modifie le moteur selectioné pour mon site
-        //RequestUtils::setValuesToObject($site);
-        $site instanceof models\Site && DAO::update($site);
-        $this->forward("controllers\AdminSiteController","moteur");
+        $recupId = explode('/', $_GET['c']); // Récupération de l'id du moteur à sélectionner avec un explode de l'URL en tant que paramètre
+        $site=DAO::getOne("models\Site", $_SESSION["user"]->getSite()->getId()); // Récupération du site à administrer
+        $moteur=DAO::getOne("models\Moteur", "id=".$recupId[2]); // Récupération du moteur à sélectionner
+        $site->setMoteur($moteur); // Modification du moteur du site
+        $site instanceof models\Site && DAO::update($site); // Envoi de la requete modifiant le moteur selectioné pour le site
+        $this->forward("controllers\AdminSiteController","moteur"); // Retour arrière vers le controlleur AdminSiteController
     }
     
     public function newMoteur()
@@ -213,18 +193,15 @@ class AdminSiteController extends ControllerBase
             $moteur=new Moteur();
         }
         
-        $semantic=$this->jquery->semantic();
-        // Affectation du langage français à la 'semantic'
-        $semantic->setLanguage("fr");
-        // Variable 'form' affectant la 'semantic' locale au formulaire d'id 'frmMoteur' au paramètre instance de moteur
-        $form=$semantic->dataForm("frmMoteur",$moteur);
-        // Envoi des paramètres du formulaire lors de sa validation
-        $form->setValidationParams(["on"=>"blur", "inline"=>true]);
+        $semantic=$this->jquery->semantic(); // Déclaration d'un nouvel accesseur
+        $semantic->setLanguage("fr"); // Affectation du langage français à la 'semantic'
+        
+        $form=$semantic->dataForm("frmMoteur",$moteur); // Variable 'form' affectant la 'semantic' locale au formulaire d'id 'frmMoteur' au paramètre instance de moteur
+        $form->setValidationParams(["on"=>"blur", "inline"=>true]); // Envoi des paramètres du formulaire lors de sa validation
         $form->setFields(["id","nom","code","submit"]);
         $form->setCaptions(["id","Nom","Code","Valider"]);
         $form->fieldAsHidden("id");
-        // Ajout d'un bouton de validation 'submit' de couleur verte 'green' récupérant l'action et l'id du bloc '#divSites'
-        $form->fieldAsSubmit("submit","green",$action,"#divSite");
+        $form->fieldAsSubmit("submit","green",$action,"#divSite"); // Ajout d'un bouton de validation 'submit' de couleur verte 'green' récupérant l'action et l'id du bloc '#divSites'
         
         echo $form->compile($this->jquery);
         echo $this->jquery->compile();
@@ -253,31 +230,14 @@ class AdminSiteController extends ControllerBase
     public function deleteMoteurConfirm()
     {
         $idMoteur=$_POST['id'];
-        
         $moteur=DAO::getOne("models\Moteur", 'id='.$idMoteur);
-        /* 
-        $etablissement = DAO::getAll("models\Etablissement", $moteur);;
-        $site = DAO::getAll("models\Site", $moteur);
-        $utilisateur = DAO::getAll("models\Utilisateur", $moteur);
-        
-        $moteurVide= new Moteur();
-        
-        RequestUtils::setValuesToObject($etablissement,$moteurVide);
-        RequestUtils::setValuesToObject($site,$moteurVide);
-        RequestUtils::setValuesToObject($utilisateur,$moteurVide);
-        
-        if(DAO::update($etablissement) && DAO::update($site) && DAO::update($utilisateur)){
-            echo "Le moteur ".$idMoteur." n'est plus accocié aux établissement, sites et utilisateurs";
-        }
-        */
         if(DAO::remove($moteur)){
             echo "Le moteur ".$moteur->getId().": ".$moteur->getNom()." a été supprimé.";
             $this->forward("controllers\AdminSiteController","moteur");
         }
     }
     
-    // ----------- MAP -----------
-    
+    // Méthode permettant d'afficher une carte GoogleMaps
     private function _generateMap($lat,$long){
         return "
         <script>
