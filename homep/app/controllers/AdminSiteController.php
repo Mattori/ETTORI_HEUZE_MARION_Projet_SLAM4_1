@@ -3,6 +3,7 @@ namespace controllers;
 
 use micro\orm\DAO;
 use micro\utils\RequestUtils;
+use Ajax\semantic\html\collections\form\HtmlFormCheckbox;
 use models;
 use models\Moteur;
 use Ajax\JsUtils;
@@ -11,7 +12,6 @@ use Ajax\JsUtils;
  * Controller AdminSiteController
  * @property JsUtils $jquery
  **/
-
 class AdminSiteController extends ControllerBase
 {
     /* Méthode d'initialisation de l'utilisateur connecté et de son fond d'écran */
@@ -68,9 +68,16 @@ class AdminSiteController extends ControllerBase
         $this->jquery->compile($this->view); // Chargement de la page HTML 'index.html' de la vue 'configuration.html' avec la génération de la carte Google via la fonction privée 'generateMap'
         $this->loadView("AdminSite\configuration.html",["jsMap"=>$this->_generateMap($site->getLatitude(),$site->getLongitude())]);
     }
+<<<<<<< HEAD
     
     
     /* Méthode affichant les options données à l'utilisateur connecté par l'administrateur du site */
+=======
+
+    /**
+     * permet d'afficher un tableau 
+     */
+>>>>>>> 5fa23689855ff1acbe3d9b7d1e9f0064a531d7ab
     public function optionsUtilisateur(){
         $semantic=$this->jquery->semantic(); // Déclaration d'un nouvel accesseur
         
@@ -82,12 +89,78 @@ class AdminSiteController extends ControllerBase
         
         $optionSelect = DAO::getOne('models\Site',$_SESSION["user"]->getSite()->getOptions());
         $optionsSelect = explode(',',$_SESSION["user"]->getSite()->getOptions());
+<<<<<<< HEAD
 
         $form->addFieldButtons(['personnalisable','non-perso'],true,'');
+=======
+>>>>>>> 5fa23689855ff1acbe3d9b7d1e9f0064a531d7ab
         
+        $form->addFieldButton("autorise",false,function(&$bt,$instance,$index) use($optionsSelect){
+            foreach($optionsSelect as &$optn)
+            {
+                if(array_search($instance->getId(),$optionsSelect)!==false){
+                    $bt->addClass("disabled");
+                }elseif(array_search($instance->getId(),$optionsSelect)==false){
+                    $bt->addClass("_toCheck");
+                }
+            }
+        });
+            $form->addFieldButton("interdit",false,function(&$bt,$instance,$index) use($optionsSelect){
+                foreach($optionsSelect as &$optn)
+                {
+                    if(array_search($instance->getId(),$optionsSelect)!==false){
+                        $bt->addClass("_toUncheck");
+                    }elseif(array_search($instance->getId(),$optionsSelect)==false){
+                        $bt->addClass("disabled");
+                    }
+                }
+            });
+                
+        $this->jquery->getOnClick("._toUncheck", "AdminSiteController/interdireOptnSite","#divSite",["attr"=>"data-ajax"]);
+        $this->jquery->getOnClick("._toCheck", "AdminSiteController/autoriserOptnSite","#divSite",["attr"=>"data-ajax"]);
+        ////////////////////////
         echo $form->compile($this->jquery);
+        echo $this->jquery->compile();
     }
     
+    public function interdireOptnSite(){
+        // je récupère l'id du site que l'on veut selectionner avec un explode de l'url où il s'y trouve en tant que paramètre:
+        $recupId = explode('/', $_GET['c']);
+        // je recupère le site que j'administre:
+        $site=DAO::getOne("models\Site", $_SESSION["user"]->getSite()->getId());
+        // je modifie les options du site:
+        $siteOptions = explode(",",$site->getOptions());
+        
+        // variable utile pour la conditions qu suit
+        $newOptn = "";
+        $i = 0;
+        
+        // conditon recréant les options attribués avec la nouvelle interdiction: 
+        while($i<count($siteOptions))
+        {
+            // si les options du site ne comporte pas l'option selectioné: 
+            if($siteOptions[$i]!=$recupId[2])
+            {
+                // si on est à la première option on n'afficha pas la virgule
+                if($i == 0)
+                {
+                    $newOptn = $siteOptions[$i];
+                }
+                $newOptn = $newOptn . "," . $siteOptions[$i];
+            }
+            $i = $i + 1;
+        }
+        
+        // on modifie le site: 
+        $site->setOptions($newOptn);
+        // on modifie aussi la variable de session
+        $_SESSION["user"]->getSite()->setOptions($newOptn);
+        
+        $site instanceof models\Site && DAO::update($site);
+        $this->forward("controllers\AdminSiteController","optionsUtilisateur");
+    }
+    
+<<<<<<< HEAD
     
     /* Méthode de tests des GET et des POST */
     public function checked(){
@@ -96,10 +169,132 @@ class AdminSiteController extends ControllerBase
     }
     
     
-    public function optionsEtablissement(){
+=======
+    public function autoriserOptnSite(){
+        // je récupère l'id du site que l'on veut selectionner avec un explode de l'url où il s'y trouve en tant que paramètre:
+        $recupId = explode('/', $_GET['c']);
+        // je recupère le site que j'administre:
+        $site=DAO::getOne("models\Site", $_SESSION["user"]->getSite()->getId());
+        // je modifie les options du site:
+        if(!empty($site->getOptions()))
+        {
+            $newOptn = $site->getOptions(). "," . $recupId[2];
+        }else{
+            $newOptn = $recupId[2];
+            }
         
+        $site->setOptions($newOptn);
+        $_SESSION["user"]->getSite()->setOptions($newOptn);
+        // j'envoi la requete qui modifie les options selectionés pour mon site
+        //RequestUtils::setValuesToObject($site);
+        $site instanceof models\Site && DAO::update($site);
+        $this->forward("controllers\AdminSiteController","optionsUtilisateur");
     }
     
+    // -----------Methode Options Etablissement-----------
+    /*
+>>>>>>> 5fa23689855ff1acbe3d9b7d1e9f0064a531d7ab
+    public function optionsEtablissement(){
+        $semantic=$this->jquery->semantic();
+        
+        $options=DAO::getAll("models\Option");
+        
+        $form=$semantic->dataTable("tblOptionsE", "models\Option", $options);
+        $form->setFields(["id","libelle"]);
+        $form->setCaptions(["id","libelle",'personnalisable']);
+        
+        $optionSelect = DAO::getOne('models\Site',$_SESSION["user"]->getEtablissement()->getOptions());
+        $optionsSelect = explode(',',$_SESSION["user"]->getEtablissement()->getOptions());
+        
+        $form->addFieldButton("autorise",false,function(&$bt,$instance,$index) use($optionsSelect){
+            foreach($optionsSelect as &$optn)
+            {
+                if(array_search($instance->getId(),$optionsSelect)!==false){
+                    $bt->addClass("disabled");
+                }elseif(array_search($instance->getId(),$optionsSelect)==false){
+                    $bt->addClass("_toCheck");
+                }
+            }
+        });
+            $form->addFieldButton("interdit",false,function(&$bt,$instance,$index) use($optionsSelect){
+                foreach($optionsSelect as &$optn)
+                {
+                    if(array_search($instance->getId(),$optionsSelect)!==false){
+                        $bt->addClass("_toUncheck");
+                    }elseif(array_search($instance->getId(),$optionsSelect)==false){
+                        $bt->addClass("disabled");
+                    }
+                }
+            });
+                
+                $this->jquery->getOnClick("._toUncheck", "AdminSiteController/interdireOptnEtablissement","#divSite",["attr"=>"data-ajax"]);
+                $this->jquery->getOnClick("._toCheck", "AdminSiteController/autoriserOptnEtablissement","#divSite",["attr"=>"data-ajax"]);
+                ////////////////////////
+                echo $form->compile($this->jquery);
+                echo $this->jquery->compile();
+    }
+    public function interdireOptnEtablissement(){
+        // je récupère l'id du site que l'on veut selectionner avec un explode de l'url où il s'y trouve en tant que paramètre:
+        $recupId = explode('/', $_GET['c']);
+        // je recupère le site que j'administre:
+        $site=DAO::getOne("models\Site", $_SESSION["user"]->getSite()->getId());
+        // je modifie les options du site:
+        $siteOptions = explode(",",$site->getOptions());
+        
+        // variable utile pour la conditions qu suit
+        $newOptn = "";
+        $i = 0;
+        
+        // conditon recréant les options attribués avec la nouvelle interdiction:
+        while($i<count($siteOptions)-1)
+        {
+            // si les options du site ne comporte pas l'option selectioné:
+            if($siteOptions[$i]!=$recupId[2])
+            {
+                // si on est à la première option on n'afficha pas la virgule
+                if($i == 0)
+                {
+                    $newOptn = $siteOptions[$i];
+                }
+                $newOptn = $newOptn . "," . $siteOptions[$i];
+            }
+            $i = $i + 1;
+        }
+        
+        // on modifie le site:
+        $site->setOptions($newOptn);
+        // on modifie aussi la variable de session
+        $_SESSION["user"]->getSite()->setOptions($newOptn);
+        
+        $site instanceof models\Site && DAO::update($site);
+        $this->forward("controllers\AdminSiteController","optionsUtilisateur");
+    }
+    
+<<<<<<< HEAD
+=======
+    public function autoriserOptnEtablissement(){
+        // je récupère l'id du site que l'on veut selectionner avec un explode de l'url où il s'y trouve en tant que paramètre:
+        $recupId = explode('/', $_GET['c']);
+        // je recupère le site que j'administre:
+        $site=DAO::getOne("models\Site", $_SESSION["user"]->getSite()->getId());
+        // je modifie les options du site:
+        if(!empty($site->getOptions()))
+        {
+            $newOptn = $site->getOptions(). "," . $recupId[2];
+        }else{
+            $newOptn = $recupId[2];
+        }
+        
+        $site->setOptions($newOptn);
+        $_SESSION["user"]->getSite()->setOptions($newOptn);
+        // j'envoi la requete qui modifie les options selectionés pour mon site
+        //RequestUtils::setValuesToObject($site);
+        $site instanceof models\Site && DAO::update($site);
+        $this->forward("controllers\AdminSiteController","optionsUtilisateur");
+    }
+    */
+    // ----------- les actions liés au site -------
+>>>>>>> 5fa23689855ff1acbe3d9b7d1e9f0064a531d7ab
     
 
     /* Méthode permettant de confirmer l'édition des actions liés au site */
@@ -132,13 +327,20 @@ class AdminSiteController extends ControllerBase
         $table->setUrls(['','AdminSiteController/editMoteur/','AdminSiteController/deleteMoteur/']); // Assignation des méthodes aux boutons d'édition et de suppression
         $table->setTargetSelector("#divSite"); // Assignation du bloc/de la div dans laquelle renvoyer 
         
+<<<<<<< HEAD
         $table->addFieldButton("Selectionner",false,function(&$bt,$instance) use($moteurSelected) { // Différenciation du moteur déjà selectionné par rapport aux autres
             if($instance->getId()==$moteurSelected){
+=======
+        // on différencie le moteur déjà selectionné des autres
+        $table->addFieldButton("Selectionner",false,function(&$bt,$instance) use($moteurSelected){
+            if($instance->getId()==$moteurSelected->getId()){
+>>>>>>> 5fa23689855ff1acbe3d9b7d1e9f0064a531d7ab
                 $bt->addClass("disabled");
             }else{
                 $bt->addClass("_toSelect");
             }
         });
+<<<<<<< HEAD
         
         $this->jquery->getOnClick("._toSelect", "AdminSiteController/selectionner","#divSite",["attr"=>"data-ajax"]); // Affectation du clic sur le bouton Sélectionner
         
@@ -149,6 +351,23 @@ class AdminSiteController extends ControllerBase
         echo $btAdd->compile($this->jquery);
         
         echo $this->jquery->compile();
+=======
+            $this->jquery->getOnClick("._toSelect", "AdminSiteController/selectionner","#divSite",["attr"=>"data-ajax"]);
+            
+            // ---------- AJOUTER MOTEUR  ------------
+            
+            $btAdd=$semantic->htmlButton('btAdd','ajouter un moteur');
+            $btAdd->getOnClick("AdminSiteController/newMoteur","#divSite");
+            
+            // ------------
+            
+            $this->jquery->getOnClick("._toSelect", "AdminSiteController/selectionner","#divSite",["attr"=>"data-ajax"]);
+            echo $table;
+            echo $btAdd;
+            
+            echo $this->jquery->compile();
+       
+>>>>>>> 5fa23689855ff1acbe3d9b7d1e9f0064a531d7ab
     }
 
     
@@ -231,6 +450,24 @@ class AdminSiteController extends ControllerBase
     {
         $idMoteur=$_POST['id'];
         $moteur=DAO::getOne("models\Moteur", 'id='.$idMoteur);
+<<<<<<< HEAD
+=======
+        /*
+         $etablissement = DAO::getAll("models\Etablissement", $moteur);;
+         $site = DAO::getAll("models\Site", $moteur);
+         $utilisateur = DAO::getAll("models\Utilisateur", $moteur);
+         
+         $moteurVide= new Moteur();
+         
+         RequestUtils::setValuesToObject($etablissement,$moteurVide);
+         RequestUtils::setValuesToObject($site,$moteurVide);
+         RequestUtils::setValuesToObject($utilisateur,$moteurVide);
+         
+         if(DAO::update($etablissement) && DAO::update($site) && DAO::update($utilisateur)){
+         echo "Le moteur ".$idMoteur." n'est plus accocié aux établissement, sites et utilisateurs";
+         }
+         */
+>>>>>>> 5fa23689855ff1acbe3d9b7d1e9f0064a531d7ab
         if(DAO::remove($moteur)){
             echo "Le moteur ".$moteur->getId().": ".$moteur->getNom()." a été supprimé.";
             $this->forward("controllers\AdminSiteController","moteur");
@@ -284,4 +521,3 @@ class AdminSiteController extends ControllerBase
         ";
     }
 }
-
