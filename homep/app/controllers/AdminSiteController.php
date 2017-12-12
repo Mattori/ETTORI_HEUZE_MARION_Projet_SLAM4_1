@@ -157,7 +157,6 @@ class AdminSiteController extends ControllerBase
         $btAdd=$semantic->htmlButton('btAdd','ajouter un moteur');
         $btAdd->getOnClick("AdminSiteController/newMoteur","#divSite");
         
-        // ------------
         
         echo $table->compile($this->jquery);
         echo $btAdd->compile($this->jquery);
