@@ -6,7 +6,6 @@ use micro\utils\RequestUtils;
 
 use models;
 use models\Lienweb;
-use Ajax\JsUtils;
 
 
 /**
@@ -35,21 +34,21 @@ class UserController extends ControllerBase
         if(!isset($_SESSION["user"])) {
             $bt=$semantic->htmlButton("bts","Connexion");
             $bt->postOnClick("UserController/connexion/","{action:'UserController/submit'}","#divUsers",["attr"=>""]);
+            
+            $frm=$this->jquery->semantic()->htmlForm("frm-search");
+            $input=$frm->addInput("q");
+            $input->labeled("Google");
+            
+            $frm->setProperty("action","https://www.google.fr/search?q=");
+            $frm->setProperty("method","get");
+            $frm->setProperty("target","_new");
+            $bt=$input->addAction("Rechercher");
+            echo $frm;
         } else {
             $bts=$semantic->htmlButtonGroups("bts",["Liste des liens web", "Préférences", "Choix du moteur", "Recherche", "Éléments masqués", "Déconnexion"]);
             $bts->setPropertyValues("data-ajax", ["listeFavoris/", "preferences/", "moteur/", "afficheMoteur/", "elementsMasques/", "deconnexion/UserController/index"]);
             $bts->getOnClick("UserController/","#divUsers",["attr"=>"data-ajax"]);
         }
-        
-        $frm=$this->jquery->semantic()->htmlForm("frm-search");
-        $input=$frm->addInput("q");
-        $input->labeled("Google");
-        
-        $frm->setProperty("action","https://www.google.fr/search?q=");
-        $frm->setProperty("method","get");
-        $frm->setProperty("target","_new");
-        $bt=$input->addAction("Rechercher");
-        echo $frm;
         
         $this->jquery->compile($this->view);
         $this->loadView("Utilisateur\index.html");
@@ -100,12 +99,12 @@ class UserController extends ControllerBase
     private function _listeFavoris() {
         $semantic=$this->jquery->semantic();
         
-        $liens=DAO::getAll("models\Lienweb","idUtilisateur=".$_SESSION["user"]->getId());
+        $liens=DAO::getAll("models\Lienweb","idUtilisateur=".$_SESSION["user"]->getId()." ORDER BY ordre ASC");
         
         $table=$semantic->dataTable("tblLiens", "models\Utilisateur", $liens);
         $table->setIdentifierFunction("getId");
-        $table->setFields(["id","libelle","url"]);
-        $table->setCaptions(["ID","Nom du lien","URL","Action"]);
+        $table->setFields(["libelle","url", "ordre"]);
+        $table->setCaptions(["Nom du lien","URL", "Ordre", "Action"]);
         $table->addEditDeleteButtons(true,["ajaxTransition"=>"random","method"=>"post"]);
         $table->setUrls(["","UserController/editLink","UserController/deleteLink"]);
         $table->setTargetSelector("#divUsers");
