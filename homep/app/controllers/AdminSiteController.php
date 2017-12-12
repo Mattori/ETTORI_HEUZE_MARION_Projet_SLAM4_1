@@ -330,10 +330,12 @@ class AdminSiteController extends ControllerBase
             
             // ------------
             
-            echo $table->compile($this->jquery);
-            echo $btAdd->compile($this->jquery);
+            $this->jquery->getOnClick("._toSelect", "AdminSiteController/selectionner","#divSite",["attr"=>"data-ajax"]);
+            echo $table;
+            echo $btAdd;
             
             echo $this->jquery->compile();
+       
     }
     
     // ----------- les actioins liés aux moteurs -------

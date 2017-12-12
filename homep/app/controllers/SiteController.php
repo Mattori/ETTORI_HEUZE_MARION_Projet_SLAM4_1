@@ -4,7 +4,6 @@ use micro\orm\DAO;
 use micro\utils\RequestUtils;
 use models;
 use models\Site;
-use Ajax\JsUtils;
 
 /**
  * Controller SiteController
@@ -72,11 +71,7 @@ class SiteController extends ControllerBase
     private function _all(){
         // Variable 'sites' récupérant toutes les données de la table 'Site' à partir du modèle d'URL 'models\Site'
         // sous forme de tableau
-        $sites=DAO::getAll("models\Site","1=1 ORDER BY ordre DESC");
-        $tab = array_map(function($site){return $site->getOrdre();}, $sites);
-        foreach ($tab as $key => $val) {
-            echo "$key = $val\n";
-        }
+        $sites=DAO::getAll("models\Site");
         
         // Déclaration d'une nouvelle Semantic-UI
         $semantic=$this->jquery->semantic();
@@ -91,10 +86,10 @@ class SiteController extends ControllerBase
         //$table->setIdentifierFunction(function($i,$obj){return $obj->getId();});
         
         // Envoi des champs de chaque élément de la table 'Site' à 'table'
-        $table->setFields(["nom","latitude","longitude","ecart","fondEcran","couleur","ordre","options"]);
+        $table->setFields(["id", "nom","latitude","longitude","ecart","fondEcran","couleur","ordre","options"]);
         
         // Envoi des titres à chaque champ des éléments de la table 'Site' à 'table'
-        $table->setCaptions(["Nom","Latitude","Longitude","Ecart","Fond d'écran","Couleur", "Ordre", "Options", "Actions"]);
+        $table->setCaptions(["id","Nom","Latitude","Longitude","Ecart","Fond d'écran","Couleur", "Ordre", "Options", "Actions"]);
         
         // Ajout d'un bouton d'édition et d'un bouton de suppression à chaque ligne renvoyé de 'table'
         $table->addEditDeleteButtons(true,["ajaxTransition"=>"random","method"=>"post"]);

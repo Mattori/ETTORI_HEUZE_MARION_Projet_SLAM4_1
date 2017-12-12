@@ -11,7 +11,7 @@ abstract class ControllerBase extends Controller{
 
 	public function initialize(){
 		if(!RequestUtils::isAjax()){
-			$this->loadView("main/vHeader.html");
+			$this->loadView("main/vHeader.html",["fond"=>$_SESSION["user"]->getFondEcran()]);
 		}
 	}
 
