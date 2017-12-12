@@ -75,7 +75,7 @@ class AdminSiteController extends ControllerBase
         $this->loadView("AdminSite\configuration.html",["jsMap"=>$this->_generateMap($site->getLatitude(),$site->getLongitude())]);
     }
     
-    // -----------Methode Options Utilisateur(Site)-----------
+    // -----------Methode Options Utilisateur(Site)------------
     public function optionsUtilisateur(){
         $semantic=$this->jquery->semantic();
         
