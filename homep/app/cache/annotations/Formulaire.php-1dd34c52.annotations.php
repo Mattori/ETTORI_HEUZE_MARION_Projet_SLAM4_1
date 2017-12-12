@@ -3,20 +3,19 @@
 return array(
   '#namespace' => 'controllers',
   '#uses' => array (
+  'HtmlButton' => 'Ajax\\semantic\\html\\elements\\HtmlButton',
   'DAO' => 'micro\\orm\\DAO',
-  'RequestUtils' => 'micro\\utils\\RequestUtils',
-  'HtmlFormCheckbox' => 'Ajax\\semantic\\html\\collections\\form\\HtmlFormCheckbox',
-  'models' => 'models',
-  'Moteur' => 'models\\Moteur',
-  'JsUtils' => 'Ajax\\JsUtils',
 ),
   '#traitMethodOverrides' => array (
-  'controllers\\AdminSiteController' => 
+  'controllers\\Formulaire' => 
   array (
   ),
 ),
-  'controllers\\AdminSiteController' => array(
+  'controllers\\Formulaire' => array(
     array('#name' => 'property', '#type' => 'mindplay\\annotations\\standard\\PropertyAnnotation', 'type' => 'JsUtils', 'name' => 'jquery')
+  ),
+  'controllers\\Formulaire::index' => array(
+    array('#name' => 'route', '#type' => 'micro\\annotations\\router\\RouteAnnotation', "/users")
   ),
 );
 

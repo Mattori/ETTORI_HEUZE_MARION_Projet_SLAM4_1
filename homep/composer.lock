@@ -85,12 +85,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpMv/phpMv-UI.git",
-                "reference": "966ba4cd11846088a7f0f1ea4f33ff5a9ec45e8c"
+                "reference": "7ed86783899ee9200891a1eec122c30c5b736ac4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpMv/phpMv-UI/zipball/966ba4cd11846088a7f0f1ea4f33ff5a9ec45e8c",
-                "reference": "966ba4cd11846088a7f0f1ea4f33ff5a9ec45e8c",
+                "url": "https://api.github.com/repos/phpMv/phpMv-UI/zipball/7ed86783899ee9200891a1eec122c30c5b736ac4",
+                "reference": "7ed86783899ee9200891a1eec122c30c5b736ac4",
                 "shasum": ""
             },
             "require": {
@@ -133,7 +133,7 @@
                 "twitter bootstrap",
                 "yii"
             ],
-            "time": "2017-12-07T02:27:04+00:00"
+            "time": "2017-12-12T02:56:53+00:00"
         },
         {
             "name": "twig/twig",
