@@ -21,10 +21,9 @@ abstract class ControllerBase extends Controller{
 		}
 	}
 	
-	public function connexion() {
-	    $action=$_POST["action"];
+	public function connexion($ctrl,$action) {
 	    $frm=$this->jquery->semantic()->defaultLogin("connect");
-	    $frm->fieldAsSubmit("submit","green",$action,"body");
+	    $frm->fieldAsSubmit("submit","green",$ctrl."/".$action,"body");
 	    $frm->removeField("Connexion");
 	    $frm->setCaption("login", "Identifiant");
 	    $frm->setCaption("password", "Mot de passe");

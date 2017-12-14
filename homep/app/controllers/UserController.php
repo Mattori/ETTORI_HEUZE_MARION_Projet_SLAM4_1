@@ -6,6 +6,7 @@ use micro\utils\RequestUtils;
 
 use models;
 use models\Lienweb;
+use Ajax\JsUtils;
 
 
 /**
@@ -32,8 +33,12 @@ class UserController extends ControllerBase
         $semantic=$this->jquery->semantic();
         
         if(!isset($_SESSION["user"])) {
-            $bt=$semantic->htmlButton("bts","Connexion");
-            $bt->postOnClick("UserController/connexion/","{action:'UserController/submit'}","#divUsers",["attr"=>""]);
+            $menu=$semantic->htmlMenu("menu9");
+            $menu->addItem("<h4 class='ui header'>Accueil</h4>");
+            $menu->addItem("<h4 class='ui header'>Connexion</h4>");
+            $menu->setPropertyValues("data-ajax", ["", "connexion/UserController/submit"]);
+            $menu->getOnClick("UserController/","#divUsers",["attr"=>"data-ajax"]);
+            $menu->setVertical();
             
             $frm=$this->jquery->semantic()->htmlForm("frm-search");
             $input=$frm->addInput("q");
@@ -45,8 +50,19 @@ class UserController extends ControllerBase
             $bt=$input->addAction("Rechercher");
             echo $frm;
         } else {
-            $bts=$semantic->htmlButtonGroups("bts",["Liste des liens web", "Préférences", "Choix du moteur", "Recherche", "Éléments masqués", "Déconnexion"]);
-            $bts->setPropertyValues("data-ajax", ["listeFavoris/", "preferences/", "moteur/", "afficheMoteur/", "elementsMasques/", "deconnexion/UserController/index"]);
+            $img=$semantic->htmlImage("imgtest","assets/img/homepage_symbol.jpg","An image","small");
+            $menu=$semantic->htmlMenu("menu9");
+            $menu->addItem("<h4 class='ui header'>Accueil</h4>");
+            $menu->addItem("<h4 class='ui header'>Informations</h4>");
+            $menu->addItem("<h4 class='ui header'>Favoris</h4>");
+            $menu->addItem("<h4 class='ui header'>Moteur</h4>");
+            $menu->addItem("<h4 class='ui header'>Déconnexion</h4>");
+            $menu->setPropertyValues("data-ajax", ["", "preferences/", "listeFavoris/", "moteur/", "deconnexion/UserController/index"]);
+            $menu->getOnClick("UserController/","#divUsers",["attr"=>"data-ajax"]);
+            $menu->setVertical();
+            
+            $bts=$semantic->htmlButtonGroups("bts",["Profil", "Favoris", "Choix du moteur", "Recherche", "Éléments masqués", "Déconnexion"]);
+            $bts->setPropertyValues("data-ajax", ["preferences/", "listeFavoris/", "moteur/", "afficheMoteur/", "elementsMasques/", "deconnexion/UserController/index"]);
             $bts->getOnClick("UserController/","#divUsers",["attr"=>"data-ajax"]);
         }
         
@@ -103,8 +119,8 @@ class UserController extends ControllerBase
         
         $table=$semantic->dataTable("tblLiens", "models\Utilisateur", $liens);
         $table->setIdentifierFunction("getId");
-        $table->setFields(["libelle","url", "ordre"]);
-        $table->setCaptions(["Nom du lien","URL", "Ordre", "Action"]);
+        $table->setFields(["libelle","url"]);
+        $table->setCaptions(["Nom du lien","URL", "Action"]);
         $table->addEditDeleteButtons(true,["ajaxTransition"=>"random","method"=>"post"]);
         $table->setUrls(["","UserController/editLink","UserController/deleteLink"]);
         $table->setTargetSelector("#divUsers");

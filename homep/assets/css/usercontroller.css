@@ -1,0 +1,16 @@
+body {
+	height:0px;
+	width:0px;
+}
+#menu9 {
+	margin-top:0px;
+}
+
+#imgtest, #menu9 {
+	border-radius:0;
+	border-top-width:0;
+	border-right-style:solid;
+	border-right-width:0.25em;
+	border-right-color:#4E86A5;
+	width:300px;
+}
