@@ -72,7 +72,7 @@ class AdminSiteController extends ControllerBase
         $this->jquery->compile($this->view);
         $this->loadView("AdminSite\configuration.html",["jsMap"=>$this->_generateMap($site->getLatitude(),$site->getLongitude())]);
     }
-
+    
     /**
      * Module: Affiche un tableau des options personnalisable par les utilisateurs avec boutons (autoriser, interdire)
      */
@@ -110,11 +110,11 @@ class AdminSiteController extends ControllerBase
                 }
             });
                 
-        $this->jquery->getOnClick("._toUncheck", "AdminSiteController/interdireOptnSite","#divSite",["attr"=>"data-ajax"]);
-        $this->jquery->getOnClick("._toCheck", "AdminSiteController/autoriserOptnSite","#divSite",["attr"=>"data-ajax"]);
-        
-        echo $form->compile($this->jquery);
-        echo $this->jquery->compile();
+                $this->jquery->getOnClick("._toUncheck", "AdminSiteController/interdireOptnSite","#divSite",["attr"=>"data-ajax"]);
+                $this->jquery->getOnClick("._toCheck", "AdminSiteController/autoriserOptnSite","#divSite",["attr"=>"data-ajax"]);
+                
+                echo $form->compile($this->jquery);
+                echo $this->jquery->compile();
     }
     
     /**
@@ -128,7 +128,7 @@ class AdminSiteController extends ControllerBase
         $newOptn = "";
         $i = 0;
         
-        // conditon recréant les options attribués avec la nouvelle interdiction: 
+        // conditon recréant les options attribués avec la nouvelle interdiction:
         while($i<count($siteOptions))
         {
             if($siteOptions[$i]!=$recupId[2])
@@ -214,17 +214,17 @@ class AdminSiteController extends ControllerBase
                 $bt->addClass("_toSelect");
             }
         });
-        $this->jquery->getOnClick("._toSelect", "AdminSiteController/selectionner","#divSite",["attr"=>"data-ajax"]);
-
-        // /!\ non fonctionnel
-        // bouton ajout d'un moteur
-        $btAdd=$semantic->htmlButton('btAdd','ajouter un moteur');
-        $btAdd->getOnClick("AdminSiteController/newMoteur","#divSite");
-
-        
-        echo $table->compile($this->jquery);
-        echo $btAdd->compile($this->jquery);
-        echo $this->jquery->compile();
+            $this->jquery->getOnClick("._toSelect", "AdminSiteController/selectionner","#divSite",["attr"=>"data-ajax"]);
+            
+            // /!\ non fonctionnel
+            // bouton ajout d'un moteur
+            $btAdd=$semantic->htmlButton('btAdd','ajouter un moteur');
+            $btAdd->getOnClick("AdminSiteController/newMoteur","#divSite");
+            
+            
+            echo $table->compile($this->jquery);
+            echo $btAdd->compile($this->jquery);
+            echo $this->jquery->compile();
     }
     
     /**
@@ -294,7 +294,7 @@ class AdminSiteController extends ControllerBase
         $semantic->setLanguage("fr");
         
         $form=$semantic->dataForm("frmMoteur",$moteur);
-
+        
         $form->setValidationParams(["on"=>"blur", "inline"=>true]);
         $form->setFields(["id","nom","code","submit"]);
         $form->setCaptions(["id","Nom","Code",$actionMsg]);
@@ -356,7 +356,7 @@ class AdminSiteController extends ControllerBase
      * @param float $lat
      * @param float $long
      * @return string
-     */    
+     */
     private function _generateMap($lat,$long){
         return "
         <script>
