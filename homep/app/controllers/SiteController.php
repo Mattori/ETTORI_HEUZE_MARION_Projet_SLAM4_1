@@ -10,7 +10,7 @@ use models\Site;
  * @property JsUtils $jquery
  **/
 
-// DÃ©claration de la classe SiteController hÃ©ritant de ControllerBase
+// Déclaration de la classe SiteController héritant de ControllerBase
 class SiteController extends ControllerBase
 {
     public function initialize(){
@@ -21,7 +21,7 @@ class SiteController extends ControllerBase
         }
     }
     
-    // Fonction publique permettant de dÃ©terminer les Ã©lÃ©ments et les Ã©vÃ¨nements de la page 'index.html'
+    // Fonction publique permettant de déterminer les éléments et les évènements de la page 'index.html'
     public function index(){
         $semantic=$this->jquery->semantic();
         //echo "ici, on administre le site qui a pour identifiant: ".$_SESSION["user"]->getSite()->getId();
@@ -81,7 +81,7 @@ class SiteController extends ControllerBase
             $mess->addHeader("Bienvenue !");
             $mess->setDismissable();
         }
-        // Génération du JavaScript/JQuery en tant que variable Ã  l'intérieur de la vue
+        // Génération du JavaScript/JQuery en tant que variable à  l'intérieur de la vue
         $this->jquery->compile($this->view);
         
         // Affiliation à  la vue d'URL 'sites\index.html'
@@ -89,39 +89,39 @@ class SiteController extends ControllerBase
         //$this->loadView("sites\index.html",["jsMap"=>$this->_generateMap(49.201491, -0.380734)]);
     }
     
-    // Fonction privÃ©e permettant d'afficher le contenu de la table 'Site' de la BDD 'homepage'
+    // Fonction privée permettant d'afficher le contenu de la table 'Site' de la BDD 'homepage'
     private function _all(){
-        // Variable 'sites' rÃ©cupÃ©rant toutes les donnÃ©es de la table 'Site' Ã  partir du modÃ¨le d'URL 'models\Site'
+        // Variable 'sites' récupérant toutes les données de la table 'Site' à  partir du modèle d'URL 'models\Site'
         // sous forme de tableau
         $sites=DAO::getAll("models\Site");
         
-        // DÃ©claration d'une nouvelle Semantic-UI
+        // Déclaration d'une nouvelle Semantic-UI
         $semantic=$this->jquery->semantic();
         
-        // Variable 'table' affectant la 'semantic' locale aux tableaux de donnÃ©es 'table' de la table 'Site' avec :
+        // Variable 'table' affectant la 'semantic' locale aux tableaux de données 'table' de la table 'Site' avec :
         // 1) Identifiant : 'tblSites'
-        // 2) ModÃ¨le : 'models\Site'
-        // 3) Tableau de donnÃ©es : 'sites'
+        // 2) Modèle : 'models\Site'
+        // 3) Tableau de données : 'sites'
         $table=$semantic->dataTable("tblSites", "models\Site", $sites);
         
-        // Envoi de l'identifiant de la fonction rÃ©cupÃ©rant chaque id sous forme d'objet au tableau de donnÃ©es 'table'
+        // Envoi de l'identifiant de la fonction récupérant chaque id sous forme d'objet au tableau de données 'table'
         //$table->setIdentifierFunction(function($i,$obj){return $obj->getId();});
         
-        // Envoi des champs de chaque Ã©lÃ©ment de la table 'Site' Ã  'table'
+        // Envoi des champs de chaque élément de la table 'Site' à  'table'
         $table->setFields(["id", "nom","latitude","longitude","ecart","fondEcran","couleur","ordre","options"]);
         
-        // Envoi des titres Ã  chaque champ des Ã©lÃ©ments de la table 'Site' Ã  'table'
-        $table->setCaptions(["id","Nom","Latitude","Longitude","Ecart","Fond d'Ã©cran","Couleur", "Ordre", "Options", "Actions"]);
+        // Envoi des titres à  chaque champ des éléments de la table 'Site' à  'table'
+        $table->setCaptions(["id","Nom","Latitude","Longitude","Ecart","Fond d'écran","Couleur", "Ordre", "Options", "Actions"]);
         
-        // Ajout d'un bouton d'Ã©dition et d'un bouton de suppression Ã  chaque ligne renvoyÃ© de 'table'
+        // Ajout d'un bouton d'édition et d'un bouton de suppression à  chaque ligne renvoyé de 'table'
         $table->addEditDeleteButtons(true,["ajaxTransition"=>"random","method"=>"post"]);
         
-        // Affectation d'un URL Ã  chaque bouton prÃ©cÃ©dent :
+        // Affectation d'un URL à  chaque bouton précédent :
         // 1) edit=>'SiteController/edit'
         // 2) delete=>'SiteController/delete'
         $table->setUrls(["","SiteController/edit","SiteController/delete"]);
         
-        // Envoi du tableau de donnÃ©es Ã  l'intÃ©rieur de la div '#divSites' dans 'index.html'
+        // Envoi du tableau de données à  l'intérieur de la div '#divSites' dans 'index.html'
         $table->setTargetSelector("#divSites");
         
         echo $table->compile($this->jquery);
@@ -129,15 +129,15 @@ class SiteController extends ControllerBase
     }
 
     
-    // Fonction publique permettant l'exÃ©cution, la compilation et l'affichage de la fonction _all en publique
+    // Fonction publique permettant l'exécution, la compilation et l'affichage de la fonction _all en publique
     public function all() {
-        // Affectation de _all Ã  la classe actuelle de variable 'this'
+        // Affectation de _all à  la classe actuelle de variable 'this'
         $this->_all();
         
-        // GÃ©nÃ©ration du JavaScript/JQuery en tant que variable Ã  l'intÃ©rieur de la vue
+        // Génération du JavaScript/JQuery en tant que variable à  l'intérieur de la vue
         $this->jquery->compile($this->view);
         
-        // Affiliation Ã  la vue d'URL 'sites\index.html'
+        // Affiliation à  la vue d'URL 'sites\index.html'
         $this->loadView("sites\index.html");
     }
     
@@ -147,127 +147,95 @@ class SiteController extends ControllerBase
         $this->_form(new Site(),"SiteController/newSite/",49.201491,-0.380734);
     }
     
-    // Fonction privÃ©e permettant l'ajout des donnÃ©es des sites Ã©crites dans le formulaire
+    // Fonction privée permettant l'ajout des données des sites écrites dans le formulaire
     private function _form($site, $action,$lat,$long){
-        // DÃ©claration d'une nouvelle Semantic-UI
+        // Déclaration d'une nouvelle Semantic-UI
         $semantic=$this->jquery->semantic();
         
-        // Affectation du langage franÃ§ais Ã  la 'semantic'
+        // Affectation du langage franà§ais à  la 'semantic'
         $semantic->setLanguage("fr");
         
-        // Variable 'form' affectant la 'semantic' locale au formulaire d'id 'frmSite' au paramÃ¨tre '$site'
+        // Variable 'form' affectant la 'semantic' locale au formulaire d'id 'frmSite' au paramètre '$site'
         $form=$semantic->dataForm("frmSite", $site);
         
-        // Envoi des paramÃ¨tres du formulaire lors de sa validation
+        // Envoi des paramètres du formulaire lors de sa validation
         $form->setValidationParams(["on"=>"blur", "inline"=>true]);
         
-        // Envoi des champs de chaque Ã©lÃ©ment de la table 'Site' Ã  'form'
+        // Envoi des champs de chaque élément de la table 'Site' à  'form'
         $form->setFields(["nom\n","latitude","longitude","ecart\n","fondEcran","couleur\n","ordre","options","submit"]);
         
-        // Envoi des titres Ã  chaque champ des Ã©lÃ©ments de la table 'Site' Ã  'table'
-        $form->setCaptions(["Nom","Latitude","Longitude","Ecart","Fond d'Ã©cran","Couleur", "Ordre", "Options","Valider"]);
+        // Envoi des titres à  chaque champ des éléments de la table 'Site' à  'table'
+        $form->setCaptions(["Nom","Latitude","Longitude","Ecart","Fond d'écran","Couleur", "Ordre", "Options","Valider"]);
         
-        // Ajout d'un bouton de validation 'submit' de couleur verte 'green' rÃ©cupÃ©rant l'action et l'id du bloc '#divSites'
+        // Ajout d'un bouton de validation 'submit' de couleur verte 'green' récupérant l'action et l'id du bloc '#divSites'
         $form->fieldAsSubmit("submit","green",$action,"#divSites");
-        /*$this->jquery->click("#map","
-         console.log(event);
-         var latlong = event.latLng;
-         var lat = latlong.lat();
-         var long = latlong.lng();
-         alert(lat+' - '+lng);
-         ");*/
-        //$this->jquery->change("[name=latitude]","alert('lat change : '+event.target.value);");
         
-        // Chargement de la page HTML 'index.html' de la vue 'sites' avec la gÃ©nÃ©ration de la carte Google
-        // via la fonction privÃ©e '_generateMap'
+        // Chargement de la page HTML 'index.html' de la vue 'sites' avec la génération de la carte Google
+        // via la fonction privée '_generateMap'
         $this->loadView("sites\index.html",["jsMap"=>$this->_generateMap($lat,$long)]);
         
         echo $form->compile($this->jquery);
         echo $this->jquery->compile();
     }
     
-    // Fonction publique permettant l'exÃ©cution de la requÃªte d'ajout d'un nouveau site
+    // Fonction publique permettant l'exécution de la requàªte d'ajout d'un nouveau site
     public function newSite(){
         
-        // Variable 'site' rÃ©cupÃ©rant toutes les donnÃ©es d'un nouveau site
+        // Variable 'site' récupérant toutes les données d'un nouveau site
         $site=new Site();
         
-        // ExÃ©cution de la requÃªte d'insertion de toutes les valeurs entrÃ©es dans le formulaire d'ajout d'un nouveau site
+        // Exécution de la requàªte d'insertion de toutes les valeurs entrées dans le formulaire d'ajout d'un nouveau site
         RequestUtils::setValuesToObject($site,$_POST);
         
-        // Condition si l'insertion d'un nouveau site est exÃ©cutÃ©e
+        // Condition si l'insertion d'un nouveau site est exécutée
         if(DAO::insert($site)){
             // Affichage du message suivant
-            echo "Le site ".$site->getNom()." a Ã©tÃ© ajoutÃ©.";
+            echo "Le site ".$site->getNom()." a été ajouté.";
         }
     }
     
-    // Fonction publique permettant l'exÃ©cution de la requÃªte de suppression d'un nouveau site
+    // Fonction publique permettant l'exécution de la requàªte de suppression d'un nouveau site
     public function delete($id){
-        //  if(RequestUtils::isPost())
-        //{
-            //echo " - ".$id." - ";
-            
-            // Variable 'site' rÃ©cupÃ©rant toutes les donnÃ©es d'un site selon son id et le modÃ¨le 'Site'
-            $site=DAO::getOne("models\Site", $id);
-            
-            // Instanciation du modÃ¨le 'Site' sur le site rÃ©cupÃ©rÃ© et exÃ©cution de la requÃªte de suppression
-            $site instanceof models\Site && DAO::remove($site);
-            
-            // Retour sur la page d'affichage de tous les sites
-            $this->forward("controllers\SiteController","all");
-            //echo "le site {$site} est supprimÃ©";
-            /*if($site instanceof models\Site && DAO::remove($site))
-             {
-             echo "le site {$site} est supprimÃ©";
-             }else{ echo "impossible a supp";}*/
-        //}
-        //else{echo "accÃ©s interdit";}
+        // Variable 'site' récupérant toutes les données d'un site selon son id et le modèle 'Site'
+        $site=DAO::getOne("models\Site", $id);
+        
+        // Instanciation du modèle 'Site' sur le site récupéré et exécution de la requàªte de suppression
+        $site instanceof models\Site && DAO::remove($site);
+        
+        // Retour sur la page d'affichage de tous les sites
+        $this->forward("controllers\SiteController","all");
     }
     
     // Fonction publique permettant 
     public function _getSiteInGet(){
-        //if(RequestUtils::isPost())
-        {
-            $id=RequestUtils::get('id');
-            $site=DAO::getOne("models\Site", $id);
-            if($site instanceof models\Site)
-                return $site;
-                return false;
+        $id=RequestUtils::get('id');
+        $site=DAO::getOne("models\Site", $id);
+        if($site instanceof models\Site){
+            return $site;
+            return false;
         }
-        /*else
-         {
-         return false;
-         }*/
     }
     
     public function edit($id){
-        //if($site=$this->_getSiteInGet()){
         $site=DAO::getOne("models\Site", $id);
         $this->_form($site,"SiteController/update/".$id,$site->getLatitude(),$site->getLongitude());
-        //$site instanceof models\Site && DAO::update($site);
-        //$this->jquery->postFormOnClick("#btValider","SiteController/update", "frmEdit","#divSites");
-        //$this->jquery->compile($this->view);
-        
-        //        $this->loadView("SiteController/edit.html");
-        //}else{echo 'accÃ©s interdit';}
     }
     
     public function update($id){
         $site=DAO::getOne("models\Site", $id);
         RequestUtils::setValuesToObject($site,$_POST);
         if(DAO::update($site)){
-            echo "Le site ".$site->getNom()." a Ã©tÃ© modifiÃ©.";
+            echo "Le site ".$site->getNom()." a été modifié.";
         }
     }
     
     private function _generateMap($lat,$long){
         return "
         <script>
-            // DÃ©claration de la carte Google Maps
+            // Déclaration de la carte Google Maps
             var map={};
             
-            // Fonction d'initialisation de la carte, de ses Ã©lÃ©ments et de ses Ã©vÃ¨nements
+            // Fonction d'initialisation de la carte, de ses éléments et de ses évènements
             function initMap() {
                 // Options de la carte
                 var optionsMap = {
@@ -287,21 +255,21 @@ class SiteController extends ControllerBase
                 // Affectation du cercle
 				var cercle = new google.maps.Circle(optionsCercle);
 				
-                // Ajout d'un Ã©vÃ¨nement lorsque l'on clique sur la carte
+                // Ajout d'un évènement lorsque l'on clique sur la carte
                 map.addListener('click',function(event){
-                    // Affectation de la valeur de la div d'id 'frmSite-latitude' Ã  la valeur de la latitude de l'Ã©vÃ¨nement
+                    // Affectation de la valeur de la div d'id 'frmSite-latitude' à  la valeur de la latitude de l'évènement
                     document.getElementById('frmSite-latitude').value=event.latLng.lat();
                     
-                    // Affectation de la valeur de la div d'id 'frmSite-latitude' Ã  la valeur de la longitude de l'Ã©vÃ¨nement
+                    // Affectation de la valeur de la div d'id 'frmSite-latitude' à  la valeur de la longitude de l'évènement
                     document.getElementById('frmSite-longitude').value=event.latLng.lng();
 
-                    // Affectation de la valeur de la div d'id 'frmSite-latitude' Ã  la valeur de la longitude de l'Ã©vÃ¨nement
+                    // Affectation de la valeur de la div d'id 'frmSite-latitude' à  la valeur de la longitude de l'évènement
                     document.getElementById('frmSite-longitude').value=event.latLng.lng();
                 })
                 
-                // Ajout d'un Ã©vÃ¨nement lorsque l'on change la latitude de la div d'id 'frmSite-latitude'
+                // Ajout d'un évènement lorsque l'on change la latitude de la div d'id 'frmSite-latitude'
                 frmSite-latitude.addListener('change', function(event){
-                    // Affectation de la valeur de la cible de l'Ã©vÃ¨nement Ã  la valeur de la latitude de la carte
+                    // Affectation de la valeur de la cible de l'évènement à  la valeur de la latitude de la carte
                     event.target.value=map.latLng.lat();
                 })
             }

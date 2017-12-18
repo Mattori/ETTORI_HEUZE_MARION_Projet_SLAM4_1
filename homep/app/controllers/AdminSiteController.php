@@ -13,10 +13,10 @@ use models\Moteur;
 class AdminSiteController extends ControllerBase
 {
     /**
-     * <h1>Description de la m√©thode</h1> Utilisant <b>les Tags HTML</b> et {@literal <b> JavaDoc </b> }
-     * Pour plus de d√©tails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
+     * <h1>Description de la mÈthode</h1> Utilisant <b>les Tags HTML</b> et {@literal <b> JavaDoc </b> }
+     * Pour plus de dÈtails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
      * 
-     * Initialise l'utilisateur connect√© ainsi que son fond d'√©cran (dont l'URL est enregistr√© dans la BDD)
+     * Initialise l'utilisateur connectÈ ainsi que son fond d'Ècran (dont l'URL est enregistrÈ dans la BDD)
      * 
      * @see getFondEcran
      * 
@@ -38,7 +38,7 @@ class AdminSiteController extends ControllerBase
     }
     
     /**
-     * Affiche le menu de la page si un administrateur de site est connect√©
+     * Affiche le menu de la page si un administrateur de site est connectÈ
      * {@inheritdoc}
      * @see \micro\controllers\Controller::index()
      */
@@ -53,7 +53,7 @@ class AdminSiteController extends ControllerBase
                 $bts->setPropertyValues("data-ajax", ["configuration/","moteur/","ordreElement/","optionsUtilisateur/","deconnexion/AdminSiteController/index"]);
                 $bts->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
             } else {
-                echo "Acc√®s √† la page d'administration du site interdit";
+                echo "AccËs ‡† la page d'administration du site interdit";
                 $bts=$semantic->htmlButtonGroups("bts",["Deconnexion"]);
                 $bts->setPropertyValues("data-ajax", ["deconnexion/AdminSiteController/index"]);
                 $bts->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
@@ -64,10 +64,10 @@ class AdminSiteController extends ControllerBase
     }
     
     /**
-     * <h1>Description de la m√©thode</h1> Utilisant <b>les Tags HTML</b> et {@literal <b> JavaDoc </b> }
-     * Pour plus de d√©tails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
+     * <h1>Description de la mÈthode</h1> Utilisant <b>les Tags HTML</b> et {@literal <b> JavaDoc </b> }
+     * Pour plus de dÈtails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
      * 
-     * Affiche un formulaire de configuration des param√®tres du site.
+     * Affiche un formulaire de configuration des paramËtres du site.
      * 
      * @see initialize
      * @see $_SESSION
@@ -86,7 +86,7 @@ class AdminSiteController extends ControllerBase
         $form=$semantic->dataForm("frmSite", $site);
         $form->setValidationParams(["on"=>"blur", "inline"=>true]);
         $form->setFields(["nom\n","latitude","longitude","ecart\n","fondEcran","couleur\n","submit"]);
-        $form->setCaptions(["Nom","Latitude","Longitude","Ecart","Fond d'√©cran","Couleur","Valider"]);
+        $form->setCaptions(["Nom","Latitude","Longitude","Ecart","Fond d'Ècran","Couleur","Valider"]);
         $form->fieldAsSubmit("submit","green fluid","AdminSiteController/editSiteConfirm","#divSite");
         $form->fieldAsElement(5,'div','class="jscolor"');
         $this->jquery->compile($this->view);
@@ -94,10 +94,10 @@ class AdminSiteController extends ControllerBase
     }
     
     /**
-     * <h1>Description de la m√©thode</h1> Utilisant <b>les Tags HTML</b> et {@literal <b> JavaDoc </b> }
-     * Pour plus de d√©tails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
+     * <h1>Description de la mÈthode</h1> Utilisant <b>les Tags HTML</b> et {@literal <b> JavaDoc </b> }
+     * Pour plus de dÈtails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
      *
-     * Affiche un tableau des options personnalisable par les utilisateurs avec boutons (autoriser, interdire).
+     * Affiche un tableau des options personnalisable par les utilisateurs avec les boutons 'Autoriser' et 'Interdire'.
      *
      * @see initialize
      * @see $_SESSION
@@ -119,7 +119,7 @@ class AdminSiteController extends ControllerBase
         $optionSelect = DAO::getOne('models\Site',$_SESSION["user"]->getSite()->getOptions());
         $optionsSelect = explode(',',$_SESSION["user"]->getSite()->getOptions());
         
-        // Ajout d'attribus aux boutons pour que l'on puisse identifier ce qui est d√©j√† autoris√© et interdit
+        // Ajout d'attribus aux boutons pour que l'on puisse identifier ce qui est dÈj‡† autorisÈ et interdit
         $form->addFieldButton("autorise",false,function(&$bt,$instance,$index) use($optionsSelect){
             foreach($optionsSelect as &$optn)
             {
@@ -149,10 +149,10 @@ class AdminSiteController extends ControllerBase
     }
     
     /**
-     * <h1>Description de la m√©thode</h1> Utilisant <b>les Tags HTML</b> et {@literal <b> JavaDoc </b> }
-     * Pour plus de d√©tails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
+     * <h1>Description de la mÈthode</h1> Utilisant <b>les Tags HTML</b> et {@literal <b> JavaDoc </b> }
+     * Pour plus de dÈtails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
      *
-     * Confirme l'interdiction pour les utilisateurs de ce site de personnaliser une option (BDD).
+     * Confirme l'interdiction pour les utilisateurs du site de personnaliser une option.
      *
      * @see initialize
      * @see $_SESSION
@@ -170,15 +170,15 @@ class AdminSiteController extends ControllerBase
         $newOptn = "";
         $i = 0;
         
-        // conditon recr√©ant les options attribu√©s avec la nouvelle interdiction:
+        // Conditon vÈrifiant si cela recrÈe les options attribuÈs avec la nouvelle interdiction
         while($i<count($siteOptions))
         {
             if($siteOptions[$i]!=$recupId[2])
             {
-                // si on est √† la premi√®re option on n'afficha pas la virgule
+                // Condition vÈrifiant si on est ‡†la premiËre option
                 if($i == 0)
                 {
-                    $newOptn = $siteOptions[$i];
+                    $newOptn = $siteOptions[$i]; // N'afficha pas la virgule
                 }
                 $newOptn = $newOptn . "," . $siteOptions[$i];
             }
@@ -193,7 +193,7 @@ class AdminSiteController extends ControllerBase
     }
     
     /**
-     * Confirme l'autorisation pour les utilisateurs de ce site de personnaliser une option (BDD)
+     * Confirme l'autorisation pour les utilisateurs du site de personnaliser une option.
      * {@inheritdoc}
      */
     public function autoriserOptnSite(){
@@ -215,7 +215,7 @@ class AdminSiteController extends ControllerBase
     }
     
     /**
-     * Confirme l'edit du site (BDD)
+     * Confirme la modification du site dans la BDD.
      * {@inheritdoc}
      */
     public function editSiteConfirm()
@@ -225,13 +225,13 @@ class AdminSiteController extends ControllerBase
         RequestUtils::setValuesToObject($site,$_POST);
         if(DAO::update($site)){
             $_SESSION["user"]->setSite($site);
-            echo "Le site ".$site->getId()."->".$site->getNom()." a √©t√© modifi√©.";
+            echo "Le site ".$site->getId()."->".$site->getNom()." a ÈtÈ modifiÈ.";
             $this->forward("controllers\AdminSiteController","configuration");
         }
     }
     
     /**
-     * Module: Affiche un tableau des moteurs de la BDD avec un bouton de selection pour le Site
+     * Affiche un tableau des moteurs de la BDD avec un bouton de sÈlection pour le site.
      * {@inheritdoc}
      */
     public function moteur(){
@@ -250,8 +250,8 @@ class AdminSiteController extends ControllerBase
         $table->addEditDeleteButtons(true,["ajaxTransition"=>"random","method"=>"post"]);
         $table->setUrls(['','AdminSiteController/editMoteur/','AdminSiteController/deleteMoteur/']);
         $table->setTargetSelector("#divSite");
-        // Selection du moteur pour un site
-        // diff√©renciation du moteur d√©j√† selectionn√© des autres
+
+        // DiffÈrenciation du moteur dÈj‡†selectionnÈ des autres
         $table->addFieldButton("Selectionner",false,function(&$bt,$instance) use($moteurSelected){
             if($instance->getId()==$moteurSelected->getId()){
                 $bt->addClass("disabled");
@@ -261,7 +261,7 @@ class AdminSiteController extends ControllerBase
         });
         $this->jquery->getOnClick("._toSelect", "AdminSiteController/selectionner","#divSite",["attr"=>"data-ajax"]);
         
-        // bouton ajout d'un moteur
+        // Bouton d'ajout d'un moteur
         $btAdd=$semantic->htmlButton('btAdd','ajouter un moteur');
         $btAdd->getOnClick("AdminSiteController/newMoteur","#divSite");
         
@@ -271,27 +271,26 @@ class AdminSiteController extends ControllerBase
     }
     
     /**
-     * Confirme la selection du moteur pour un site
+     * Confirme la sÈlection du moteur pour un site.
      * {@inheritdoc}
      */
     public function selectionner()
     {
-        // r√©cup√®re l'id du moteur grace √† l'url
-        $recupId = explode('/', $_GET['c']);
-        // instanciation de notre site et du moteur selectionn√©
-        $site=DAO::getOne("models\Site", $_SESSION["user"]->getSite()->getId());
+        $recupId = explode('/', $_GET['c']); // RÈcupÈration de l'identifiant du moteur ‡ partir de†l'URL
+        
+        $site=DAO::getOne("models\Site", $_SESSION["user"]->getSite()->getId()); // Instanciation du site et du moteur sÈlectionnÈ
         $moteur=DAO::getOne("models\Moteur", "id=".$recupId[2]);
-        // MAJ dans le model
-        $site->setMoteur($moteur);
+        
+        $site->setMoteur($moteur); // Mise ‡ jour ‡ l'intÈrieur du modËle
         $_SESSION["user"]->getSite()->setMoteur($moteur);
-        // MAJ dans la BDD
-        $site instanceof models\Site && DAO::update($site);
+
+        $site instanceof models\Site && DAO::update($site); // Mise ‡ jour ‡ l'intÈrieur de la BDD
         
         $this->forward("controllers\AdminSiteController","moteur");
     }
     
     /**
-     * Appel la m√©thode _frmMoteur: pour cr√©er un nouveau moteur
+     * Appelle la mÈthode _frmMoteur crÈant un nouveau moteur.
      * {@inheritdoc}
      */
     public function newMoteur()
@@ -300,7 +299,7 @@ class AdminSiteController extends ControllerBase
     }
     
     /**
-     * Appel la m√©thode _frmMoteur: pour modifier un moteur
+     * Appelle la mÈthode _frmMoteur modifiant un moteur.
      * {@inheritdoc}
      */
     public function editMoteur()
@@ -310,7 +309,7 @@ class AdminSiteController extends ControllerBase
     }
     
     /**
-     * Appel la m√©thode _frmMoteur: pour supprimer un moteur
+     * Appelle la mÈthode _frmMoteur supprimant un moteur.
      * {@inheritdoc}
      */
     public function deleteMoteur()
@@ -320,11 +319,11 @@ class AdminSiteController extends ControllerBase
     }
     
     /**
-     * Affiche le formulaire d'un Moteur
+     * Affiche le formulaire d'un moteur.
      * {@inheritdoc}
-     * @param int $idM identifiant du moteur
-     * @param string $action url de redirection
-     * @param string $actionMsg nom du bouton en lien avec l'action
+     * @param int idM : Identifiant du moteur
+     * @param string action : URL de redirection
+     * @param string actionMsg : Nom du bouton en lien avec l'action
      */
     private function _frmMoteur($idM,$action,$actionMsg)
     {
@@ -353,7 +352,7 @@ class AdminSiteController extends ControllerBase
     }
     
     /**
-     * Confirme la cr√©ation du nouveau moteur (BDD)
+     * Confirme la crÈation du nouveau moteur dans la BDD.
      * {@inheritdoc}
      */
     public function newMoteurConfirm()
@@ -362,13 +361,13 @@ class AdminSiteController extends ControllerBase
         RequestUtils::setValuesToObject($moteur,$_POST);
         
         if(DAO::insert($moteur)){
-            echo "Le moteur ".$moteur->getId().": ".$moteur->getNom()." a √©t√© ajout√©.";
+            echo "Le moteur ".$moteur->getId().": ".$moteur->getNom()." a ÈtÈ ajoutÈ.";
             $this->forward("controllers\AdminSiteController","moteur");
         }
     }
     
     /**
-     * Confirme la modification du moteur (BDD)
+     * Confirme la modification du moteur dans la BDD.
      * {@inheritdoc}
      */
     public function editMoteurConfirm()
@@ -378,13 +377,13 @@ class AdminSiteController extends ControllerBase
         
         if(DAO::update($moteur)){
             $_SESSION["user"]->setMoteur($moteur);
-            echo "Le moteur ".$moteur->getId().": ".$moteur->getNom()." a √©t√© modifi√©.";
+            echo "Le moteur ".$moteur->getId().": ".$moteur->getNom()." a ÈtÈ modifiÈ.";
             $this->forward("controllers\AdminSiteController","moteur");
         }
     }
     
     /**
-     * Confirme la suppression du moteur (BDD)
+     * Confirme la suppression du moteur dans la BDD.
      * {@inheritdoc}
      */
     public function deleteMoteurConfirm()
@@ -393,26 +392,26 @@ class AdminSiteController extends ControllerBase
         $moteur=DAO::getOne("models\Moteur", 'id='.$idMoteur);
         
         if(DAO::remove($moteur)){
-            echo "Le moteur ".$moteur->getId().": ".$moteur->getNom()." a √©t√© supprim√©.";
+            echo "Le moteur ".$moteur->getId().": ".$moteur->getNom()." a ÈtÈ supprimÈ.";
             $this->forward("controllers\AdminSiteController","moteur");
         }
     }
     
     
     /**
-     * Affiche une map Google
+     * Affiche une carte Google Maps.
      * {@inheritdoc}
-     * @param float $lat latitude
-     * @param float $long longitude
-     * @return string Script de la GoogleMap
+     * @param float lat : Latitude du site
+     * @param float long : Longitude du site
+     * @return string : Script de la carte Google Maps
      */
     private function _generateMap($lat,$long){
         return "
         <script>
-            // D√©claration de la carte Google Maps
+            // DÈclaration de la carte Google Maps
             var map={};
             
-            // Fonction d'initialisation de la carte, de ses √©l√©ments et de ses √©v√®nements
+            // Fonction d'initialisation de la carte, de ses ÈlÈments et de ses ÈvËnements
             function initMap() {
                 // Options de la carte
                 var optionsMap = {
@@ -432,18 +431,18 @@ class AdminSiteController extends ControllerBase
                 // Affectation du cercle
 				var cercle = new google.maps.Circle(optionsCercle);
 				
-                // Ajout d'un √©v√®nement lorsque l'on clique sur la carte
+                // Ajout d'un ÈvËnement lorsque l'on clique sur la carte
                 map.addListener('click',function(event){
-                    // Affectation de la valeur de la div d'id 'frmSite-latitude' √† la valeur de la latitude de l'√©v√®nement
+                    // Affectation de la valeur de la div d'id 'frmSite-latitude' ‡† la valeur de la latitude de l'ÈvËnement
                     document.getElementById('frmSite-latitude').value=event.latLng.lat();
                     
-                    // Affectation de la valeur de la div d'id 'frmSite-latitude' √† la valeur de la longitude de l'√©v√®nement
+                    // Affectation de la valeur de la div d'id 'frmSite-latitude' ‡† la valeur de la longitude de l'ÈvËnement
                     document.getElementById('frmSite-longitude').value=event.latLng.lng();
                 })
                 
-                // Ajout d'un √©v√®nement lorsque l'on change la latitude de la div d'id 'frmSite-latitude'
+                // Ajout d'un ÈvËnement lorsque l'on change la latitude de la div d'id 'frmSite-latitude'
                 frmSite-latitude.addListener('change', function(event){
-                    // Affectation de la valeur de la cible de l'√©v√®nement √† la valeur de la latitude de la carte
+                    // Affectation de la valeur de la cible de l'ÈvËnement ‡† la valeur de la latitude de la carte
                     event.target.value=map.latLng.lat();
                 })
             }
