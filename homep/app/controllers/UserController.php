@@ -47,7 +47,6 @@ class UserController extends ControllerBase
      * @see \micro\controllers\Controller::index()
      */
     public function index(){
-        $user=$_SESSION["user"];
         $semantic=$this->jquery->semantic();
         
         if(!isset($_SESSION["user"])) {
@@ -72,7 +71,7 @@ class UserController extends ControllerBase
             $img=$semantic->htmlImage("imgtest","assets/img/homepage_symbol.jpg","Image d'accueil","small");
             
             $title=$semantic->htmlHeader("header5",4);
-            $title->asImage("https://semantic-ui.com/images/avatar2/large/patrick.png",$user->getNom()." ".$user->getPrenom());
+            $title->asImage("https://semantic-ui.com/images/avatar2/large/patrick.png",$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom());
             
             $menu=$semantic->htmlMenu("menu9");
             $menu->addItem("<h4 class='ui header'>Accueil</h4>");
@@ -84,7 +83,7 @@ class UserController extends ControllerBase
             $menu->getOnClick("UserController/","#divUsers",["attr"=>"data-ajax"]);
             $menu->setVertical();
             
-            $mess=$semantic->htmlMessage("mess3","Vous êtes désormais connecté, ".$user->getNom()." ".$user->getPrenom(). "!");
+            $mess=$semantic->htmlMessage("mess3","Vous êtes désormais connecté, ".$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom(). "!");
             $mess->addHeader("Bienvenue !");
             $mess->setDismissable();
         }

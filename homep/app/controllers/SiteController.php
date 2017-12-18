@@ -26,45 +26,67 @@ class SiteController extends ControllerBase
         $semantic=$this->jquery->semantic();
         //echo "ici, on administre le site qui a pour identifiant: ".$_SESSION["user"]->getSite()->getId();
         if(!isset($_SESSION["user"])) {
-            $bts=$semantic->htmlButtonGroups("bts",["Connexion"]);
-            $bts->postOnClick("SiteController/connexion/","{action:'SiteController/submit'}","#divSites",["attr"=>""]);
+            $img=$semantic->htmlImage("imgtest","assets/img/homepage_symbol.jpg","Image d'accueil","small");
+            $menu=$semantic->htmlMenu("menu9");
+            $menu->addItem("<h4 class='ui header'>Accueil</h4>");
+            $menu->addItem("<h4 class='ui header'>Connexion</h4>");
+            $menu->setPropertyValues("data-ajax", ["", "connexion/SiteController/submit"]);
+            $menu->getOnClick("SiteController/","#divSites",["attr"=>"data-ajax"]);
+            $menu->setVertical();
             
-            $this->jquery->compile($this->view);
-            $this->loadView("sites\index.html");
+            $frm=$this->jquery->semantic()->htmlForm("frm-search");
+            $input=$frm->addInput("q");
+            $input->labeled("Google");
+            
+            $frm->setProperty("action","https://www.google.fr/search?q=");
+            $frm->setProperty("method","get");
+            $frm->setProperty("target","_new");
+            $bt=$input->addAction("Rechercher");
+            echo $frm;
         }
         elseif($_SESSION["user"]->getStatut()->getId() < 3)
         {
-            echo "Vous √™tes connect√©s mais vous n'avez pas les droits.";
-            $bts=$semantic->htmlButtonGroups("bts",["Deconnexion"]);
-            $bts->setPropertyValues("data-ajax", ["deconnexion/SiteController/index"]);
-            $bts->getOnClick("SiteController/","#divSites",["attr"=>"data-ajax"]);
+            $img=$semantic->htmlImage("imgtest","assets/img/homepage_symbol.jpg","Image d'accueil","small");
             
-            $this->jquery->compile($this->view);
-            $this->loadView("sites\index.html");
+            $title=$semantic->htmlHeader("header5",4);
+            $title->asImage("https://semantic-ui.com/images/avatar2/large/patrick.png",$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom());
+            
+            $menu=$semantic->htmlMenu("menu9");
+            $menu->addItem("<h4 class='ui header'>Accueil</h4>");
+            $menu->addItem("<h4 class='ui header'>DÈconnexion</h4>");
+            $menu->setPropertyValues("data-ajax", ["", "deconnexion/SiteController/index"]);
+            $menu->getOnClick("SiteController/","#divSites",["attr"=>"data-ajax"]);
+            $menu->setVertical();
+            
+            $mess=$semantic->htmlMessage("mess3","Vous Ítes connectÈ mais vous n'avez pas les droits, ".$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom(). "!");
+            $mess->addHeader("Attention !");
+            $mess->setDismissable();
         }
         else{
-            // Variable 'semantic' d√©clarant une nouvelle Semantic-UI
-            $semantic=$this->jquery->semantic();
+            $img=$semantic->htmlImage("imgtest","assets/img/homepage_symbol.jpg","Image d'accueil","small");
             
-            // Variable 'bts' affectant la 'semantic' locale a un groupe de boutons
-            $bts=$semantic->htmlButtonGroups("bts",["Liste des sites","Ajouter un site", "D√©connexion"]);
+            $title=$semantic->htmlHeader("header5",4);
+            $title->asImage("https://semantic-ui.com/images/avatar2/large/patrick.png",$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom());
             
-            // Attribution des propri√©t√©s 'all' et 'addSite' respectivement aux boutons de 'bts' :
-            // 1) 'Liste des sites' => 'all/'
-            // 2) 'Ajouter un site' => 'addSite/'
-            $bts->setPropertyValues("data-ajax", ["all/","addSite/", "deconnexion/"]);
+            $menu=$semantic->htmlMenu("menu9");
+            $menu->addItem("<h4 class='ui header'>Accueil</h4>");
+            $menu->addItem("<h4 class='ui header'>Liste des sites</h4>");
+            $menu->addItem("<h4 class='ui header'>Ajouter un site</h4>");
+            $menu->addItem("<h4 class='ui header'>DÈconnexion</h4>");
+            $menu->setPropertyValues("data-ajax", ["", "all/","addSite/", "deconnexion/"]);
+            $menu->getOnClick("SiteController/","#divSites",["attr"=>"data-ajax"]);
+            $menu->setVertical();
             
-            // R√©cup√©ration du clic fait dans 'SiteController' en renvoyant la r√©ponse dans la div '#divSites'
-            $bts->getOnClick("SiteController/","#divSites",["attr"=>"data-ajax"]);
-            //$this->jquery->exec("initMap();",true);
-            
-            // G√©n√©ration du JavaScript/JQuery en tant que variable √† l'int√©rieur de la vue
-            $this->jquery->compile($this->view);
-            
-            // Affiliation √† la vue d'URL 'sites\index.html'
-            $this->loadView("sites\index.html");
-            //$this->loadView("sites\index.html",["jsMap"=>$this->_generateMap(49.201491, -0.380734)]);
+            $mess=$semantic->htmlMessage("mess3","Vous Ítes connectÈ, ".$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom(). "!");
+            $mess->addHeader("Bienvenue !");
+            $mess->setDismissable();
         }
+        // GÈnÈration du JavaScript/JQuery en tant que variable √† l'intÈrieur de la vue
+        $this->jquery->compile($this->view);
+        
+        // Affiliation ‡† la vue d'URL 'sites\index.html'
+        $this->loadView("sites\index.html");
+        //$this->loadView("sites\index.html",["jsMap"=>$this->_generateMap(49.201491, -0.380734)]);
     }
     
     // Fonction priv√©e permettant d'afficher le contenu de la table 'Site' de la BDD 'homepage'
