@@ -3,10 +3,8 @@ namespace controllers;
 
 use micro\orm\DAO;
 use micro\utils\RequestUtils;
-use Ajax\semantic\html\collections\form\HtmlFormCheckbox;
 use models;
 use models\Moteur;
-use Ajax\JsUtils;
 
 /**
  * Cette class génère une page d'administration d'un site (celui auquel l'utilisateur connecté à la page y est assoocié)
@@ -15,7 +13,19 @@ use Ajax\JsUtils;
  **/
 class AdminSiteController extends ControllerBase
 {
-    
+    /**
+     * <h1>Description de la méthode</h1> Utilisant <b>les Tags HTML</b> et {@literal <b> JavaDoc </b> }
+     * Pour plus de détails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
+     * 
+     * Initialise l'utilisateur connecté ainsi que son fond d'écran (dont l'URL est enregistré dans la BDD)
+     * 
+     * @see getFondEcran
+     * 
+     * @author Matteo ETTORI
+     * @version 1.0
+     * {@inheritDoc}
+     * @see \controllers\ControllerBase::initialize()
+     */
     public function initialize(){
         $fond="";
         if(isset($_SESSION["user"])){
@@ -29,7 +39,7 @@ class AdminSiteController extends ControllerBase
     }
     
     /**
-     * Affiche le menu de la page si l'utilisateur est connecté
+     * Affiche le menu de la page si un administrateur de site est connecté
      * {@inheritDoc}
      * @see \micro\controllers\Controller::index()
      */
@@ -55,7 +65,18 @@ class AdminSiteController extends ControllerBase
     }
     
     /**
-     * Module: Affiche un formulaire de modification des paramètres du site
+     * <h1>Description de la méthode</h1> Utilisant <b>les Tags HTML</b> et {@literal <b> JavaDoc </b> }
+     * Pour plus de détails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
+     * 
+     * Affiche un formulaire de configuration des paramètres du site.
+     * 
+     * @see initialize
+     * @see $_SESSION
+     * 
+     * @author Joffrey MARION
+     * @version 1.0
+     * {@inheritDoc}
+     * @see \controllers\ControllerBase::initialize()
      */
     public function configuration() {
         $semantic=$this->jquery->semantic();
@@ -74,7 +95,18 @@ class AdminSiteController extends ControllerBase
     }
     
     /**
-     * Module: Affiche un tableau des options personnalisable par les utilisateurs avec boutons (autoriser, interdire)
+     * <h1>Description de la méthode</h1> Utilisant <b>les Tags HTML</b> et {@literal <b> JavaDoc </b> }
+     * Pour plus de détails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
+     *
+     * Affiche un tableau des options personnalisable par les utilisateurs avec boutons (autoriser, interdire).
+     *
+     * @see initialize
+     * @see $_SESSION
+     *
+     * @author Joffrey MARION
+     * @version 1.0
+     * {@inheritDoc}
+     * @see \controllers\ControllerBase::initialize()
      */
     public function optionsUtilisateur(){
         $semantic=$this->jquery->semantic();
@@ -118,7 +150,18 @@ class AdminSiteController extends ControllerBase
     }
     
     /**
-     * Confirme l'interdiction pour les utilisateurs de ce site de personnaliser une option (BDD)
+     * <h1>Description de la méthode</h1> Utilisant <b>les Tags HTML</b> et {@literal <b> JavaDoc </b> }
+     * Pour plus de détails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
+     *
+     * Confirme l'interdiction pour les utilisateurs de ce site de personnaliser une option (BDD).
+     *
+     * @see initialize
+     * @see $_SESSION
+     *
+     * @author Joffrey MARION
+     * @version 1.0
+     * {@inheritDoc}
+     * @see \controllers\ControllerBase::initialize()
      */
     public function interdireOptnSite(){
         $recupId = explode('/', $_GET['c']);
