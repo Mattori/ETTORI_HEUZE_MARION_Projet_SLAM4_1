@@ -7,7 +7,6 @@ use models;
 use models\Moteur;
 
 /**
- * Cette class génère une page d'administration d'un site (celui auquel l'utilisateur connecté à la page y est assoocié)
  * Controller AdminSiteController
  * @property JsUtils $jquery
  **/
@@ -40,7 +39,7 @@ class AdminSiteController extends ControllerBase
     
     /**
      * Affiche le menu de la page si un administrateur de site est connecté
-     * {@inheritDoc}
+     * {@inheritdoc}
      * @see \micro\controllers\Controller::index()
      */
     public function index(){
@@ -89,7 +88,7 @@ class AdminSiteController extends ControllerBase
         $form->setFields(["nom\n","latitude","longitude","ecart\n","fondEcran","couleur\n","submit"]);
         $form->setCaptions(["Nom","Latitude","Longitude","Ecart","Fond d'écran","Couleur","Valider"]);
         $form->fieldAsSubmit("submit","green fluid","AdminSiteController/editSiteConfirm","#divSite");
-        
+        $form->fieldAsElement(5,'div','class="jscolor"');
         $this->jquery->compile($this->view);
         $this->loadView("AdminSite\configuration.html",["jsMap"=>$this->_generateMap($site->getLatitude(),$site->getLongitude())]);
     }
@@ -195,6 +194,7 @@ class AdminSiteController extends ControllerBase
     
     /**
      * Confirme l'autorisation pour les utilisateurs de ce site de personnaliser une option (BDD)
+     * {@inheritdoc}
      */
     public function autoriserOptnSite(){
         $recupId = explode('/', $_GET['c']);
@@ -216,6 +216,7 @@ class AdminSiteController extends ControllerBase
     
     /**
      * Confirme l'edit du site (BDD)
+     * {@inheritdoc}
      */
     public function editSiteConfirm()
     {
@@ -231,6 +232,7 @@ class AdminSiteController extends ControllerBase
     
     /**
      * Module: Affiche un tableau des moteurs de la BDD avec un bouton de selection pour le Site
+     * {@inheritdoc}
      */
     public function moteur(){
         $semantic=$this->jquery->semantic();
@@ -257,21 +259,20 @@ class AdminSiteController extends ControllerBase
                 $bt->addClass("_toSelect");
             }
         });
-            $this->jquery->getOnClick("._toSelect", "AdminSiteController/selectionner","#divSite",["attr"=>"data-ajax"]);
-            
-            // /!\ non fonctionnel
-            // bouton ajout d'un moteur
-            $btAdd=$semantic->htmlButton('btAdd','ajouter un moteur');
-            $btAdd->getOnClick("AdminSiteController/newMoteur","#divSite");
-            
-            
-            echo $table->compile($this->jquery);
-            echo $btAdd->compile($this->jquery);
-            echo $this->jquery->compile();
+        $this->jquery->getOnClick("._toSelect", "AdminSiteController/selectionner","#divSite",["attr"=>"data-ajax"]);
+        
+        // bouton ajout d'un moteur
+        $btAdd=$semantic->htmlButton('btAdd','ajouter un moteur');
+        $btAdd->getOnClick("AdminSiteController/newMoteur","#divSite");
+        
+        echo $table->compile($this->jquery);
+        echo $btAdd->compile($this->jquery);
+        echo $this->jquery->compile();
     }
     
     /**
      * Confirme la selection du moteur pour un site
+     * {@inheritdoc}
      */
     public function selectionner()
     {
@@ -291,6 +292,7 @@ class AdminSiteController extends ControllerBase
     
     /**
      * Appel la méthode _frmMoteur: pour créer un nouveau moteur
+     * {@inheritdoc}
      */
     public function newMoteur()
     {
@@ -299,6 +301,7 @@ class AdminSiteController extends ControllerBase
     
     /**
      * Appel la méthode _frmMoteur: pour modifier un moteur
+     * {@inheritdoc}
      */
     public function editMoteur()
     {
@@ -308,6 +311,7 @@ class AdminSiteController extends ControllerBase
     
     /**
      * Appel la méthode _frmMoteur: pour supprimer un moteur
+     * {@inheritdoc}
      */
     public function deleteMoteur()
     {
@@ -316,11 +320,11 @@ class AdminSiteController extends ControllerBase
     }
     
     /**
-     * Affiche un formulaire de Moteur
-     * -> $idM est un id moteur
-     * -> $action est une url
-     * @param int $idM
-     * @param string $action
+     * Affiche le formulaire d'un Moteur
+     * {@inheritdoc}
+     * @param int $idM identifiant du moteur
+     * @param string $action url de redirection
+     * @param string $actionMsg nom du bouton en lien avec l'action
      */
     private function _frmMoteur($idM,$action,$actionMsg)
     {
@@ -350,6 +354,7 @@ class AdminSiteController extends ControllerBase
     
     /**
      * Confirme la création du nouveau moteur (BDD)
+     * {@inheritdoc}
      */
     public function newMoteurConfirm()
     {
@@ -364,6 +369,7 @@ class AdminSiteController extends ControllerBase
     
     /**
      * Confirme la modification du moteur (BDD)
+     * {@inheritdoc}
      */
     public function editMoteurConfirm()
     {
@@ -379,6 +385,7 @@ class AdminSiteController extends ControllerBase
     
     /**
      * Confirme la suppression du moteur (BDD)
+     * {@inheritdoc}
      */
     public function deleteMoteurConfirm()
     {
@@ -394,11 +401,10 @@ class AdminSiteController extends ControllerBase
     
     /**
      * Affiche une map Google
-     * -> $lat est la lattitude
-     * -> $long est la longitude
-     * @param float $lat
-     * @param float $long
-     * @return string
+     * {@inheritdoc}
+     * @param float $lat latitude
+     * @param float $long longitude
+     * @return string Script de la GoogleMap
      */
     private function _generateMap($lat,$long){
         return "
