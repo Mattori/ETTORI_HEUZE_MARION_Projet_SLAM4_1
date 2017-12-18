@@ -1,7 +1,3 @@
-body {
-	height:0px;
-	width:0px;
-}
 #menu9 {
 	margin-top:0px;
 }
@@ -13,4 +9,9 @@ body {
 	border-right-width:0.25em;
 	border-right-color:#4E86A5;
 	width:300px;
+}
+
+#divUsers {
+	position:relative;
+	float:left;
 }
