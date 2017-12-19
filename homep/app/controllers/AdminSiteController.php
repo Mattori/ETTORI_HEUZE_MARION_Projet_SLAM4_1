@@ -19,10 +19,11 @@ class AdminSiteController extends ControllerBase
      * 
      * Initialise l'utilisateur connecté ainsi que son fond d'écran (dont l'URL est enregistré dans la BDD)
      * 
+     * @see \controllers\ControllerBase::initialize()
+     * 
      * @author Matteo ETTORI
      * @version 1.0
      * {@inheritDoc}
-     * @see \controllers\ControllerBase::initialize()
      */
     public function initialize(){
         $fond="";
@@ -37,8 +38,12 @@ class AdminSiteController extends ControllerBase
     
     /**
      * Affiche le menu de la page si un administrateur de site est connecté
-     * {@inheritdoc}
+     * 
      * @see \micro\controllers\Controller::index()
+     * 
+     * @author Matteo ETTORI / Joffrey MARION
+     * @version 1.0
+     * {@inheritDoc}
      */
     public function index(){
         $semantic=$this->jquery->semantic();
@@ -120,7 +125,6 @@ class AdminSiteController extends ControllerBase
      * @author Joffrey MARION
      * @version 1.0
      * {@inheritDoc}
-     * @see \controllers\ControllerBase::initialize()
      */
     public function configuration() {
         $semantic=$this->jquery->semantic();
@@ -150,7 +154,6 @@ class AdminSiteController extends ControllerBase
      * @author Joffrey MARION
      * @version 1.0
      * {@inheritDoc}
-     * @see \controllers\ControllerBase::initialize()
      */
     public function optionsUtilisateur(){
         $semantic=$this->jquery->semantic();
@@ -204,7 +207,6 @@ class AdminSiteController extends ControllerBase
      * @author Joffrey MARION
      * @version 1.0
      * {@inheritDoc}
-     * @see \controllers\ControllerBase::initialize()
      */
     public function interdireOptnSite(){
         $recupId = explode('/', $_GET['c']);
@@ -238,7 +240,10 @@ class AdminSiteController extends ControllerBase
     
     /**
      * Confirme l'autorisation pour les utilisateurs du site de personnaliser une option.
-     * {@inheritdoc}
+     * 
+     * @author Joffrey MARION
+     * @version 1.0
+     * {@inheritDoc}
      */
     public function autoriserOptnSite(){
         $recupId = explode('/', $_GET['c']);
@@ -260,7 +265,10 @@ class AdminSiteController extends ControllerBase
     
     /**
      * Confirme la modification du site dans la BDD.
-     * {@inheritdoc}
+     * 
+     * @author Joffrey MARION
+     * @version 1.0
+     * {@inheritDoc}
      */
     public function editSiteConfirm()
     {
@@ -276,7 +284,10 @@ class AdminSiteController extends ControllerBase
     
     /**
      * Affiche un tableau des moteurs de la BDD avec un bouton de sélection pour le site.
-     * {@inheritdoc}
+     * 
+     * @author Joffrey MARION
+     * @version 1.0
+     * {@inheritDoc}
      */
     public function moteur(){
         $semantic=$this->jquery->semantic();
@@ -316,7 +327,10 @@ class AdminSiteController extends ControllerBase
     
     /**
      * Confirme la sélection du moteur pour un site.
-     * {@inheritdoc}
+     * 
+     * @author Joffrey MARION
+     * @version 1.0
+     * {@inheritDoc}
      */
     public function selectionner()
     {
@@ -335,7 +349,10 @@ class AdminSiteController extends ControllerBase
     
     /**
      * Appelle la méthode _frmMoteur créant un nouveau moteur.
-     * {@inheritdoc}
+     * 
+     * @author Joffrey MARION
+     * @version 1.0
+     * {@inheritDoc}
      */
     public function newMoteur()
     {
@@ -344,7 +361,10 @@ class AdminSiteController extends ControllerBase
     
     /**
      * Appelle la méthode _frmMoteur modifiant un moteur.
-     * {@inheritdoc}
+     * 
+     * @author Joffrey MARION
+     * @version 1.0
+     * {@inheritDoc}
      */
     public function editMoteur()
     {
@@ -354,7 +374,10 @@ class AdminSiteController extends ControllerBase
     
     /**
      * Appelle la méthode _frmMoteur supprimant un moteur.
-     * {@inheritdoc}
+     * 
+     * @author Joffrey MARION
+     * @version 1.0
+     * {@inheritDoc}
      */
     public function deleteMoteur()
     {
@@ -368,6 +391,10 @@ class AdminSiteController extends ControllerBase
      * @param int idM : Identifiant du moteur
      * @param string action : URL de redirection
      * @param string actionMsg : Nom du bouton en lien avec l'action
+     * 
+     * @author Joffrey MARION
+     * @version 1.0
+     * {@inheritDoc}
      */
     private function _frmMoteur($idM,$action,$actionMsg)
     {
@@ -397,7 +424,10 @@ class AdminSiteController extends ControllerBase
     
     /**
      * Confirme la création du nouveau moteur dans la BDD.
-     * {@inheritdoc}
+     * 
+     * @author Joffrey MARION
+     * @version 1.0
+     * {@inheritDoc}
      */
     public function newMoteurConfirm()
     {
@@ -412,7 +442,10 @@ class AdminSiteController extends ControllerBase
     
     /**
      * Confirme la modification du moteur dans la BDD.
-     * {@inheritdoc}
+     * 
+     * @author Joffrey MARION
+     * @version 1.0
+     * {@inheritDoc}
      */
     public function editMoteurConfirm()
     {
@@ -428,7 +461,10 @@ class AdminSiteController extends ControllerBase
     
     /**
      * Confirme la suppression du moteur dans la BDD.
-     * {@inheritdoc}
+     * 
+     * @author Joffrey MARION
+     * @version 1.0
+     * {@inheritDoc}
      */
     public function deleteMoteurConfirm()
     {
@@ -448,6 +484,10 @@ class AdminSiteController extends ControllerBase
      * @param float lat : Latitude du site
      * @param float long : Longitude du site
      * @return string : Script de la carte Google Maps
+     * 
+     * @author Matteo ETTORI
+     * @version 1.0
+     * {@inheritDoc}
      */
     private function _generateMap($lat,$long){
         return "

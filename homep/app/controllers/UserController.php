@@ -21,7 +21,7 @@ class UserController extends ControllerBase
      * <h1>Description de la méthode</h1> Utilisant <b>les Tags HTML</b> et {@literal <b> JavaDoc </b> }
      * Pour plus de détails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
      * 
-     * Initialise l'utilisateur connecté ainsi que son fond d'écran (dont l'URL est enregistré dans la BDD)
+     * Initialise l'utilisateur connecté ainsi que son fond d'écran (dont l'URL est enregistré dans la BDD).
      * 
      * @author Matteo ETTORI
      * @version 1.0
@@ -42,8 +42,12 @@ class UserController extends ControllerBase
     
     /**
      * Affiche le menu de la page si un utilisateur normal est connecté
-     * {@inheritDoc}
+     * 
      * @see \micro\controllers\Controller::index()
+     * 
+     * @author Matteo ETTORI
+     * @version 1.0
+     * {@inheritDoc}
      */
     public function index(){
         $semantic=$this->jquery->semantic();
@@ -103,6 +107,10 @@ class UserController extends ControllerBase
     
     /**
      * Affiche/Masque les éléments du site à  partir de boutons
+     * 
+     * @author Matteo ETTORI
+     * @version 1.0
+     * {@inheritDoc}
      */
     public function elementsMasques() {
         // Déclaration d'une nouvelle Semantic-UI
@@ -135,9 +143,10 @@ class UserController extends ControllerBase
      * <h1>Description de la méthode</h1>
      *
      * Affiche le moteur de recherche sélectionné par l'utilisateur.
-     *
+     * 
      * @author Matteo ETTORI
      * @version 1.0
+     * {@inheritDoc}
      */
     public function afficheMoteur() {
         $moteur=DAO::getOne("models\Utilisateur","idMoteur=".$_SESSION["user"]->getMoteur());
@@ -158,9 +167,10 @@ class UserController extends ControllerBase
      * <h1>Description de la méthode</h1>
      *
      * Crée une liste des liens web liés à  l'utilisateur sous forme de tableau.
-     *
+     * 
      * @author Matteo ETTORI
      * @version 1.0
+     * {@inheritDoc}
      */
     private function _listeFavoris() {
         $semantic=$this->jquery->semantic();
@@ -183,9 +193,10 @@ class UserController extends ControllerBase
      * <h1>Description de la méthode</h1>
      *
      * Affiche la liste des liens web liés à  l'utilisateur sous forme de tableau.
-     *
+     * 
      * @author Matteo ETTORI
      * @version 1.0
+     * {@inheritDoc}
      */
     public function listeFavoris() {
         // Affectation de _all à  la classe actuelle de variable 'this'
@@ -202,9 +213,10 @@ class UserController extends ControllerBase
      * <h1>Description de la méthode</h1>
      *
      * Affiche le formulaire d'ajout des données des sites.
-     *
+     * 
      * @author Matteo ETTORI
      * @version 1.0
+     * {@inheritDoc}
      */
     private function _formFavoris($liens, $action, $libelle, $url, $ordre){
         // Déclaration d'une nouvelle Semantic-UI
@@ -245,9 +257,10 @@ class UserController extends ControllerBase
      * @param action   : Action du bouton de validation
      * @param login    : Login récupéré de l'utilisateur connecté
      * @param password : Mot de passe récupéré de l'utilisateur connecté
-     *
+     * 
      * @author Matteo ETTORI
      * @version 1.0
+     * {@inheritDoc}
      */
     private function _preferences($user, $action, $login, $password){
         // Déclaration d'une nouvelle Semantic-UI
@@ -283,9 +296,10 @@ class UserController extends ControllerBase
      * <h1>Description de la méthode</h1>
      *
      * Affiche le formulaire des préférences utilisateurs.
-     *
+     * 
      * @author Matteo ETTORI
      * @version 1.0
+     * {@inheritDoc}
      */
     public function preferences(){
         $id=$_SESSION["user"]->getId();
@@ -299,9 +313,10 @@ class UserController extends ControllerBase
      * Met à  jour les données de l'utilisateur connecté.
      * 
      * @param id : Identifiant récupéré de l'utilisateur connecté
-     *
+     * 
      * @author Matteo ETTORI
      * @version 1.0
+     * {@inheritDoc}
      */
     public function updateUser($id){
         $user=DAO::getOne("models\Utilisateur", $id);
@@ -321,9 +336,10 @@ class UserController extends ControllerBase
      * Exécute de l'ajout d'un nouveau lien.
      *
      * @param id : Identifiant récupéré de l'utilisateur connecté
-     *
+     * 
      * @author Matteo ETTORI
      * @version 1.0
+     * {@inheritDoc}
      */
     public function newLink(){
         
@@ -346,9 +362,10 @@ class UserController extends ControllerBase
      * Exécute de la suppression d'un lien.
      *
      * @param id : Identifiant récupéré de l'utilisateur connecté
-     *
+     * 
      * @author Matteo ETTORI
      * @version 1.0
+     * {@inheritDoc}
      */
     public function deleteLink($id){
         // Variable $liens récupérant toutes les données d'un site selon son id et le modà¨le 'Site'
@@ -367,9 +384,10 @@ class UserController extends ControllerBase
      * Exécute de la modification d'un lien.
      *
      * @param id : Identifiant récupéré de l'utilisateur connecté
-     *
+     * 
      * @author Matteo ETTORI
      * @version 1.0
+     * {@inheritDoc}
      */
     public function editLink($id){
         $liens=DAO::getOne("models\Lienweb", $id);
@@ -382,9 +400,10 @@ class UserController extends ControllerBase
      * Exécute de la mise à  jour d'un lien.
      *
      * @param id : Identifiant récupéré de l'utilisateur connecté
-     *
+     * 
      * @author Matteo ETTORI
      * @version 1.0
+     * {@inheritDoc}
      */
     public function updateLink($id){
         $liens=DAO::getOne("models\Lienweb", $id);
@@ -398,9 +417,10 @@ class UserController extends ControllerBase
      * <h1>Description de la méthode</h1>
      *
      * Affiche la liste des moteurs disponibles sous forme de tableau.
-     *
-     * @author Matteo ETTORI
+     * 
+     * @author Joffrey MARION
      * @version 1.0
+     * {@inheritDoc}
      */
     public function moteur(){
         $semantic=$this->jquery->semantic();
@@ -428,7 +448,6 @@ class UserController extends ControllerBase
         echo $this->jquery->compile();
     }
     
-
     /**
      * <h1>Description de la méthode</h1>
      *

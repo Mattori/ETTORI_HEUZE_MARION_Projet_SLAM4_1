@@ -33,8 +33,12 @@ class SiteController extends ControllerBase
     
     /**
      * Affiche le menu de la page si un utilisateur normal est connecté.
-     * {@inheritDoc}
+     * 
      * @see \micro\controllers\Controller::index()
+     * 
+     * @author Matteo ETTORI
+     * @version 1.0
+     * {@inheritDoc}
      */
     public function index(){
         $semantic=$this->jquery->semantic();
@@ -95,6 +99,9 @@ class SiteController extends ControllerBase
     
     /**
      * Affiche le contenu de la table 'Site' de la BDD 'homepage'.
+     * 
+     * @author Matteo ETTORI
+     * @version 1.0
      * {@inheritDoc}
      */
     private function _all(){
@@ -134,6 +141,9 @@ class SiteController extends ControllerBase
 
     /**
      * Exécute, compile et affiche le contenu de la méthode _all en publique dans la vue 'index.html'.
+     * 
+     * @author Matteo ETTORI
+     * @version 1.0
      * {@inheritDoc}
      */
     public function all() {
@@ -149,6 +159,9 @@ class SiteController extends ControllerBase
     
     /**
      * Ajoute un nouveau site en prenant en compte la méthode _form
+     * 
+     * @author Matteo ETTORI / Joffrey MARION
+     * @version 1.0
      * {@inheritDoc}
      */
     public function addSite(){
@@ -163,6 +176,8 @@ class SiteController extends ControllerBase
      * @param float lat : Latitude du site
      * @param float long : Longitude du site
      * 
+     * @author Matteo ETTORI
+     * @version 1.0
      * {@inheritDoc}
      */
     private function _form($site, $action, $lat, $long){
@@ -197,7 +212,9 @@ class SiteController extends ControllerBase
     
     /**
      * Exécute la requête d'ajout d'un nouveau site.
-     *
+     * 
+     * @author Matteo ETTORI / Joffrey MARION
+     * @version 1.0
      * {@inheritDoc}
      */
     public function newSite(){
@@ -219,7 +236,9 @@ class SiteController extends ControllerBase
      * Exécute la requête de suppression d'un nouveau site.
      * 
      * @param int id : Identifiant du site
-     *
+     * 
+     * @author Matteo ETTORI / Joffrey MARION
+     * @version 1.0
      * {@inheritDoc}
      */
     public function delete($id){
@@ -237,7 +256,9 @@ class SiteController extends ControllerBase
      * Récupère le formulaire de préférences du site avec renvoi vers la fonction 'update'.
      * 
      * @param int id : Identifiant du site
-     *
+     * 
+     * @author Matteo ETTORI / Joffrey MARION
+     * @version 1.0
      * {@inheritDoc}
      */
     public function edit($id){
@@ -249,7 +270,9 @@ class SiteController extends ControllerBase
      * Exécute la requête de modification d'un site.
      * 
      * @param int id : Identifiant du site
-     *
+     * 
+     * @author Matteo ETTORI / Joffrey MARION
+     * @version 1.0
      * {@inheritDoc}
      */
     public function update($id){
@@ -266,6 +289,10 @@ class SiteController extends ControllerBase
      * @param float lat : Latitude du site
      * @param float long : Longitude du site
      * @return string : Script de la carte Google Maps
+     * 
+     * @author Matteo ETTORI
+     * @version 1.0
+     * {@inheritDoc}
      */
     private function _generateMap($lat,$long){
         return "
