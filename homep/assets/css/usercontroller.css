@@ -1,17 +1,20 @@
+/* Style du bloc du menu affiché par la vue de UserController */
 #menu9 {
-	margin-top:0px;
+	margin-top:0px;  /* Marge (margin) avec le haut de la page (top) à 0px (aucun)
 }
 
+/* Style des blocs de l'image d'accueil et du menu affiché par la vue de UserController */
 #imgtest, #menu9 {
-	border-radius:0;
-	border-top-width:0;
-	border-right-style:solid;
-	border-right-width:0.25em;
-	border-right-color:#4E86A5;
-	width:300px;
+	border-radius:0;             /* Rayon (radius) du bord (border) des blocs à 0 (pas de bord) */
+	border-top-width:0;          /* Épaisseur (width) des bords (border) du haut (top) à 0 (pas d'épaisseur) */
+	border-right-style:solid;    /* Style des bords (border) de droite (right) de valeur 'solid' */
+	border-right-width:0.25em;   /* Épaisseur (width) des bords (border) de droite (right) à 0.25em */
+	border-right-color:#4E86A5;  /* Couleur (color) des bords (border) de droite (right) en #4E86A5 (variante de bleu) */
+	width:300px;                 /* Épaisseur (width) des blocs de 300px (pixel)*/
 }
 
+/* Style du menu affiché par la vue de UserController */
 #divUsers {
-	position:relative;
-	float:left;
+	position:relative;  /* Position du bloc de valeur relative */
+	float:left;         /* Flottement du bloc sur la gauche */
 }
