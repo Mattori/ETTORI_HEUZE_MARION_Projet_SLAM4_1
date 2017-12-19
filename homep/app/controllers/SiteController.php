@@ -13,6 +13,19 @@ use models\Site;
 // Déclaration de la classe SiteController héritant de ControllerBase
 class SiteController extends ControllerBase
 {
+    /**
+     * <h1>Description de la méthode</h1> Utilisant <b>les Tags HTML</b> et {@literal <b> JavaDoc </b> }
+     * Pour plus de détails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
+     *
+     * Initialise l'utilisateur connecté ainsi que son fond d'écran (dont l'URL est enregistré dans la BDD).
+     *
+     * @see getFondEcran
+     *
+     * @author Matteo ETTORI
+     * @version 1.0
+     * {@inheritDoc}
+     * @see \controllers\ControllerBase::initialize()
+     */
     public function initialize(){
         parent::initialize();
         if(isset($_SESSION["user"])){
@@ -21,7 +34,11 @@ class SiteController extends ControllerBase
         }
     }
     
-    // Fonction publique permettant de déterminer les éléments et les évènements de la page 'index.html'
+    /**
+     * Affiche le menu de la page si un utilisateur normal est connecté.
+     * {@inheritDoc}
+     * @see \micro\controllers\Controller::index()
+     */
     public function index(){
         $semantic=$this->jquery->semantic();
         //echo "ici, on administre le site qui a pour identifiant: ".$_SESSION["user"]->getSite()->getId();
@@ -89,7 +106,10 @@ class SiteController extends ControllerBase
         //$this->loadView("sites\index.html",["jsMap"=>$this->_generateMap(49.201491, -0.380734)]);
     }
     
-    // Fonction privée permettant d'afficher le contenu de la table 'Site' de la BDD 'homepage'
+    /**
+     * Affiche le contenu de la table 'Site' de la BDD 'homepage'.
+     * {@inheritDoc}
+     */
     private function _all(){
         // Variable 'sites' récupérant toutes les données de la table 'Site' à  partir du modèle d'URL 'models\Site'
         // sous forme de tableau
@@ -128,8 +148,10 @@ class SiteController extends ControllerBase
         echo $this->jquery->compile();
     }
 
-    
-    // Fonction publique permettant l'exécution, la compilation et l'affichage de la fonction _all en publique
+    /**
+     * Exécute, compile et affiche le contenu de la méthode _all en publique dans la vue 'index.html'.
+     * {@inheritDoc}
+     */
     public function all() {
         // Affectation de _all à  la classe actuelle de variable 'this'
         $this->_all();
@@ -141,18 +163,29 @@ class SiteController extends ControllerBase
         $this->loadView("sites\index.html");
     }
     
-    
-    // Fonction publique permettant de prendre en compte la fonction _form
+    /**
+     * Ajoute un nouveau site en prenant en compte la méthode _form
+     * {@inheritDoc}
+     */
     public function addSite(){
         $this->_form(new Site(),"SiteController/newSite/",49.201491,-0.380734);
     }
     
-    // Fonction privée permettant l'ajout des données des sites écrites dans le formulaire
-    private function _form($site, $action,$lat,$long){
+    /**
+     * Ajoute des données des sites écrites dans le formulaire.
+     * 
+     * @param array site : Données d'un site sous forme de tableau
+     * @param string action : Action de redirection
+     * @param float lat : Latitude du site
+     * @param float long : Longitude du site
+     * 
+     * {@inheritDoc}
+     */
+    private function _form($site, $action, $lat, $long){
         // Déclaration d'une nouvelle Semantic-UI
         $semantic=$this->jquery->semantic();
         
-        // Affectation du langage franà§ais à  la 'semantic'
+        // Affectation du langage français à  la 'semantic'
         $semantic->setLanguage("fr");
         
         // Variable 'form' affectant la 'semantic' locale au formulaire d'id 'frmSite' au paramètre '$site'
@@ -178,7 +211,13 @@ class SiteController extends ControllerBase
         echo $this->jquery->compile();
     }
     
-    // Fonction publique permettant l'exécution de la requàªte d'ajout d'un nouveau site
+    /**
+     * Exécute la requête d'ajout d'un nouveau site.
+     * 
+     * @see addSite
+     *
+     * {@inheritDoc}
+     */
     public function newSite(){
         
         // Variable 'site' récupérant toutes les données d'un nouveau site
@@ -194,7 +233,13 @@ class SiteController extends ControllerBase
         }
     }
     
-    // Fonction publique permettant l'exécution de la requàªte de suppression d'un nouveau site
+    /**
+     * Exécute la requête de suppression d'un nouveau site.
+     * 
+     * @param int id : Identifiant du site
+     *
+     * {@inheritDoc}
+     */
     public function delete($id){
         // Variable 'site' récupérant toutes les données d'un site selon son id et le modèle 'Site'
         $site=DAO::getOne("models\Site", $id);
@@ -206,21 +251,25 @@ class SiteController extends ControllerBase
         $this->forward("controllers\SiteController","all");
     }
     
-    // Fonction publique permettant 
-    public function _getSiteInGet(){
-        $id=RequestUtils::get('id');
-        $site=DAO::getOne("models\Site", $id);
-        if($site instanceof models\Site){
-            return $site;
-            return false;
-        }
-    }
-    
+    /**
+     * Récupère le formulaire de préférences du site avec renvoi vers la fonction 'update'.
+     * 
+     * @param int id : Identifiant du site
+     *
+     * {@inheritDoc}
+     */
     public function edit($id){
         $site=DAO::getOne("models\Site", $id);
         $this->_form($site,"SiteController/update/".$id,$site->getLatitude(),$site->getLongitude());
     }
     
+    /**
+     * Exécute la requête de modification d'un site.
+     * 
+     * @param int id : Identifiant du site
+     *
+     * {@inheritDoc}
+     */
     public function update($id){
         $site=DAO::getOne("models\Site", $id);
         RequestUtils::setValuesToObject($site,$_POST);
@@ -229,6 +278,13 @@ class SiteController extends ControllerBase
         }
     }
     
+    /**
+     * Affiche une carte Google Maps.
+     * {@inheritdoc}
+     * @param float lat : Latitude du site
+     * @param float long : Longitude du site
+     * @return string : Script de la carte Google Maps
+     */
     private function _generateMap($lat,$long){
         return "
         <script>
