@@ -7,6 +7,8 @@ use micro\utils\RequestUtils;
 use models;
 use models\Lienweb;
 
+use Ajax\semantic\html\collections\HtmlBreadcrumb;
+
 
 /**
  * Controller UserController
@@ -94,6 +96,10 @@ class UserController extends ControllerBase
             $menu->setPropertyValues("data-ajax", ["", "preferences/", "listeFavoris/", "moteur/", "deconnexion/UserController/index"]);
             $menu->getOnClick("UserController/","#divUsers",["attr"=>"data-ajax"]);
             $menu->setVertical();
+            
+            $bc=new HtmlBreadcrumb("bc2", array("Accueil","Utilisateur"));
+            $bc->setContentDivider(">");
+            echo $bc;
             
             $mess=$semantic->htmlMessage("mess3","Vous àªtes désormais connecté, ".$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom(). "!");
             $mess->addHeader("Bienvenue !");
