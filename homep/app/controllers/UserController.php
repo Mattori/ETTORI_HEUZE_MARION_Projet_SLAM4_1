@@ -15,7 +15,6 @@ use models\Lienweb;
 
 class UserController extends ControllerBase
 {
-    
     /**
      * <h1>Description de la méthode</h1> Utilisant <b>les Tags HTML</b> et {@literal <b> JavaDoc </b> }
      * Pour plus de détails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
@@ -68,6 +67,19 @@ class UserController extends ControllerBase
             $bt=$input->addAction("Rechercher");
             echo $frm;
         } else {
+            $moteur=DAO::getOne("models\Utilisateur","idMoteur=".$_SESSION["user"]->getMoteur());
+            //var_dump($moteur->getMoteur()->getNom());
+            
+            $frm=$this->jquery->semantic()->htmlForm("frm-search");
+            $input=$frm->addInput("q");
+            $input->labeled($moteur->getMoteur()->getNom());
+            
+            $frm->setProperty("action",$moteur->getMoteur()->getCode());
+            $frm->setProperty("method","get");
+            $frm->setProperty("target","_new");
+            $bt=$input->addAction("Rechercher");
+            echo $frm;
+            
             $img=$semantic->htmlImage("imgtest","assets/img/homepage_symbol.jpg","Image d'accueil","small");
             
             $title=$semantic->htmlHeader("header5",4);
