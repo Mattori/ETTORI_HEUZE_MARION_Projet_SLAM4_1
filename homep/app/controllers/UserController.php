@@ -50,24 +50,19 @@ class UserController extends ControllerBase
     public function index(){
         $semantic=$this->jquery->semantic();
         
+        $img=$semantic->htmlImage("imgtest","assets/img/homepage_symbol.jpg","Image d'accueil","small");
+        $menu=$semantic->htmlMenu("menu9");
+        $menu->addItem("<h4 class='ui header'>Accueil</h4>");
+        
         if(!isset($_SESSION["user"])) {
-            $img=$semantic->htmlImage("imgtest","assets/img/homepage_symbol.jpg","Image d'accueil","small");
-            $menu=$semantic->htmlMenu("menu9");
-            $menu->addItem("<h4 class='ui header'>Accueil</h4>");
             $menu->addItem("<h4 class='ui header'>Connexion</h4>");
             $menu->setPropertyValues("data-ajax", ["", "connexion/UserController/submit"]);
-            $menu->getOnClick("UserController/","#divUsers",["attr"=>"data-ajax"]);
-            $menu->setVertical();
             
             $frm=$this->jquery->semantic()->htmlForm("frm-search");
             $input=$frm->addInput("q");
             $input->labeled("Google");
             
             $frm->setProperty("action","https://www.google.fr/search?q=");
-            $frm->setProperty("method","get");
-            $frm->setProperty("target","_new");
-            $bt=$input->addAction("Rechercher");
-            echo $frm;
         } else {
             $moteur=DAO::getOne("models\Utilisateur","idMoteur=".$_SESSION["user"]->getMoteur());
             //var_dump($moteur->getMoteur()->getNom());
@@ -77,34 +72,32 @@ class UserController extends ControllerBase
             $input->labeled($moteur->getMoteur()->getNom());
             
             $frm->setProperty("action",$moteur->getMoteur()->getCode());
-            $frm->setProperty("method","get");
-            $frm->setProperty("target","_new");
-            $bt=$input->addAction("Rechercher");
-            echo $frm;
-            
-            $img=$semantic->htmlImage("imgtest","assets/img/homepage_symbol.jpg","Image d'accueil","small");
             
             $title=$semantic->htmlHeader("header5",4);
             $title->asImage("https://semantic-ui.com/images/avatar2/large/patrick.png",$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom());
-            
-            $menu=$semantic->htmlMenu("menu9");
-            $menu->addItem("<h4 class='ui header'>Accueil</h4>");
+
             $menu->addItem("<h4 class='ui header'>Informations</h4>");
             $menu->addItem("<h4 class='ui header'>Favoris</h4>");
             $menu->addItem("<h4 class='ui header'>Moteur</h4>");
             $menu->addItem("<h4 class='ui header'>Déconnexion</h4>");
             $menu->setPropertyValues("data-ajax", ["", "preferences/", "listeFavoris/", "moteur/", "deconnexion/UserController/index"]);
-            $menu->getOnClick("UserController/","#divUsers",["attr"=>"data-ajax"]);
-            $menu->setVertical();
-            
-            $bc=new HtmlBreadcrumb("bc2", array("Accueil","Utilisateur"));
-            $bc->setContentDivider(">");
-            echo $bc;
             
             $mess=$semantic->htmlMessage("mess3","Vous àªtes désormais connecté, ".$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom(). "!");
             $mess->addHeader("Bienvenue !");
             $mess->setDismissable();
         }
+        
+        $bc=new HtmlBreadcrumb("bc2", array("Accueil","Utilisateur"));
+        $bc->setContentDivider(">");
+        echo $bc;
+        
+        $frm->setProperty("method","get");
+        $frm->setProperty("target","_new");
+        $bt=$input->addAction("Rechercher");
+        echo $frm;
+        
+        $menu->getOnClick("UserController/","#divUsers",["attr"=>"data-ajax"]);
+        $menu->setVertical();
         
         $this->jquery->compile($this->view);
         $this->loadView("Utilisateur\index.html");

@@ -14,7 +14,7 @@ use models\Site;
 class SiteController extends ControllerBase
 {
     /**
-     * <h1>Description de la méthode</h1> Utilisant <b>les Tags HTML</b> et {@literal <b> JavaDoc </b> }
+     * <h1>Description de la méthode</h1> Utilisant <b>les Tags HTML</b> et JavaDoc
      * Pour plus de détails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
      *
      * Initialise l'utilisateur connecté ainsi que son fond d'écran (dont l'URL est enregistré dans la BDD).
@@ -30,7 +30,6 @@ class SiteController extends ControllerBase
         parent::initialize();
         if(isset($_SESSION["user"])){
             $user=$_SESSION["user"];
-            //echo $user->getLogin();
         }
     }
     
@@ -41,15 +40,15 @@ class SiteController extends ControllerBase
      */
     public function index(){
         $semantic=$this->jquery->semantic();
-        //echo "ici, on administre le site qui a pour identifiant: ".$_SESSION["user"]->getSite()->getId();
+        
+        $img=$semantic->htmlImage("imgtest","assets/img/homepage_symbol.jpg","Image d'accueil","small");
+        
+        $menu=$semantic->htmlMenu("menu9");
+        $menu->addItem("<h4 class='ui header'>Accueil</h4>");
+
         if(!isset($_SESSION["user"])) {
-            $img=$semantic->htmlImage("imgtest","assets/img/homepage_symbol.jpg","Image d'accueil","small");
-            $menu=$semantic->htmlMenu("menu9");
-            $menu->addItem("<h4 class='ui header'>Accueil</h4>");
             $menu->addItem("<h4 class='ui header'>Connexion</h4>");
             $menu->setPropertyValues("data-ajax", ["", "connexion/SiteController/submit"]);
-            $menu->getOnClick("SiteController/","#divSites",["attr"=>"data-ajax"]);
-            $menu->setVertical();
             
             $frm=$this->jquery->semantic()->htmlForm("frm-search");
             $input=$frm->addInput("q");
@@ -63,47 +62,37 @@ class SiteController extends ControllerBase
         }
         elseif($_SESSION["user"]->getStatut()->getId() < 3)
         {
-            $img=$semantic->htmlImage("imgtest","assets/img/homepage_symbol.jpg","Image d'accueil","small");
-            
             $title=$semantic->htmlHeader("header5",4);
             $title->asImage("https://semantic-ui.com/images/avatar2/large/patrick.png",$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom());
-            
-            $menu=$semantic->htmlMenu("menu9");
-            $menu->addItem("<h4 class='ui header'>Accueil</h4>");
+
             $menu->addItem("<h4 class='ui header'>Déconnexion</h4>");
             $menu->setPropertyValues("data-ajax", ["", "deconnexion/SiteController/index"]);
-            $menu->getOnClick("SiteController/","#divSites",["attr"=>"data-ajax"]);
-            $menu->setVertical();
             
             $mess=$semantic->htmlMessage("mess3","Vous êtes connecté mais vous n'avez pas les droits, ".$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom(). "!");
             $mess->addHeader("Attention !");
             $mess->setDismissable();
         }
         else{
-            $img=$semantic->htmlImage("imgtest","assets/img/homepage_symbol.jpg","Image d'accueil","small");
-            
             $title=$semantic->htmlHeader("header5",4);
             $title->asImage("https://semantic-ui.com/images/avatar2/large/patrick.png",$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom());
-            
-            $menu=$semantic->htmlMenu("menu9");
-            $menu->addItem("<h4 class='ui header'>Accueil</h4>");
+
             $menu->addItem("<h4 class='ui header'>Liste des sites</h4>");
             $menu->addItem("<h4 class='ui header'>Ajouter un site</h4>");
             $menu->addItem("<h4 class='ui header'>Déconnexion</h4>");
             $menu->setPropertyValues("data-ajax", ["", "all/","addSite/", "deconnexion/"]);
-            $menu->getOnClick("SiteController/","#divSites",["attr"=>"data-ajax"]);
-            $menu->setVertical();
             
             $mess=$semantic->htmlMessage("mess3","Vous êtes connecté, ".$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom(). "!");
             $mess->addHeader("Bienvenue !");
             $mess->setDismissable();
         }
+        $menu->getOnClick("SiteController/","#divSites",["attr"=>"data-ajax"]);
+        $menu->setVertical();
+        
         // Génération du JavaScript/JQuery en tant que variable à  l'intérieur de la vue
         $this->jquery->compile($this->view);
         
         // Affiliation à  la vue d'URL 'sites\index.html'
         $this->loadView("sites\index.html");
-        //$this->loadView("sites\index.html",["jsMap"=>$this->_generateMap(49.201491, -0.380734)]);
     }
     
     /**
@@ -123,9 +112,6 @@ class SiteController extends ControllerBase
         // 2) Modèle : 'models\Site'
         // 3) Tableau de données : 'sites'
         $table=$semantic->dataTable("tblSites", "models\Site", $sites);
-        
-        // Envoi de l'identifiant de la fonction récupérant chaque id sous forme d'objet au tableau de données 'table'
-        //$table->setIdentifierFunction(function($i,$obj){return $obj->getId();});
         
         // Envoi des champs de chaque élément de la table 'Site' à  'table'
         $table->setFields(["id", "nom","latitude","longitude","ecart","fondEcran","couleur","ordre","options"]);

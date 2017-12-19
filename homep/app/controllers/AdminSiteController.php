@@ -31,7 +31,6 @@ class AdminSiteController extends ControllerBase
         if(isset($_SESSION["user"])){
             $user=$_SESSION["user"];
             $fond=$user->getFondEcran();
-            //echo $user->getLogin();
         }
         if(!RequestUtils::isAjax()){
             $this->loadView("main/vHeader.html",["fond"=>$fond]);
@@ -45,97 +44,69 @@ class AdminSiteController extends ControllerBase
      */
     public function index(){
         $semantic=$this->jquery->semantic();
+        
+        $img=$semantic->htmlImage("imgtest","assets/img/homepage_symbol.jpg","Image d'accueil","small");
+        $menu=$semantic->htmlMenu("menu9");
+        $menu->addItem("<h4 class='ui header'>Accueil</h4>");
+        
         if(!isset($_SESSION["user"])) {
-            $img=$semantic->htmlImage("imgtest","assets/img/homepage_symbol.jpg","Image d'accueil","small");
-            $menu=$semantic->htmlMenu("menu9");
-            $menu->addItem("<h4 class='ui header'>Accueil</h4>");
             $menu->addItem("<h4 class='ui header'>Connexion</h4>");
             $menu->setPropertyValues("data-ajax", ["", "connexion/AdminSiteController/submit"]);
-            $menu->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
-            $menu->setVertical();
             
             $frm=$this->jquery->semantic()->htmlForm("frm-search");
             $input=$frm->addInput("q");
             $input->labeled("Google");
             
             $frm->setProperty("action","https://www.google.fr/search?q=");
-            $frm->setProperty("method","get");
-            $frm->setProperty("target","_new");
-            $bt=$input->addAction("Rechercher");
-            echo $frm;
         } else {
-            if($_SESSION["user"]->getStatut()->getId() >=2) {
-                $moteur=DAO::getOne("models\Utilisateur","idMoteur=".$_SESSION["user"]->getMoteur());
-                //var_dump($moteur->getMoteur()->getNom());
-                
-                $frm=$this->jquery->semantic()->htmlForm("frm-search");
-                $input=$frm->addInput("q");
-                $input->labeled($moteur->getMoteur()->getNom());
-                
-                $frm->setProperty("action",$moteur->getMoteur()->getCode());
-                $frm->setProperty("method","get");
-                $frm->setProperty("target","_new");
-                $bt=$input->addAction("Rechercher");
-                echo $frm;
-                
-                $img=$semantic->htmlImage("imgtest","assets/img/homepage_symbol.jpg","Image d'accueil","small");
-                
-                $title=$semantic->htmlHeader("header5",4);
-                $title->asImage("https://semantic-ui.com/images/avatar2/large/patrick.png",$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom());
-                
-                $menu=$semantic->htmlMenu("menu9");
-                $menu->addItem("<h4 class='ui header'>Accueil</h4>");
+            $moteur=DAO::getOne("models\Utilisateur","idMoteur=".$_SESSION["user"]->getMoteur());
+            if($_SESSION["user"]->getStatut()->getId() >=2) {     
                 $menu->addItem("<h4 class='ui header'>Configuration du site</h4>");
                 $menu->addItem("<h4 class='ui header'>Moteur de recherche</h4>");
                 $menu->addItem("<h4 class='ui header'>Ordre des éléments</h4>");
                 $menu->addItem("<h4 class='ui header'>Droits de personnalisation</h4>");
                 $menu->addItem("<h4 class='ui header'>Déconnexion</h4>");
                 $menu->setPropertyValues("data-ajax", ["", "configuration/", "moteur/", "ordreElement/", "optionsUtilisateur/", "deconnexion/AdminSiteController/index"]);
-                $menu->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
-                $menu->setVertical();
                 
-                $bc=new HtmlBreadcrumb("bc2", array("Accueil","Administrateur de sites"));
-                $bc->setContentDivider(">");
-                echo $bc;
-                
-                $mess=$semantic->htmlMessage("mess3","Vous àªtes désormais connecté, ".$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom(). "!");
+                $mess=$semantic->htmlMessage("mess3","Vous êtes désormais connecté, ".$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom(). "!");
                 $mess->addHeader("Bienvenue !");
                 $mess->setDismissable();
             } else {
-                $moteur=DAO::getOne("models\Utilisateur","idMoteur=".$_SESSION["user"]->getMoteur());
-                //var_dump($moteur->getMoteur()->getNom());
-                
                 $frm=$this->jquery->semantic()->htmlForm("frm-search");
                 $input=$frm->addInput("q");
                 $input->labeled($moteur->getMoteur()->getNom());
                 
                 $frm->setProperty("action",$moteur->getMoteur()->getCode());
-                $frm->setProperty("method","get");
-                $frm->setProperty("target","_new");
-                $bt=$input->addAction("Rechercher");
-                echo $frm;
-                
-                $img=$semantic->htmlImage("imgtest","assets/img/homepage_symbol.jpg","Image d'accueil","small");
-                
-                $title=$semantic->htmlHeader("header5",4);
-                $title->asImage("https://semantic-ui.com/images/avatar2/large/patrick.png",$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom());
-                
-                $menu=$semantic->htmlMenu("menu9");
-                $menu->addItem("<h4 class='ui header'>Accueil</h4>");
+
                 $menu->addItem("<h4 class='ui header'>Déconnexion</h4>");
                 $menu->setPropertyValues("data-ajax", ["", "deconnexion/AdminSiteController/index"]);
-                $menu->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
-                $menu->setVertical();
-                
-                $bc=new HtmlBreadcrumb("bc2", array("Accueil","Administrateur de sites"));
-                $bc->setContentDivider(">");
-                echo $bc;
                 
                 $mess=$semantic->htmlMessage("mess3","Accès à la page d'administration du site interdit, ".$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom(). "!");
                 $mess->addHeader("Erreur !");
                 $mess->setDismissable();
             }
+            $title=$semantic->htmlHeader("header5",4);
+            $title->asImage("https://semantic-ui.com/images/avatar2/large/patrick.png",$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom());
+            
+            $frm=$this->jquery->semantic()->htmlForm("frm-search");
+            $input=$frm->addInput("q");
+            $input->labeled($moteur->getMoteur()->getNom());
+            
+            $frm->setProperty("action",$moteur->getMoteur()->getCode());
         }
+        
+        $frm->setProperty("method","get");
+        $frm->setProperty("target","_new");
+        $bt=$input->addAction("Rechercher");
+        echo $frm;
+        
+        $menu->getOnClick("AdminSiteController/","#divSite",["attr"=>"data-ajax"]);
+        $menu->setVertical();
+        
+        $bc=new HtmlBreadcrumb("bc2", array("Accueil","Administrateur de sites"));
+        $bc->setContentDivider(">");
+        echo $bc;
+        
         $this->jquery->compile($this->view);
         $this->loadView("AdminSite\index.html");
     }
@@ -166,6 +137,7 @@ class AdminSiteController extends ControllerBase
         $form->setCaptions(["Nom","Latitude","Longitude","Ecart","Fond d'écran","Couleur","Valider"]);
         $form->fieldAsSubmit("submit","green fluid","AdminSiteController/editSiteConfirm","#divSite");
         $form->fieldAsElement(5,'div','class="jscolor"');
+        
         $this->jquery->compile($this->view);
         $this->loadView("AdminSite\configuration.html",["jsMap"=>$this->_generateMap($site->getLatitude(),$site->getLongitude())]);
     }
@@ -207,22 +179,22 @@ class AdminSiteController extends ControllerBase
                 }
             }
         });
-            $form->addFieldButton("interdit",false,function(&$bt,$instance,$index) use($optionsSelect){
-                foreach($optionsSelect as &$optn)
-                {
-                    if(array_search($instance->getId(),$optionsSelect)!==false){
-                        $bt->addClass("_toUncheck");
-                    }elseif(array_search($instance->getId(),$optionsSelect)==false){
-                        $bt->addClass("disabled");
-                    }
+        $form->addFieldButton("interdit",false,function(&$bt,$instance,$index) use($optionsSelect){
+            foreach($optionsSelect as &$optn)
+            {
+                if(array_search($instance->getId(),$optionsSelect)!==false){
+                    $bt->addClass("_toUncheck");
+                }elseif(array_search($instance->getId(),$optionsSelect)==false){
+                    $bt->addClass("disabled");
                 }
-            });
-                
-                $this->jquery->getOnClick("._toUncheck", "AdminSiteController/interdireOptnSite","#divSite",["attr"=>"data-ajax"]);
-                $this->jquery->getOnClick("._toCheck", "AdminSiteController/autoriserOptnSite","#divSite",["attr"=>"data-ajax"]);
-                
-                echo $form->compile($this->jquery);
-                echo $this->jquery->compile();
+            }
+        });
+            
+        $this->jquery->getOnClick("._toUncheck", "AdminSiteController/interdireOptnSite","#divSite",["attr"=>"data-ajax"]);
+        $this->jquery->getOnClick("._toCheck", "AdminSiteController/autoriserOptnSite","#divSite",["attr"=>"data-ajax"]);
+        
+        echo $form->compile($this->jquery);
+        echo $this->jquery->compile();
     }
     
     /**
