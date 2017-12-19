@@ -105,35 +105,16 @@ class SiteController extends ControllerBase
      * {@inheritDoc}
      */
     private function _all(){
-        // Variable 'sites' récupérant toutes les données de la table 'Site' à  partir du modèle d'URL 'models\Site'
-        // sous forme de tableau
-        $sites=DAO::getAll("models\Site");
-        
-        // Déclaration d'une nouvelle Semantic-UI
-        $semantic=$this->jquery->semantic();
-        
-        // Variable 'table' affectant la 'semantic' locale aux tableaux de données 'table' de la table 'Site' avec :
-        // 1) Identifiant : 'tblSites'
-        // 2) Modèle : 'models\Site'
-        // 3) Tableau de données : 'sites'
-        $table=$semantic->dataTable("tblSites", "models\Site", $sites);
-        
-        // Envoi des champs de chaque élément de la table 'Site' à  'table'
-        $table->setFields(["id", "nom","latitude","longitude","ecart","fondEcran","couleur","ordre","options"]);
-        
-        // Envoi des titres à  chaque champ des éléments de la table 'Site' à  'table'
-        $table->setCaptions(["id","Nom","Latitude","Longitude","Ecart","Fond d'écran","Couleur", "Ordre", "Options", "Actions"]);
-        
-        // Ajout d'un bouton d'édition et d'un bouton de suppression à  chaque ligne renvoyé de 'table'
-        $table->addEditDeleteButtons(true,["ajaxTransition"=>"random","method"=>"post"]);
-        
-        // Affectation d'un URL à  chaque bouton précédent :
-        // 1) edit=>'SiteController/edit'
-        // 2) delete=>'SiteController/delete'
-        $table->setUrls(["","SiteController/edit","SiteController/delete"]);
-        
-        // Envoi du tableau de données à  l'intérieur de la div '#divSites' dans 'index.html'
-        $table->setTargetSelector("#divSites");
+        $sites=DAO::getAll("models\Site"); // Variable 'sites' récupérant toutes les données de la table 'Site' à  partir du modèle d'URL 'models\Site' sous forme de tableau
+
+        $semantic=$this->jquery->semantic(); // Déclaration d'un nouvel accesseur
+
+        $table=$semantic->dataTable("tblSites", "models\Site", $sites); // Variable 'table' affectant l'accesseur locale aux tableaux de données 'table' de la table 'Site'
+        $table->setFields(["id", "nom","latitude","longitude","ecart","fondEcran","couleur","ordre","options"]); // Envoi des champs de chaque élément de la table 'Site' à  'table'
+        $table->setCaptions(["id","Nom","Latitude","Longitude","Ecart","Fond d'écran","Couleur", "Ordre", "Options", "Actions"]); // Envoi des titres à  chaque champ des éléments de la table 'Site' à 'table'
+        $table->addEditDeleteButtons(true,["ajaxTransition"=>"random","method"=>"post"]); // Ajout d'un bouton d'édition et d'un bouton de suppression à  chaque ligne renvoyé de 'table'
+        $table->setUrls(["","SiteController/edit","SiteController/delete"]); // Affectation d'un URL à chaque bouton
+        $table->setTargetSelector("#divSites"); // Envoi du tableau de données à  l'intérieur de la div '#divSites' dans 'index.html'
         
         echo $table->compile($this->jquery);
         echo $this->jquery->compile();
@@ -147,14 +128,9 @@ class SiteController extends ControllerBase
      * {@inheritDoc}
      */
     public function all() {
-        // Affectation de _all à  la classe actuelle de variable 'this'
-        $this->_all();
-        
-        // Génération du JavaScript/JQuery en tant que variable à  l'intérieur de la vue
-        $this->jquery->compile($this->view);
-        
-        // Affiliation à  la vue d'URL 'sites\index.html'
-        $this->loadView("sites\index.html");
+        $this->_all(); // Affectation de _all à  la classe actuelle de variable 'this'
+        $this->jquery->compile($this->view); // Génération du JavaScript/JQuery en tant que variable à  l'intérieur de la vue
+        $this->loadView("sites\index.html"); // Affiliation à  la vue d'URL 'sites\index.html'
     }
     
     /**
@@ -181,30 +157,16 @@ class SiteController extends ControllerBase
      * {@inheritDoc}
      */
     private function _form($site, $action, $lat, $long){
-        // Déclaration d'une nouvelle Semantic-UI
-        $semantic=$this->jquery->semantic();
-        
-        // Affectation du langage français à  la 'semantic'
-        $semantic->setLanguage("fr");
-        
-        // Variable 'form' affectant la 'semantic' locale au formulaire d'id 'frmSite' au paramètre '$site'
-        $form=$semantic->dataForm("frmSite", $site);
-        
-        // Envoi des paramètres du formulaire lors de sa validation
-        $form->setValidationParams(["on"=>"blur", "inline"=>true]);
-        
-        // Envoi des champs de chaque élément de la table 'Site' à  'form'
-        $form->setFields(["nom\n","latitude","longitude","ecart\n","fondEcran","couleur\n","ordre","options","submit"]);
-        
-        // Envoi des titres à  chaque champ des éléments de la table 'Site' à  'table'
-        $form->setCaptions(["Nom","Latitude","Longitude","Ecart","Fond d'écran","Couleur", "Ordre", "Options","Valider"]);
-        
-        // Ajout d'un bouton de validation 'submit' de couleur verte 'green' récupérant l'action et l'id du bloc '#divSites'
-        $form->fieldAsSubmit("submit","green",$action,"#divSites");
-        
-        // Chargement de la page HTML 'index.html' de la vue 'sites' avec la génération de la carte Google
-        // via la fonction privée '_generateMap'
-        $this->loadView("sites\index.html",["jsMap"=>$this->_generateMap($lat,$long)]);
+        $semantic=$this->jquery->semantic(); // Déclaration d'un nouvel accesseur
+        $semantic->setLanguage("fr"); // Affectation du langage français à l'accesseur
+
+        $form=$semantic->dataForm("frmSite", $site); // Variable 'form' affectant l'accesseur locale au formulaire d'id 'frmSite' au paramètre '$site'
+        $form->setValidationParams(["on"=>"blur", "inline"=>true]); // Envoi des paramètres du formulaire lors de sa validation
+        $form->setFields(["nom\n","latitude","longitude","ecart\n","fondEcran","couleur\n","ordre","options","submit"]); // Envoi des champs de chaque élément de la table 'Site' à 'form'
+        $form->setCaptions(["Nom","Latitude","Longitude","Ecart","Fond d'écran","Couleur", "Ordre", "Options","Valider"]); // Envoi des titres à  chaque champ des éléments de la table 'Site' à 'table'
+        $form->fieldAsSubmit("submit","green",$action,"#divSites"); // Ajout d'un bouton de validation 'submit' de couleur verte 'green' récupérant l'action et l'id du bloc '#divSites'
+
+        $this->loadView("sites\index.html",["jsMap"=>$this->_generateMap($lat,$long)]); // Chargement de la page HTML 'index.html' de la vue 'sites' avec la génération de la carte Google via la fonction privée '_generateMap'
         
         echo $form->compile($this->jquery);
         echo $this->jquery->compile();
@@ -218,17 +180,10 @@ class SiteController extends ControllerBase
      * {@inheritDoc}
      */
     public function newSite(){
-        
-        // Variable 'site' récupérant toutes les données d'un nouveau site
-        $site=new Site();
-        
-        // Exécution de la requàªte d'insertion de toutes les valeurs entrées dans le formulaire d'ajout d'un nouveau site
-        RequestUtils::setValuesToObject($site,$_POST);
-        
-        // Condition si l'insertion d'un nouveau site est exécutée
-        if(DAO::insert($site)){
-            // Affichage du message suivant
-            echo "Le site ".$site->getNom()." a été ajouté.";
+        $site=new Site(); // Variable 'site' récupérant toutes les données d'un nouveau site
+        RequestUtils::setValuesToObject($site,$_POST); // Exécution de la requàªte d'insertion de toutes les valeurs entrées dans le formulaire d'ajout d'un nouveau site
+        if(DAO::insert($site)){ // Condition vérifiant si l'insertion d'un nouveau site est exécutée
+            echo "Le site ".$site->getNom()." a été ajouté."; // Affichage d'un message
         }
     }
     
@@ -242,14 +197,9 @@ class SiteController extends ControllerBase
      * {@inheritDoc}
      */
     public function delete($id){
-        // Variable 'site' récupérant toutes les données d'un site selon son id et le modèle 'Site'
-        $site=DAO::getOne("models\Site", $id);
-        
-        // Instanciation du modèle 'Site' sur le site récupéré et exécution de la requàªte de suppression
-        $site instanceof models\Site && DAO::remove($site);
-        
-        // Retour sur la page d'affichage de tous les sites
-        $this->forward("controllers\SiteController","all");
+        $site=DAO::getOne("models\Site", $id); // Variable 'site' récupérant toutes les données d'un site selon son id et le modèle 'Site'
+        $site instanceof models\Site && DAO::remove($site); // Instanciation du modèle 'Site' sur le site récupéré et exécution de la requàªte de suppression
+        $this->forward("controllers\SiteController","all"); // Retour sur la page d'affichage de tous les sites
     }
     
     /**

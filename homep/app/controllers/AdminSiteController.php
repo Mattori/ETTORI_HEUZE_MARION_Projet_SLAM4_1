@@ -476,8 +476,7 @@ class AdminSiteController extends ControllerBase
             $this->forward("controllers\AdminSiteController","moteur");
         }
     }
-    
-    
+
     /**
      * Affiche une carte Google Maps.
      * {@inheritdoc}

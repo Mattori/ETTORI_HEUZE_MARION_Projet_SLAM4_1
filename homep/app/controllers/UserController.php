@@ -3,10 +3,8 @@ namespace controllers;
 
 use micro\orm\DAO;
 use micro\utils\RequestUtils;
-
 use models;
 use models\Lienweb;
-
 use Ajax\semantic\html\collections\HtmlBreadcrumb;
 
 
@@ -14,7 +12,6 @@ use Ajax\semantic\html\collections\HtmlBreadcrumb;
  * Controller UserController
  * @property JsUtils $jquery
  **/
-
 class UserController extends ControllerBase
 {
     /**
@@ -33,7 +30,6 @@ class UserController extends ControllerBase
         if(isset($_SESSION["user"])){
             $user=$_SESSION["user"];
             $fond=$user->getFondEcran();
-            //echo $user->getLogin();
         }
         if(!RequestUtils::isAjax()){
             $this->loadView("main/vHeader.html",["fond"=>$fond]);
@@ -67,9 +63,9 @@ class UserController extends ControllerBase
             $frm->setProperty("action","https://www.google.fr/search?q=");
         } else {
             $moteur=DAO::getOne("models\Utilisateur","idMoteur=".$_SESSION["user"]->getMoteur());
-            //var_dump($moteur->getMoteur()->getNom());
             
             $frm=$this->jquery->semantic()->htmlForm("frm-search");
+            
             $input=$frm->addInput("q");
             $input->labeled($moteur->getMoteur()->getNom());
             
@@ -113,11 +109,8 @@ class UserController extends ControllerBase
      * {@inheritDoc}
      */
     public function elementsMasques() {
-        // Déclaration d'une nouvelle Semantic-UI
-        $semantic=$this->jquery->semantic();
-        
-        // Affectation du langage franà§ais à  la 'semantic'
-        $semantic->setLanguage("fr");
+        $semantic=$this->jquery->semantic(); // Déclaration d'un nouvel accesseur
+        $semantic->setLanguage("fr"); // Affectation du langage français à l'accesseur
         
         $btt1=$semantic->htmlButton("btt1","Activer l'image de fond");
         $btt1->onClick("$('body').css('background-image', 'url(". $_SESSION["user"]->getFondEcran() .")');");
@@ -150,15 +143,16 @@ class UserController extends ControllerBase
      */
     public function afficheMoteur() {
         $moteur=DAO::getOne("models\Utilisateur","idMoteur=".$_SESSION["user"]->getMoteur());
-        //var_dump($moteur->getMoteur()->getNom());
         
         $frm=$this->jquery->semantic()->htmlForm("frm-search");
+        
         $input=$frm->addInput("q");
         $input->labeled($moteur->getMoteur()->getNom());
         
         $frm->setProperty("action",$moteur->getMoteur()->getCode());
         $frm->setProperty("method","get");
         $frm->setProperty("target","_new");
+        
         $bt=$input->addAction("Rechercher");
         echo $frm;
     }
@@ -199,14 +193,9 @@ class UserController extends ControllerBase
      * {@inheritDoc}
      */
     public function listeFavoris() {
-        // Affectation de _all à  la classe actuelle de variable 'this'
-        $this->_listeFavoris();
-        
-        // Génération du JavaScript/JQuery en tant que variable à  l'intérieur de la vue
-        $this->jquery->compile($this->view);
-        
-        // Affiliation à  la vue d'URL 'sites\index.html'
-        $this->loadView("Utilisateur\index.html");
+        $this->_listeFavoris(); // Affectation de _all à la classe actuelle de variable 'this'
+        $this->jquery->compile($this->view); // Génération du JavaScript/JQuery en tant que variable à l'intérieur de la vue
+        $this->loadView("Utilisateur\index.html"); // Affiliation à  la vue d'URL 'Utilisateur\index.html'
     }
     
     /**
@@ -219,35 +208,21 @@ class UserController extends ControllerBase
      * {@inheritDoc}
      */
     private function _formFavoris($liens, $action, $libelle, $url, $ordre){
-        // Déclaration d'une nouvelle Semantic-UI
-        $semantic=$this->jquery->semantic();
+        $semantic=$this->jquery->semantic(); // Déclaration d'un nouvel accesseur
+        $semantic->setLanguage("fr"); // Affectation du langage français à l'accesseur
         
-        // Affectation du langage franà§ais à  la 'semantic'
-        $semantic->setLanguage("fr");
-        
-        // Variable 'form' affectant la 'semantic' locale au formulaire d'id 'frmSite' au paramà¨tre '$site'
-        $form=$semantic->dataForm("frmLink", $liens);
-        
-        // Envoi des paramà¨tres du formulaire lors de sa validation
-        $form->setValidationParams(["on"=>"blur", "inline"=>true]);
-        
-        // Envoi des champs de chaque élément de la table 'Site' à  'form'
-        $form->setFields(["libelle","url","ordre","submit"]);
-        
-        // Envoi des titres à  chaque champ des éléments de la table 'Site' à  'table'
-        $form->setCaptions(["Libelle","URL","Ordre","Valider"]);
-        
-        // Ajout d'un bouton de validation 'submit' de couleur verte 'green' récupérant l'action et l'id du bloc '#divSites'
-        $form->fieldAsSubmit("submit","green",$action,"#divUsers");
-        
-        // Chargement de la page HTML 'index.html' de la vue
-        $this->loadView("Utilisateur\index.html");
+        $form=$semantic->dataForm("frmLink", $liens); // Variable 'form' affectant l'accesseur locale au formulaire d'id 'frmLink' au paramètre '$liens'
+        $form->setValidationParams(["on"=>"blur", "inline"=>true]); // Envoi des paramètres du formulaire lors de sa validation
+        $form->setFields(["libelle","url","ordre","submit"]); // Envoi des champs de chaque élément de la table 'Lienweb' à 'form'
+        $form->setCaptions(["Libelle","URL","Ordre","Valider"]); // Envoi des titres à chaque champ des éléments de la table 'Lienweb'
+        $form->fieldAsSubmit("submit","green",$action,"#divUsers"); // Ajout d'un bouton de validation 'submit' de couleur verte 'green' récupérant l'action et l'id du bloc '#divUsers'
+
+        $this->loadView("Utilisateur\index.html"); // Chargement de la page HTML 'index.html' de la vue
         
         echo $form->compile($this->jquery);
         echo $this->jquery->compile();
     }
-    
-    
+
     /**
      * <h1>Description de la méthode</h1>
      *
@@ -263,35 +238,21 @@ class UserController extends ControllerBase
      * {@inheritDoc}
      */
     private function _preferences($user, $action, $login, $password){
-        // Déclaration d'une nouvelle Semantic-UI
-        $semantic=$this->jquery->semantic();
+        $semantic=$this->jquery->semantic(); // Déclaration d'un nouvel accesseur
+        $semantic->setLanguage("fr"); // Affectation du langage français à l'accesseur
         
-        // Affectation du langage franà§ais à  la 'semantic'
-        $semantic->setLanguage("fr");
-        
-        // Variable 'form' affectant la 'semantic' locale au formulaire d'id 'frmSite' au paramà¨tre '$site'
-        $form=$semantic->dataForm("frmUser", $user);
-        
-        // Envoi des paramà¨tres du formulaire lors de sa validation
-        $form->setValidationParams(["on"=>"blur", "inline"=>true]);
-        
-        // Envoi des champs de chaque élément de la table 'Site' à  'form'
-        $form->setFields(["login", "password\n", "elementsMasques", "fondEcran", "couleur\n", "ordre", "submit"]);
-        
-        // Envoi des titres à  chaque champ des éléments de la table 'Site' à  'table'
-        $form->setCaptions(["Login","Mot de passe","à‰léments masqués","Fond d'écran","Couleur", "Ordre","Valider"]);
-        
-        // Ajout d'un bouton de validation 'submit' de couleur verte 'green' récupérant l'action et l'id du bloc '#divSites'
-        $form->fieldAsSubmit("submit", "green", $action, "#divUsers");
-        
-        // Chargement de la page HTML 'index.html' de la vue
-        $this->loadView("Utilisateur\index.html");
+        $form=$semantic->dataForm("frmUser", $user); // Variable 'form' affectant l'accesseur locale au formulaire d'id 'frmUser' au paramètre '$user'
+        $form->setValidationParams(["on"=>"blur", "inline"=>true]); // Envoi des paramètres du formulaire lors de sa validation
+        $form->setFields(["login", "password\n", "elementsMasques", "fondEcran", "couleur\n", "ordre", "submit"]); // Envoi des champs de chaque élément de la table 'Utilisateur' à 'form'
+        $form->setCaptions(["Login","Mot de passe","à‰léments masqués","Fond d'écran","Couleur", "Ordre","Valider"]); // Envoi des titres à  chaque champ des éléments de la table 'Utilisateur'
+        $form->fieldAsSubmit("submit", "green", $action, "#divUsers"); // Ajout d'un bouton de validation 'submit' de couleur verte 'green' récupérant l'action et l'id du bloc '#divUsers'
+
+        $this->loadView("Utilisateur\index.html"); // Chargement de la vue HTML 'index.html' du contrôleur
         
         echo $form->compile($this->jquery);
         echo $this->jquery->compile();
     }
-    
-    
+
     /**
      * <h1>Description de la méthode</h1>
      *
@@ -325,11 +286,9 @@ class UserController extends ControllerBase
             echo "L'utilisateur ".$user->getLogin()." a été modifié.";
             $_SESSION["user"] = $user;
             echo $this->jquery->compile($this->view);
-            //var_dump($_SESSION["user"]);
         }
     }
-    
-    
+
     /**
      * <h1>Description de la méthode</h1>
      *
@@ -342,17 +301,10 @@ class UserController extends ControllerBase
      * {@inheritDoc}
      */
     public function newLink(){
-        
-        // Variable 'site' récupérant toutes les données d'un nouveau site
-        $lien=new Lienweb();
-        
-        // Exécution de la requàªte d'insertion de toutes les valeurs entrées dans le formulaire d'ajout d'un nouveau lien web
-        RequestUtils::setValuesToObject($lien,$_POST);
-        
-        // Condition si l'insertion d'un nouveau site est exécutée
-        if(DAO::insert($lien)){
-            // Affichage du message suivant
-            echo "Le lien ".$user->getNom()." a été ajouté.";
+        $lien=new Lienweb(); // Variable 'lien' récupérant toutes les données d'un nouveau lien web 
+        RequestUtils::setValuesToObject($lien,$_POST); // Exécution de la requête d'insertion de toutes les valeurs entrées dans le formulaire d'ajout d'un nouveau lien web
+        if(DAO::insert($lien)){ // Condition vérifiant si l'insertion d'un nouveau lien est exécutée
+            echo "Le lien ".$user->getNom()." a été ajouté."; // Affichage d'un message
         }
     }
     
@@ -368,14 +320,9 @@ class UserController extends ControllerBase
      * {@inheritDoc}
      */
     public function deleteLink($id){
-        // Variable $liens récupérant toutes les données d'un site selon son id et le modà¨le 'Site'
-        $liens=DAO::getOne("models\Lienweb", "id=".$id);
-        
-        // Instanciation du modà¨le 'Site' sur le site récupéré et exécution de la requàªte de suppression
-        $liens instanceof models\Lienweb && DAO::remove($liens);
-        
-        // Retour sur la page d'affichage de tous les sites
-        $this->forward("controllers\UserController","listeFavoris");
+        $liens=DAO::getOne("models\Lienweb", "id=".$id); // Variable $liens récupérant toutes les données d'un lien web selon son id et le modèle 'Lienweb'
+        $liens instanceof models\Lienweb && DAO::remove($liens); // Instanciation du modèle 'Lienweb' sur le site récupéré et exécution de la requête de suppression
+        $this->forward("controllers\UserController","listeFavoris"); // Retour sur la page d'affichage de tous les sites
     }
     
     /**
