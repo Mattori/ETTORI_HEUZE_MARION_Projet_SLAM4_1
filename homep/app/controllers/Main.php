@@ -1,7 +1,6 @@
 <?php
 namespace controllers;
 
-use micro\orm\DAO;
 use micro\utils\RequestUtils;
 
  /**
