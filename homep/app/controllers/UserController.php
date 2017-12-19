@@ -23,8 +23,6 @@ class UserController extends ControllerBase
      * 
      * Initialise l'utilisateur connecté ainsi que son fond d'écran (dont l'URL est enregistré dans la BDD)
      * 
-     * @see getFondEcran
-     * 
      * @author Matteo ETTORI
      * @version 1.0
      * {@inheritDoc}
@@ -138,8 +136,6 @@ class UserController extends ControllerBase
      *
      * Affiche le moteur de recherche sélectionné par l'utilisateur.
      *
-     * @see moteur
-     *
      * @author Matteo ETTORI
      * @version 1.0
      */
@@ -162,8 +158,6 @@ class UserController extends ControllerBase
      * <h1>Description de la méthode</h1>
      *
      * Crée une liste des liens web liés à  l'utilisateur sous forme de tableau.
-     *
-     * @see listeFavoris
      *
      * @author Matteo ETTORI
      * @version 1.0
@@ -190,8 +184,6 @@ class UserController extends ControllerBase
      *
      * Affiche la liste des liens web liés à  l'utilisateur sous forme de tableau.
      *
-     * @see _listeFavoris
-     *
      * @author Matteo ETTORI
      * @version 1.0
      */
@@ -210,8 +202,6 @@ class UserController extends ControllerBase
      * <h1>Description de la méthode</h1>
      *
      * Affiche le formulaire d'ajout des données des sites.
-     *
-     * @see formFavoris
      *
      * @author Matteo ETTORI
      * @version 1.0

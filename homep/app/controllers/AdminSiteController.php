@@ -19,8 +19,6 @@ class AdminSiteController extends ControllerBase
      * 
      * Initialise l'utilisateur connecté ainsi que son fond d'écran (dont l'URL est enregistré dans la BDD)
      * 
-     * @see getFondEcran
-     * 
      * @author Matteo ETTORI
      * @version 1.0
      * {@inheritDoc}
@@ -117,7 +115,6 @@ class AdminSiteController extends ControllerBase
      * 
      * Affiche un formulaire de configuration des paramètres du site.
      * 
-     * @see initialize
      * @see $_SESSION
      * 
      * @author Joffrey MARION
@@ -148,7 +145,6 @@ class AdminSiteController extends ControllerBase
      *
      * Affiche un tableau des options personnalisable par les utilisateurs avec les boutons 'Autoriser' et 'Interdire'.
      *
-     * @see initialize
      * @see $_SESSION
      *
      * @author Joffrey MARION
@@ -203,7 +199,6 @@ class AdminSiteController extends ControllerBase
      *
      * Confirme l'interdiction pour les utilisateurs du site de personnaliser une option.
      *
-     * @see initialize
      * @see $_SESSION
      *
      * @author Joffrey MARION

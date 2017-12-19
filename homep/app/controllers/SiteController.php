@@ -19,8 +19,6 @@ class SiteController extends ControllerBase
      *
      * Initialise l'utilisateur connecté ainsi que son fond d'écran (dont l'URL est enregistré dans la BDD).
      *
-     * @see getFondEcran
-     *
      * @author Matteo ETTORI
      * @version 1.0
      * {@inheritDoc}
@@ -199,8 +197,6 @@ class SiteController extends ControllerBase
     
     /**
      * Exécute la requête d'ajout d'un nouveau site.
-     * 
-     * @see addSite
      *
      * {@inheritDoc}
      */
