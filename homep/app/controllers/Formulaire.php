@@ -1,7 +1,7 @@
 <?php
 namespace controllers;
 use Ajax\semantic\html\elements\HtmlButton;
-use micro\orm\DAO;
+use Ubiquity\orm\DAO;
 
  /**
  * Controller Connecte
@@ -21,7 +21,7 @@ class Formulaire extends ControllerBase{
         $this->site=DAO::getOne("models\Site",0);
     }
     
-    public function __construct($utilisateur, $bloc, $champ, $titre, $chemin, $vue){
+    public function __construct($utilisateur="", $bloc="", $champ="", $titre="", $chemin="", $vue=""){
         $this->utilisateur=$utilisateur;
         $this->bloc=$bloc;
         $this->champ=$champ;
@@ -30,10 +30,6 @@ class Formulaire extends ControllerBase{
         $this->vue=$vue;
     }
     
-	/**
-	 * @route("/users")
-	 */
-	
 	public function index(){
 	    
 	    $liensPerso=DAO::getAll("models\Lienweb","idUtilisateur = ".$this->utilisateur);

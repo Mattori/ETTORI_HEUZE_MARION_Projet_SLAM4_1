@@ -1,19 +1,19 @@
 <?php
 
 return array(
-  '#namespace' => 'micro\\annotations',
+  '#namespace' => 'Ubiquity\\annotations',
   '#uses' => array (
   'Annotations' => 'mindplay\\annotations\\Annotations',
-  'JArray' => 'micro\\utils\\JArray',
+  'JArray' => 'Ubiquity\\utils\\JArray',
   'Annotation' => 'mindplay\\annotations\\Annotation',
-  'ClassUtils' => 'micro\\cache\\ClassUtils',
+  'ClassUtils' => 'Ubiquity\\cache\\ClassUtils',
 ),
   '#traitMethodOverrides' => array (
-  'micro\\annotations\\BaseAnnotation' => 
+  'Ubiquity\\annotations\\BaseAnnotation' => 
   array (
   ),
 ),
-  'micro\\annotations\\BaseAnnotation' => array(
+  'Ubiquity\\annotations\\BaseAnnotation' => array(
     array('#name' => 'usage', '#type' => 'mindplay\\annotations\\UsageAnnotation', 'property'=>true, 'inherited'=>true)
   ),
 );

@@ -1,7 +1,7 @@
 <?php
 namespace controllers;
-use micro\orm\DAO;
-use micro\utils\RequestUtils;
+use Ubiquity\orm\DAO;
+use Ubiquity\utils\RequestUtils;
 use models;
 use models\Site;
 
@@ -10,14 +10,14 @@ use models\Site;
  * @property JsUtils $jquery
  **/
 
-// DÈclaration de la classe SiteController hÈritant de ControllerBase
+// D√©claration de la classe SiteController h√©ritant de ControllerBase
 class SiteController extends ControllerBase
 {
     /**
-     * <h1>Description de la mÈthode</h1> Utilisant <b>les Tags HTML</b> et JavaDoc
-     * Pour plus de dÈtails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
+     * <h1>Description de la m√©thode</h1> Utilisant <b>les Tags HTML</b> et JavaDoc
+     * Pour plus de d√©tails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
      *
-     * Initialise l'utilisateur connectÈ ainsi que son fond d'Ècran (dont l'URL est enregistrÈ dans la BDD).
+     * Initialise l'utilisateur connect√© ainsi que son fond d'√©cran (dont l'URL est enregistr√© dans la BDD).
      *
      * @author Matteo ETTORI
      * @version 1.0
@@ -32,9 +32,9 @@ class SiteController extends ControllerBase
     }
     
     /**
-     * Affiche le menu de la page si un utilisateur normal est connectÈ.
+     * Affiche le menu de la page si un utilisateur normal est connect√©.
      * 
-     * @see \micro\controllers\Controller::index()
+     * @see \Ubiquity\controllers\Controller::index()
      * 
      * @author Matteo ETTORI
      * @version 1.0
@@ -67,10 +67,10 @@ class SiteController extends ControllerBase
             $title=$semantic->htmlHeader("header5",4);
             $title->asImage("https://semantic-ui.com/images/avatar2/large/patrick.png",$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom());
 
-            $menu->addItem("<h4 class='ui header'>DÈconnexion</h4>");
+            $menu->addItem("<h4 class='ui header'>D√©connexion</h4>");
             $menu->setPropertyValues("data-ajax", ["", "deconnexion/SiteController/index"]);
             
-            $mess=$semantic->htmlMessage("mess3","Vous Ítes connectÈ mais vous n'avez pas les droits, ".$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom(). "!");
+            $mess=$semantic->htmlMessage("mess3","Vous √©tes connect√© mais vous n'avez pas les droits, ".$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom(). "!");
             $mess->addHeader("Attention !");
             $mess->setDismissable();
         }
@@ -80,20 +80,20 @@ class SiteController extends ControllerBase
 
             $menu->addItem("<h4 class='ui header'>Liste des sites</h4>");
             $menu->addItem("<h4 class='ui header'>Ajouter un site</h4>");
-            $menu->addItem("<h4 class='ui header'>DÈconnexion</h4>");
+            $menu->addItem("<h4 class='ui header'>D√©connexion</h4>");
             $menu->setPropertyValues("data-ajax", ["", "all/","addSite/", "deconnexion/"]);
             
-            $mess=$semantic->htmlMessage("mess3","Vous Ítes connectÈ, ".$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom(). "!");
+            $mess=$semantic->htmlMessage("mess3","Vous √©tes connect√©, ".$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom(). "!");
             $mess->addHeader("Bienvenue !");
             $mess->setDismissable();
         }
         $menu->getOnClick("SiteController/","#divSites",["attr"=>"data-ajax"]);
         $menu->setVertical();
         
-        // GÈnÈration du JavaScript/JQuery en tant que variable ‡† l'intÈrieur de la vue
+        // G√©n√©ration du JavaScript/JQuery en tant que variable √© l'int√©rieur de la vue
         $this->jquery->compile($this->view);
         
-        // Affiliation ‡† la vue d'URL 'sites\index.html'
+        // Affiliation √© la vue d'URL 'sites\index.html'
         $this->loadView("sites\index.html");
     }
     
@@ -105,36 +105,36 @@ class SiteController extends ControllerBase
      * {@inheritDoc}
      */
     private function _all(){
-        $sites=DAO::getAll("models\Site"); // Variable 'sites' rÈcupÈrant toutes les donnÈes de la table 'Site' ‡† partir du modËle d'URL 'models\Site' sous forme de tableau
+        $sites=DAO::getAll("models\Site"); // Variable 'sites' r√©cup√©rant toutes les donn√©es de la table 'Site' √© partir du mod√©le d'URL 'models\Site' sous forme de tableau
 
-        $semantic=$this->jquery->semantic(); // DÈclaration d'un nouvel accesseur
+        $semantic=$this->jquery->semantic(); // D√©claration d'un nouvel accesseur
 
-        $table=$semantic->dataTable("tblSites", "models\Site", $sites); // Variable 'table' affectant l'accesseur locale aux tableaux de donnÈes 'table' de la table 'Site'
-        $table->setFields(["id", "nom","latitude","longitude","ecart","fondEcran","couleur","ordre","options"]); // Envoi des champs de chaque ÈlÈment de la table 'Site' ‡† 'table'
-        $table->setCaptions(["id","Nom","Latitude","Longitude","Ecart","Fond d'Ècran","Couleur", "Ordre", "Options", "Actions"]); // Envoi des titres ‡† chaque champ des ÈlÈments de la table 'Site' ‡†'table'
-        $table->addEditDeleteButtons(true,["ajaxTransition"=>"random","method"=>"post"]); // Ajout d'un bouton d'Èdition et d'un bouton de suppression ‡† chaque ligne renvoyÈ de 'table'
-        $table->setUrls(["","SiteController/edit","SiteController/delete"]); // Affectation d'un URL ‡†chaque bouton
-        $table->setTargetSelector("#divSites"); // Envoi du tableau de donnÈes ‡† l'intÈrieur de la div '#divSites' dans 'index.html'
+        $table=$semantic->dataTable("tblSites", "models\Site", $sites); // Variable 'table' affectant l'accesseur locale aux tableaux de donn√©es 'table' de la table 'Site'
+        $table->setFields(["id", "nom","latitude","longitude","ecart","fondEcran","couleur","ordre","options"]); // Envoi des champs de chaque √©l√©ment de la table 'Site' √© 'table'
+        $table->setCaptions(["id","Nom","Latitude","Longitude","Ecart","Fond d'√©cran","Couleur", "Ordre", "Options", "Actions"]); // Envoi des titres √© chaque champ des √©l√©ments de la table 'Site' √©'table'
+        $table->addEditDeleteButtons(true,["ajaxTransition"=>"random","method"=>"post"]); // Ajout d'un bouton d'√©dition et d'un bouton de suppression √© chaque ligne renvoy√© de 'table'
+        $table->setUrls(["","SiteController/edit","SiteController/delete"]); // Affectation d'un URL √©chaque bouton
+        $table->setTargetSelector("#divSites"); // Envoi du tableau de donn√©es √© l'int√©rieur de la div '#divSites' dans 'index.html'
         
         echo $table->compile($this->jquery);
         echo $this->jquery->compile();
     }
 
     /**
-     * ExÈcute, compile et affiche le contenu de la mÈthode _all en publique dans la vue 'index.html'.
+     * Ex√©cute, compile et affiche le contenu de la m√©thode _all en publique dans la vue 'index.html'.
      * 
      * @author Matteo ETTORI
      * @version 1.0
      * {@inheritDoc}
      */
     public function all() {
-        $this->_all(); // Affectation de _all ‡† la classe actuelle de variable 'this'
-        $this->jquery->compile($this->view); // GÈnÈration du JavaScript/JQuery en tant que variable ‡† l'intÈrieur de la vue
-        $this->loadView("sites\index.html"); // Affiliation ‡† la vue d'URL 'sites\index.html'
+        $this->_all(); // Affectation de _all √© la classe actuelle de variable 'this'
+        $this->jquery->compile($this->view); // G√©n√©ration du JavaScript/JQuery en tant que variable √© l'int√©rieur de la vue
+        $this->loadView("sites\index.html"); // Affiliation √© la vue d'URL 'sites\index.html'
     }
     
     /**
-     * Ajoute un nouveau site en prenant en compte la mÈthode _form
+     * Ajoute un nouveau site en prenant en compte la m√©thode _form
      * 
      * @author Matteo ETTORI / Joffrey MARION
      * @version 1.0
@@ -145,9 +145,9 @@ class SiteController extends ControllerBase
     }
     
     /**
-     * Ajoute des donnÈes des sites Ècrites dans le formulaire.
+     * Ajoute des donn√©es des sites √©crites dans le formulaire.
      * 
-     * @param array site : DonnÈes d'un site sous forme de tableau
+     * @param array site : Donn√©es d'un site sous forme de tableau
      * @param string action : Action de redirection
      * @param float lat : Latitude du site
      * @param float long : Longitude du site
@@ -157,38 +157,38 @@ class SiteController extends ControllerBase
      * {@inheritDoc}
      */
     private function _form($site, $action, $lat, $long){
-        $semantic=$this->jquery->semantic(); // DÈclaration d'un nouvel accesseur
-        $semantic->setLanguage("fr"); // Affectation du langage franÁais ‡†l'accesseur
+        $semantic=$this->jquery->semantic(); // D√©claration d'un nouvel accesseur
+        $semantic->setLanguage("fr"); // Affectation du langage fran√©ais √©l'accesseur
 
-        $form=$semantic->dataForm("frmSite", $site); // Variable 'form' affectant l'accesseur locale au formulaire d'id 'frmSite' au paramËtre '$site'
-        $form->setValidationParams(["on"=>"blur", "inline"=>true]); // Envoi des paramËtres du formulaire lors de sa validation
-        $form->setFields(["nom\n","latitude","longitude","ecart\n","fondEcran","couleur\n","ordre","options","submit"]); // Envoi des champs de chaque ÈlÈment de la table 'Site' ‡†'form'
-        $form->setCaptions(["Nom","Latitude","Longitude","Ecart","Fond d'Ècran","Couleur", "Ordre", "Options","Valider"]); // Envoi des titres ‡† chaque champ des ÈlÈments de la table 'Site' ‡†'table'
-        $form->fieldAsSubmit("submit","green",$action,"#divSites"); // Ajout d'un bouton de validation 'submit' de couleur verte 'green' rÈcupÈrant l'action et l'id du bloc '#divSites'
+        $form=$semantic->dataForm("frmSite", $site); // Variable 'form' affectant l'accesseur locale au formulaire d'id 'frmSite' au param√©tre '$site'
+        $form->setValidationParams(["on"=>"blur", "inline"=>true]); // Envoi des param√©tres du formulaire lors de sa validation
+        $form->setFields(["nom\n","latitude","longitude","ecart\n","fondEcran","couleur\n","ordre","options","submit"]); // Envoi des champs de chaque √©l√©ment de la table 'Site' √©'form'
+        $form->setCaptions(["Nom","Latitude","Longitude","Ecart","Fond d'√©cran","Couleur", "Ordre", "Options","Valider"]); // Envoi des titres √© chaque champ des √©l√©ments de la table 'Site' √©'table'
+        $form->fieldAsSubmit("submit","green",$action,"#divSites"); // Ajout d'un bouton de validation 'submit' de couleur verte 'green' r√©cup√©rant l'action et l'id du bloc '#divSites'
 
-        $this->loadView("sites\index.html",["jsMap"=>$this->_generateMap($lat,$long)]); // Chargement de la page HTML 'index.html' de la vue 'sites' avec la gÈnÈration de la carte Google via la fonction privÈe '_generateMap'
+        $this->loadView("sites\index.html",["jsMap"=>$this->_generateMap($lat,$long)]); // Chargement de la page HTML 'index.html' de la vue 'sites' avec la g√©n√©ration de la carte Google via la fonction priv√©e '_generateMap'
         
         echo $form->compile($this->jquery);
         echo $this->jquery->compile();
     }
     
     /**
-     * ExÈcute la requÍte d'ajout d'un nouveau site.
+     * Ex√©cute la requ√©te d'ajout d'un nouveau site.
      * 
      * @author Matteo ETTORI / Joffrey MARION
      * @version 1.0
      * {@inheritDoc}
      */
     public function newSite(){
-        $site=new Site(); // Variable 'site' rÈcupÈrant toutes les donnÈes d'un nouveau site
-        RequestUtils::setValuesToObject($site,$_POST); // ExÈcution de la requ‡™te d'insertion de toutes les valeurs entrÈes dans le formulaire d'ajout d'un nouveau site
-        if(DAO::insert($site)){ // Condition vÈrifiant si l'insertion d'un nouveau site est exÈcutÈe
-            echo "Le site ".$site->getNom()." a ÈtÈ ajoutÈ."; // Affichage d'un message
+        $site=new Site(); // Variable 'site' r√©cup√©rant toutes les donn√©es d'un nouveau site
+        RequestUtils::setValuesToObject($site,$_POST); // Ex√©cution de la requ√©te d'insertion de toutes les valeurs entr√©es dans le formulaire d'ajout d'un nouveau site
+        if(DAO::insert($site)){ // Condition v√©rifiant si l'insertion d'un nouveau site est ex√©cut√©e
+            echo "Le site ".$site->getNom()." a √©t√© ajout√©."; // Affichage d'un message
         }
     }
     
     /**
-     * ExÈcute la requÍte de suppression d'un nouveau site.
+     * Ex√©cute la requ√©te de suppression d'un nouveau site.
      * 
      * @param int id : Identifiant du site
      * 
@@ -197,13 +197,13 @@ class SiteController extends ControllerBase
      * {@inheritDoc}
      */
     public function delete($id){
-        $site=DAO::getOne("models\Site", $id); // Variable 'site' rÈcupÈrant toutes les donnÈes d'un site selon son id et le modËle 'Site'
-        $site instanceof models\Site && DAO::remove($site); // Instanciation du modËle 'Site' sur le site rÈcupÈrÈ et exÈcution de la requ‡™te de suppression
+        $site=DAO::getOne("models\Site", $id); // Variable 'site' r√©cup√©rant toutes les donn√©es d'un site selon son id et le mod√©le 'Site'
+        $site instanceof models\Site && DAO::remove($site); // Instanciation du mod√©le 'Site' sur le site r√©cup√©r√© et ex√©cution de la requ√©te de suppression
         $this->forward("controllers\SiteController","all"); // Retour sur la page d'affichage de tous les sites
     }
     
     /**
-     * RÈcupËre le formulaire de prÈfÈrences du site avec renvoi vers la fonction 'update'.
+     * R√©cup√©re le formulaire de pr√©f√©rences du site avec renvoi vers la fonction 'update'.
      * 
      * @param int id : Identifiant du site
      * 
@@ -217,7 +217,7 @@ class SiteController extends ControllerBase
     }
     
     /**
-     * ExÈcute la requÍte de modification d'un site.
+     * Ex√©cute la requ√©te de modification d'un site.
      * 
      * @param int id : Identifiant du site
      * 
@@ -229,7 +229,7 @@ class SiteController extends ControllerBase
         $site=DAO::getOne("models\Site", $id);
         RequestUtils::setValuesToObject($site,$_POST);
         if(DAO::update($site)){
-            echo "Le site ".$site->getNom()." a ÈtÈ modifiÈ.";
+            echo "Le site ".$site->getNom()." a √©t√© modifi√©.";
         }
     }
     
@@ -247,10 +247,10 @@ class SiteController extends ControllerBase
     private function _generateMap($lat,$long){
         return "
         <script>
-            // DÈclaration de la carte Google Maps
+            // D√©claration de la carte Google Maps
             var map={};
             
-            // Fonction d'initialisation de la carte, de ses ÈlÈments et de ses ÈvËnements
+            // Fonction d'initialisation de la carte, de ses √©l√©ments et de ses √©v√©nements
             function initMap() {
                 // Options de la carte
                 var optionsMap = {
@@ -270,21 +270,21 @@ class SiteController extends ControllerBase
                 // Affectation du cercle
 				var cercle = new google.maps.Circle(optionsCercle);
 				
-                // Ajout d'un ÈvËnement lorsque l'on clique sur la carte
+                // Ajout d'un √©v√©nement lorsque l'on clique sur la carte
                 map.addListener('click',function(event){
-                    // Affectation de la valeur de la div d'id 'frmSite-latitude' ‡† la valeur de la latitude de l'ÈvËnement
+                    // Affectation de la valeur de la div d'id 'frmSite-latitude' √© la valeur de la latitude de l'√©v√©nement
                     document.getElementById('frmSite-latitude').value=event.latLng.lat();
                     
-                    // Affectation de la valeur de la div d'id 'frmSite-latitude' ‡† la valeur de la longitude de l'ÈvËnement
+                    // Affectation de la valeur de la div d'id 'frmSite-latitude' √© la valeur de la longitude de l'√©v√©nement
                     document.getElementById('frmSite-longitude').value=event.latLng.lng();
 
-                    // Affectation de la valeur de la div d'id 'frmSite-latitude' ‡† la valeur de la longitude de l'ÈvËnement
+                    // Affectation de la valeur de la div d'id 'frmSite-latitude' √© la valeur de la longitude de l'√©v√©nement
                     document.getElementById('frmSite-longitude').value=event.latLng.lng();
                 })
                 
-                // Ajout d'un ÈvËnement lorsque l'on change la latitude de la div d'id 'frmSite-latitude'
+                // Ajout d'un √©v√©nement lorsque l'on change la latitude de la div d'id 'frmSite-latitude'
                 frmSite-latitude.addListener('change', function(event){
-                    // Affectation de la valeur de la cible de l'ÈvËnement ‡† la valeur de la latitude de la carte
+                    // Affectation de la valeur de la cible de l'√©v√©nement √© la valeur de la latitude de la carte
                     event.target.value=map.latLng.lat();
                 })
             }

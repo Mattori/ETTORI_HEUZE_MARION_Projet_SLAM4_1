@@ -1,7 +1,7 @@
 <?php
 namespace controllers;
 use Ajax\semantic\html\elements\HtmlButton;
-use micro\orm\DAO;
+use Ubiquity\orm\DAO;
 
  /**
  * Controller NonConnecte2

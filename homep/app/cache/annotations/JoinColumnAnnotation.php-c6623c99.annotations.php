@@ -1,11 +1,11 @@
 <?php
 
 return array(
-  '#namespace' => 'micro\\annotations',
+  '#namespace' => 'Ubiquity\\annotations',
   '#uses' => array (
 ),
   '#traitMethodOverrides' => array (
-  'micro\\annotations\\JoinColumnAnnotation' => 
+  'Ubiquity\\annotations\\JoinColumnAnnotation' => 
   array (
   ),
 ),

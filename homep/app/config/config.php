@@ -8,19 +8,21 @@ return array(
 				"port"=>"3306",
 				"user"=>"root",
 				"password"=>"",
+		        "options"=>[],
 				"cache"=>false
 		],
-		"sessionToken"=>"%temporaryToken%",
-		"namespaces"=>["libraries"],
-		"templateEngine"=>'micro\views\engine\Twig',
+		"templateEngine"=>'Ubiquity\views\engine\Twig',
 		"templateEngineOptions"=>array("cache"=>false),
 		"test"=>false,
 		"debug"=>false,
 		"di"=>["jquery"=>function(){
-							$jquery=new Ajax\php\micro\JsUtils(["defer"=>true]);
+							$jquery=new Ajax\php\Ubiquity\JsUtils(["defer"=>true]);
 							$jquery->semantic(new Ajax\Semantic());
 							return $jquery;
 						}],
-		"cacheDirectory"=>"cache/",
-		"mvcNS"=>["models"=>"models","controllers"=>"controllers"]
+		"cache"=>["directory"=>"cache/","system"=>"Ubiquity\\cache\\system\\ArrayCache","params"=>[]],
+		"mvcNS"=>["models"=>"models","controllers"=>"controllers"],
+		"isRest"=>function(){
+		      return Ubiquity\utils\RequestUtils::getUrlParts()[0]==="rest";
+		}
 );

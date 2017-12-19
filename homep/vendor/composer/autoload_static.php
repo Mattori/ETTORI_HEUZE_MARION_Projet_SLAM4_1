@@ -11,6 +11,10 @@ class ComposerStaticInitfcc13a8cd7b9e73fb72232b7a35fdde9
         array (
             'mindplay\\annotations\\' => 21,
         ),
+        'U' => 
+        array (
+            'Ubiquity\\' => 9,
+        ),
         'T' => 
         array (
             'Twig\\' => 5,
@@ -26,6 +30,10 @@ class ComposerStaticInitfcc13a8cd7b9e73fb72232b7a35fdde9
         array (
             0 => __DIR__ . '/..' . '/mindplay/annotations/src/annotations',
         ),
+        'Ubiquity\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmv/ubiquity/Ubiquity',
+        ),
         'Twig\\' => 
         array (
             0 => __DIR__ . '/..' . '/twig/twig/src',
@@ -34,6 +42,10 @@ class ComposerStaticInitfcc13a8cd7b9e73fb72232b7a35fdde9
         array (
             0 => __DIR__ . '/..' . '/phpmv/php-mv-ui/Ajax',
         ),
+    );
+
+    public static $fallbackDirsPsr4 = array (
+        0 => __DIR__ . '/../..' . '/app',
     );
 
     public static $prefixesPsr0 = array (
@@ -51,6 +63,7 @@ class ComposerStaticInitfcc13a8cd7b9e73fb72232b7a35fdde9
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInitfcc13a8cd7b9e73fb72232b7a35fdde9::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitfcc13a8cd7b9e73fb72232b7a35fdde9::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInitfcc13a8cd7b9e73fb72232b7a35fdde9::$fallbackDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInitfcc13a8cd7b9e73fb72232b7a35fdde9::$prefixesPsr0;
 
         }, null, ClassLoader::class);

@@ -1,8 +1,8 @@
 <?php
 namespace controllers;
 
-use micro\orm\DAO;
-use micro\utils\RequestUtils;
+use Ubiquity\orm\DAO;
+use Ubiquity\utils\RequestUtils;
 use models;
 use models\Lienweb;
 use Ajax\semantic\html\collections\HtmlBreadcrumb;
@@ -15,10 +15,10 @@ use Ajax\semantic\html\collections\HtmlBreadcrumb;
 class UserController extends ControllerBase
 {
     /**
-     * <h1>Description de la méthode</h1> Utilisant <b>les Tags HTML</b> et {@literal <b> JavaDoc </b> }
-     * Pour plus de détails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
+     * <h1>Description de la mï¿½thode</h1> Utilisant <b>les Tags HTML</b> et {@literal <b> JavaDoc </b> }
+     * Pour plus de dï¿½tails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
      * 
-     * Initialise l'utilisateur connecté ainsi que son fond d'écran (dont l'URL est enregistré dans la BDD).
+     * Initialise l'utilisateur connectï¿½ ainsi que son fond d'ï¿½cran (dont l'URL est enregistrï¿½ dans la BDD).
      * 
      * @author Matteo ETTORI
      * @version 1.0
@@ -37,9 +37,9 @@ class UserController extends ControllerBase
     }
     
     /**
-     * Affiche le menu de la page si un utilisateur normal est connecté
+     * Affiche le menu de la page si un utilisateur normal est connectï¿½
      * 
-     * @see \micro\controllers\Controller::index()
+     * @see \Ubiquity\controllers\Controller::index()
      * 
      * @author Matteo ETTORI
      * @version 1.0
@@ -77,10 +77,10 @@ class UserController extends ControllerBase
             $menu->addItem("<h4 class='ui header'>Informations</h4>");
             $menu->addItem("<h4 class='ui header'>Favoris</h4>");
             $menu->addItem("<h4 class='ui header'>Moteur</h4>");
-            $menu->addItem("<h4 class='ui header'>Déconnexion</h4>");
+            $menu->addItem("<h4 class='ui header'>Dï¿½connexion</h4>");
             $menu->setPropertyValues("data-ajax", ["", "preferences/", "listeFavoris/", "moteur/", "deconnexion/UserController/index"]);
             
-            $mess=$semantic->htmlMessage("mess3","Vous àªtes désormais connecté, ".$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom(). "!");
+            $mess=$semantic->htmlMessage("mess3","Vous Ãªtes dÃ©sormais connectÃ©, ".$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom(). "!");
             $mess->addHeader("Bienvenue !");
             $mess->setDismissable();
         }
@@ -102,26 +102,26 @@ class UserController extends ControllerBase
     }
     
     /**
-     * Affiche/Masque les éléments du site à  partir de boutons
+     * Affiche/Masque les ï¿½lï¿½ments du site ï¿½ partir de boutons
      * 
      * @author Matteo ETTORI
      * @version 1.0
      * {@inheritDoc}
      */
     public function elementsMasques() {
-        $semantic=$this->jquery->semantic(); // Déclaration d'un nouvel accesseur
-        $semantic->setLanguage("fr"); // Affectation du langage français à l'accesseur
+        $semantic=$this->jquery->semantic(); // Dï¿½claration d'un nouvel accesseur
+        $semantic->setLanguage("fr"); // Affectation du langage franï¿½ais ï¿½l'accesseur
         
         $btt1=$semantic->htmlButton("btt1","Activer l'image de fond");
         $btt1->onClick("$('body').css('background-image', 'url(". $_SESSION["user"]->getFondEcran() .")');");
         
-        $btt2=$semantic->htmlButton("btt2","Désactiver l'image de fond");
+        $btt2=$semantic->htmlButton("btt2","Dï¿½sactiver l'image de fond");
         $btt2->onClick("$('body').css('background-image', 'none');");
         
         $btt3=$semantic->htmlButton("btt3","Activer la couleur de fond");
         $btt3->onClick("$('body').css('background-color', 'red');");
         
-        $btt4=$semantic->htmlButton("btt4","Désactiver la couleur de fond");
+        $btt4=$semantic->htmlButton("btt4","Dï¿½sactiver la couleur de fond");
         $btt4->onClick("$('body').css('background-color', 'white');");
         
         echo $btt1->compile($this->jquery);
@@ -133,9 +133,9 @@ class UserController extends ControllerBase
     }
     
     /**
-     * <h1>Description de la méthode</h1>
+     * <h1>Description de la mï¿½thode</h1>
      *
-     * Affiche le moteur de recherche sélectionné par l'utilisateur.
+     * Affiche le moteur de recherche sï¿½lectionnï¿½ par l'utilisateur.
      * 
      * @author Matteo ETTORI
      * @version 1.0
@@ -158,9 +158,9 @@ class UserController extends ControllerBase
     }
     
     /**
-     * <h1>Description de la méthode</h1>
+     * <h1>Description de la mï¿½thode</h1>
      *
-     * Crée une liste des liens web liés à  l'utilisateur sous forme de tableau.
+     * Crï¿½e une liste des liens web liï¿½s ï¿½ l'utilisateur sous forme de tableau.
      * 
      * @author Matteo ETTORI
      * @version 1.0
@@ -184,38 +184,38 @@ class UserController extends ControllerBase
     }
     
     /**
-     * <h1>Description de la méthode</h1>
+     * <h1>Description de la mï¿½thode</h1>
      *
-     * Affiche la liste des liens web liés à  l'utilisateur sous forme de tableau.
+     * Affiche la liste des liens web liï¿½s ï¿½ l'utilisateur sous forme de tableau.
      * 
      * @author Matteo ETTORI
      * @version 1.0
      * {@inheritDoc}
      */
     public function listeFavoris() {
-        $this->_listeFavoris(); // Affectation de _all à la classe actuelle de variable 'this'
-        $this->jquery->compile($this->view); // Génération du JavaScript/JQuery en tant que variable à l'intérieur de la vue
-        $this->loadView("Utilisateur\index.html"); // Affiliation à  la vue d'URL 'Utilisateur\index.html'
+        $this->_listeFavoris(); // Affectation de _all ï¿½la classe actuelle de variable 'this'
+        $this->jquery->compile($this->view); // Gï¿½nï¿½ration du JavaScript/JQuery en tant que variable ï¿½l'intï¿½rieur de la vue
+        $this->loadView("Utilisateur\index.html"); // Affiliation ï¿½ la vue d'URL 'Utilisateur\index.html'
     }
     
     /**
-     * <h1>Description de la méthode</h1>
+     * <h1>Description de la mï¿½thode</h1>
      *
-     * Affiche le formulaire d'ajout des données des sites.
+     * Affiche le formulaire d'ajout des donnï¿½es des sites.
      * 
      * @author Matteo ETTORI
      * @version 1.0
      * {@inheritDoc}
      */
     private function _formFavoris($liens, $action, $libelle, $url, $ordre){
-        $semantic=$this->jquery->semantic(); // Déclaration d'un nouvel accesseur
-        $semantic->setLanguage("fr"); // Affectation du langage français à l'accesseur
+        $semantic=$this->jquery->semantic(); // Dï¿½claration d'un nouvel accesseur
+        $semantic->setLanguage("fr"); // Affectation du langage franï¿½ais ï¿½ l'accesseur
         
-        $form=$semantic->dataForm("frmLink", $liens); // Variable 'form' affectant l'accesseur locale au formulaire d'id 'frmLink' au paramètre '$liens'
-        $form->setValidationParams(["on"=>"blur", "inline"=>true]); // Envoi des paramètres du formulaire lors de sa validation
-        $form->setFields(["libelle","url","ordre","submit"]); // Envoi des champs de chaque élément de la table 'Lienweb' à 'form'
-        $form->setCaptions(["Libelle","URL","Ordre","Valider"]); // Envoi des titres à chaque champ des éléments de la table 'Lienweb'
-        $form->fieldAsSubmit("submit","green",$action,"#divUsers"); // Ajout d'un bouton de validation 'submit' de couleur verte 'green' récupérant l'action et l'id du bloc '#divUsers'
+        $form=$semantic->dataForm("frmLink", $liens); // Variable 'form' affectant l'accesseur locale au formulaire d'id 'frmLink' au paramï¿½tre '$liens'
+        $form->setValidationParams(["on"=>"blur", "inline"=>true]); // Envoi des paramï¿½tres du formulaire lors de sa validation
+        $form->setFields(["libelle","url","ordre","submit"]); // Envoi des champs de chaque ï¿½lï¿½ment de la table 'Lienweb' ï¿½'form'
+        $form->setCaptions(["Libelle","URL","Ordre","Valider"]); // Envoi des titres ï¿½chaque champ des ï¿½lï¿½ments de la table 'Lienweb'
+        $form->fieldAsSubmit("submit","green",$action,"#divUsers"); // Ajout d'un bouton de validation 'submit' de couleur verte 'green' rï¿½cupï¿½rant l'action et l'id du bloc '#divUsers'
 
         $this->loadView("Utilisateur\index.html"); // Chargement de la page HTML 'index.html' de la vue
         
@@ -224,39 +224,39 @@ class UserController extends ControllerBase
     }
 
     /**
-     * <h1>Description de la méthode</h1>
+     * <h1>Description de la mï¿½thode</h1>
      *
-     * Crée le formulaire des préférences utilisateurs.
+     * Crï¿½e le formulaire des prï¿½fï¿½rences utilisateurs.
      * 
-     * @param user     : Utilisateur connecté
+     * @param user     : Utilisateur connectï¿½
      * @param action   : Action du bouton de validation
-     * @param login    : Login récupéré de l'utilisateur connecté
-     * @param password : Mot de passe récupéré de l'utilisateur connecté
+     * @param login    : Login rï¿½cupï¿½rï¿½ de l'utilisateur connectï¿½
+     * @param password : Mot de passe rï¿½cupï¿½rï¿½ de l'utilisateur connectï¿½
      * 
      * @author Matteo ETTORI
      * @version 1.0
      * {@inheritDoc}
      */
     private function _preferences($user, $action, $login, $password){
-        $semantic=$this->jquery->semantic(); // Déclaration d'un nouvel accesseur
-        $semantic->setLanguage("fr"); // Affectation du langage français à l'accesseur
+        $semantic=$this->jquery->semantic(); // Dï¿½claration d'un nouvel accesseur
+        $semantic->setLanguage("fr"); // Affectation du langage franï¿½ais ï¿½l'accesseur
         
-        $form=$semantic->dataForm("frmUser", $user); // Variable 'form' affectant l'accesseur locale au formulaire d'id 'frmUser' au paramètre '$user'
-        $form->setValidationParams(["on"=>"blur", "inline"=>true]); // Envoi des paramètres du formulaire lors de sa validation
-        $form->setFields(["login", "password\n", "elementsMasques", "fondEcran", "couleur\n", "ordre", "submit"]); // Envoi des champs de chaque élément de la table 'Utilisateur' à 'form'
-        $form->setCaptions(["Login","Mot de passe","à‰léments masqués","Fond d'écran","Couleur", "Ordre","Valider"]); // Envoi des titres à  chaque champ des éléments de la table 'Utilisateur'
-        $form->fieldAsSubmit("submit", "green", $action, "#divUsers"); // Ajout d'un bouton de validation 'submit' de couleur verte 'green' récupérant l'action et l'id du bloc '#divUsers'
+        $form=$semantic->dataForm("frmUser", $user); // Variable 'form' affectant l'accesseur locale au formulaire d'id 'frmUser' au paramï¿½tre '$user'
+        $form->setValidationParams(["on"=>"blur", "inline"=>true]); // Envoi des paramï¿½tres du formulaire lors de sa validation
+        $form->setFields(["login", "password\n", "elementsMasques", "fondEcran", "couleur\n", "ordre", "submit"]); // Envoi des champs de chaque ï¿½lï¿½ment de la table 'Utilisateur' ï¿½'form'
+        $form->setCaptions(["Login","Mot de passe","ï¿½ï¿½lï¿½ments masquï¿½s","Fond d'ï¿½cran","Couleur", "Ordre","Valider"]); // Envoi des titres ï¿½ chaque champ des ï¿½lï¿½ments de la table 'Utilisateur'
+        $form->fieldAsSubmit("submit", "green", $action, "#divUsers"); // Ajout d'un bouton de validation 'submit' de couleur verte 'green' rï¿½cupï¿½rant l'action et l'id du bloc '#divUsers'
 
-        $this->loadView("Utilisateur\index.html"); // Chargement de la vue HTML 'index.html' du contrôleur
+        $this->loadView("Utilisateur\index.html"); // Chargement de la vue HTML 'index.html' du contrï¿½leur
         
         echo $form->compile($this->jquery);
         echo $this->jquery->compile();
     }
 
     /**
-     * <h1>Description de la méthode</h1>
+     * <h1>Description de la mï¿½thode</h1>
      *
-     * Affiche le formulaire des préférences utilisateurs.
+     * Affiche le formulaire des prï¿½fï¿½rences utilisateurs.
      * 
      * @author Matteo ETTORI
      * @version 1.0
@@ -269,11 +269,11 @@ class UserController extends ControllerBase
     }
 
     /**
-     * <h1>Description de la méthode</h1>
+     * <h1>Description de la mï¿½thode</h1>
      *
-     * Met à  jour les données de l'utilisateur connecté.
+     * Met ï¿½ jour les donnï¿½es de l'utilisateur connectï¿½.
      * 
-     * @param id : Identifiant récupéré de l'utilisateur connecté
+     * @param id : Identifiant rï¿½cupï¿½rï¿½ de l'utilisateur connectï¿½
      * 
      * @author Matteo ETTORI
      * @version 1.0
@@ -283,54 +283,54 @@ class UserController extends ControllerBase
         $user=DAO::getOne("models\Utilisateur", $id);
         RequestUtils::setValuesToObject($user,$_POST);
         if(DAO::update($user)){
-            echo "L'utilisateur ".$user->getLogin()." a été modifié.";
+            echo "L'utilisateur ".$user->getLogin()." a ï¿½tï¿½ modifiï¿½.";
             $_SESSION["user"] = $user;
             echo $this->jquery->compile($this->view);
         }
     }
 
     /**
-     * <h1>Description de la méthode</h1>
+     * <h1>Description de la mï¿½thode</h1>
      *
-     * Exécute de l'ajout d'un nouveau lien.
+     * Exï¿½cute de l'ajout d'un nouveau lien.
      *
-     * @param id : Identifiant récupéré de l'utilisateur connecté
+     * @param id : Identifiant rï¿½cupï¿½rï¿½ de l'utilisateur connectï¿½
      * 
      * @author Matteo ETTORI
      * @version 1.0
      * {@inheritDoc}
      */
     public function newLink(){
-        $lien=new Lienweb(); // Variable 'lien' récupérant toutes les données d'un nouveau lien web 
-        RequestUtils::setValuesToObject($lien,$_POST); // Exécution de la requête d'insertion de toutes les valeurs entrées dans le formulaire d'ajout d'un nouveau lien web
-        if(DAO::insert($lien)){ // Condition vérifiant si l'insertion d'un nouveau lien est exécutée
-            echo "Le lien ".$user->getNom()." a été ajouté."; // Affichage d'un message
+        $lien=new Lienweb(); // Variable 'lien' rï¿½cupï¿½rant toutes les donnï¿½es d'un nouveau lien web 
+        RequestUtils::setValuesToObject($lien,$_POST); // Exï¿½cution de la requï¿½te d'insertion de toutes les valeurs entrï¿½es dans le formulaire d'ajout d'un nouveau lien web
+        if(DAO::insert($lien)){ // Condition vï¿½rifiant si l'insertion d'un nouveau lien est exï¿½cutï¿½e
+            echo "Le lien ".$user->getNom()." a ï¿½tï¿½ ajoutï¿½."; // Affichage d'un message
         }
     }
     
     /**
-     * <h1>Description de la méthode</h1>
+     * <h1>Description de la mï¿½thode</h1>
      *
-     * Exécute de la suppression d'un lien.
+     * Exï¿½cute de la suppression d'un lien.
      *
-     * @param id : Identifiant récupéré de l'utilisateur connecté
+     * @param id : Identifiant rï¿½cupï¿½rï¿½ de l'utilisateur connectï¿½
      * 
      * @author Matteo ETTORI
      * @version 1.0
      * {@inheritDoc}
      */
     public function deleteLink($id){
-        $liens=DAO::getOne("models\Lienweb", "id=".$id); // Variable $liens récupérant toutes les données d'un lien web selon son id et le modèle 'Lienweb'
-        $liens instanceof models\Lienweb && DAO::remove($liens); // Instanciation du modèle 'Lienweb' sur le site récupéré et exécution de la requête de suppression
+        $liens=DAO::getOne("models\Lienweb", "id=".$id); // Variable $liens rï¿½cupï¿½rant toutes les donnï¿½es d'un lien web selon son id et le modï¿½le 'Lienweb'
+        $liens instanceof models\Lienweb && DAO::remove($liens); // Instanciation du modï¿½le 'Lienweb' sur le site rï¿½cupï¿½rï¿½ et exï¿½cution de la requï¿½te de suppression
         $this->forward("controllers\UserController","listeFavoris"); // Retour sur la page d'affichage de tous les sites
     }
     
     /**
-     * <h1>Description de la méthode</h1>
+     * <h1>Description de la mï¿½thode</h1>
      *
-     * Exécute de la modification d'un lien.
+     * Exï¿½cute de la modification d'un lien.
      *
-     * @param id : Identifiant récupéré de l'utilisateur connecté
+     * @param id : Identifiant rï¿½cupï¿½rï¿½ de l'utilisateur connectï¿½
      * 
      * @author Matteo ETTORI
      * @version 1.0
@@ -342,11 +342,11 @@ class UserController extends ControllerBase
     }
     
     /**
-     * <h1>Description de la méthode</h1>
+     * <h1>Description de la mï¿½thode</h1>
      *
-     * Exécute de la mise à  jour d'un lien.
+     * Exï¿½cute de la mise ï¿½ jour d'un lien.
      *
-     * @param id : Identifiant récupéré de l'utilisateur connecté
+     * @param id : Identifiant rï¿½cupï¿½rï¿½ de l'utilisateur connectï¿½
      * 
      * @author Matteo ETTORI
      * @version 1.0
@@ -356,12 +356,12 @@ class UserController extends ControllerBase
         $liens=DAO::getOne("models\Lienweb", $id);
         RequestUtils::setValuesToObject($liens,$_POST);
         if(DAO::update($liens)){
-            echo "Le lien ".$liens->getLibelle()." a été modifié.";
+            echo "Le lien ".$liens->getLibelle()." a ï¿½tï¿½ modifiï¿½.";
         }
     }
     
     /**
-     * <h1>Description de la méthode</h1>
+     * <h1>Description de la mï¿½thode</h1>
      *
      * Affiche la liste des moteurs disponibles sous forme de tableau.
      * 
@@ -372,18 +372,18 @@ class UserController extends ControllerBase
     public function moteur(){
         $semantic=$this->jquery->semantic();
 
-        $moteurSelected=$_SESSION['user']->getMoteur(); // Récupération du moteur selectionné
-        $moteurs=DAO::getAll("models\Moteur"); // Récuperation de tout les moteurs
+        $moteurSelected=$_SESSION['user']->getMoteur(); // Rï¿½cupï¿½ration du moteur selectionnï¿½
+        $moteurs=DAO::getAll("models\Moteur"); // Rï¿½cuperation de tout les moteurs
 
         $table=$semantic->dataTable("tblMoteurs", "models\Moteur", $moteurs); // Stockage des moteurs dans un tableau
 
-        $table->setIdentifierFunction("getId"); // Récupération de l'identifiant du moteur
-        $table->setFields(["nom", "code"]); // Champs de la table 'moteur' à  afficher
-        $table->setCaptions(["Nom", "Code", "Sélectionner"]); // Titre des champs du moteur
+        $table->setIdentifierFunction("getId"); // Rï¿½cupï¿½ration de l'identifiant du moteur
+        $table->setFields(["nom", "code"]); // Champs de la table 'moteur' ï¿½ afficher
+        $table->setCaptions(["Nom", "Code", "Sï¿½lectionner"]); // Titre des champs du moteur
         $table->setTargetSelector("#divUsers");
         
-        // Différenciation du moteur déjà  selectionné par rapport aux autres
-        $table->addFieldButton("Sélectionner",false,function(&$bt,$instance) use($moteurSelected){
+        // Diffï¿½renciation du moteur dï¿½jï¿½ selectionnï¿½ par rapport aux autres
+        $table->addFieldButton("Sï¿½lectionner",false,function(&$bt,$instance) use($moteurSelected){
             if($instance->getId()==$moteurSelected->getId()){
                 $bt->addClass("disabled");
             }else{
@@ -396,22 +396,22 @@ class UserController extends ControllerBase
     }
     
     /**
-     * <h1>Description de la méthode</h1>
+     * <h1>Description de la mï¿½thode</h1>
      *
-     * Sélectionne le moteur pour le site concerné.
+     * Sï¿½lectionne le moteur pour le site concernï¿½.
      *
      * @author Joffrey MARION
      * @version 1.0
      */
     public function selectionner()
     {
-        $recupId = explode('/', $_GET['c']); // Récupération de l'identifiant du moteur à  sélectionner avec un explode de l'URL
+        $recupId = explode('/', $_GET['c']); // Rï¿½cupï¿½ration de l'identifiant du moteur ï¿½ sï¿½lectionner avec un explode de l'URL
 
-        $moteur=DAO::getOne("models\Moteur", "id=".$recupId[2]); // Récupération du moteur à  sélectionner
+        $moteur=DAO::getOne("models\Moteur", "id=".$recupId[2]); // Rï¿½cupï¿½ration du moteur ï¿½ sï¿½lectionner
         
         $_SESSION["user"]->setMoteur($moteur); // Modification du moteur du site
         
-        $_SESSION["user"] instanceof models\Utilisateur && DAO::update($_SESSION["user"]); // Envoi de la requete modifiant le moteur sélectionné pour le site
+        $_SESSION["user"] instanceof models\Utilisateur && DAO::update($_SESSION["user"]); // Envoi de la requete modifiant le moteur sï¿½lectionnï¿½ pour le site
         $this->forward("controllers\UserController","moteur"); // Retour vers l'index du controlleur
     }
 }

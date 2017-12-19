@@ -3,8 +3,8 @@
 return array(
   '#namespace' => 'controllers',
   '#uses' => array (
-  'RequestUtils' => 'micro\\utils\\RequestUtils',
-  'Controller' => 'micro\\controllers\\Controller',
+  'RequestUtils' => 'Ubiquity\\utils\\RequestUtils',
+  'Controller' => 'Ubiquity\\controllers\\Controller',
 ),
   '#traitMethodOverrides' => array (
   'controllers\\ControllerBase' => 

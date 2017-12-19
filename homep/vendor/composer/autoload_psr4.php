@@ -7,6 +7,8 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'mindplay\\annotations\\' => array($vendorDir . '/mindplay/annotations/src/annotations'),
+    'Ubiquity\\' => array($vendorDir . '/phpmv/ubiquity/Ubiquity'),
     'Twig\\' => array($vendorDir . '/twig/twig/src'),
     'Ajax\\' => array($vendorDir . '/phpmv/php-mv-ui/Ajax'),
+    '' => array($baseDir . '/app'),
 );

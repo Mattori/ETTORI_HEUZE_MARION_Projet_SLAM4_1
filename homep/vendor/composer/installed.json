@@ -144,18 +144,68 @@
         ]
     },
     {
+        "name": "phpmv/ubiquity",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/phpMv/ubiquity.git",
+            "reference": "9154771a6afadf01a9a3f2d6f35f9b8c3ed69a57"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/phpMv/ubiquity/zipball/9154771a6afadf01a9a3f2d6f35f9b8c3ed69a57",
+            "reference": "9154771a6afadf01a9a3f2d6f35f9b8c3ed69a57",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">7.0"
+        },
+        "time": "2017-12-18T01:21:46+00:00",
+        "type": "framework",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.0.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Ubiquity\\": "Ubiquity/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "authors": [
+            {
+                "name": "Jean-Christophe HERON",
+                "email": "myaddressmail@gmail.com",
+                "role": "Developer"
+            }
+        ],
+        "description": "Ubiquity-framework",
+        "keywords": [
+            "framework",
+            "mvc",
+            "orm",
+            "php"
+        ]
+    },
+    {
         "name": "phpmv/php-mv-ui",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
             "url": "https://github.com/phpMv/phpMv-UI.git",
-            "reference": "7ed86783899ee9200891a1eec122c30c5b736ac4"
+            "reference": "5059ab29e4533f9b5a22cac2c3302877d67b151e"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/phpMv/phpMv-UI/zipball/7ed86783899ee9200891a1eec122c30c5b736ac4",
-            "reference": "7ed86783899ee9200891a1eec122c30c5b736ac4",
+            "url": "https://api.github.com/repos/phpMv/phpMv-UI/zipball/5059ab29e4533f9b5a22cac2c3302877d67b151e",
+            "reference": "5059ab29e4533f9b5a22cac2c3302877d67b151e",
             "shasum": ""
         },
         "require": {
@@ -167,8 +217,13 @@
             "semantic/ui": "~2.2.1",
             "twitter/bootstrap": "~3.3"
         },
-        "time": "2017-12-12T02:56:53+00:00",
+        "time": "2017-12-18T01:25:16+00:00",
         "type": "phpmv-ui",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.3.x-dev"
+            }
+        },
         "installation-source": "source",
         "autoload": {
             "psr-4": {

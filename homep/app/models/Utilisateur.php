@@ -6,15 +6,15 @@ class Utilisateur{
 	 * @column("name"=>"id","nullable"=>"","dbType"=>"int(11)")
 	*/
 	private $id;
-	
+
 	/**
 	 * @column("name"=>"nom","nullable"=>1,"dbType"=>"varchar(25)")
-	 */
+	*/
 	private $nom;
-	
+
 	/**
 	 * @column("name"=>"prenom","nullable"=>1,"dbType"=>"varchar(25)")
-	 */
+	*/
 	private $prenom;
 
 	/**
@@ -77,21 +77,21 @@ class Utilisateur{
 	 public function setId($id){
 		$this->id=$id;
 	}
-	
-	public function getNom(){
-	    return $this->nom;
+
+	 public function getNom(){
+		return $this->nom;
 	}
-	
-	public function setNom($nom){
-	    $this->nom=$nom;
+
+	 public function setNom($nom){
+		$this->nom=$nom;
 	}
-	
-	public function getPrenom(){
-	    return $this->prenom;
+
+	 public function getPrenom(){
+		return $this->prenom;
 	}
-	
-	public function setPrenom($prenom){
-	    $this->prenom=$prenom;
+
+	 public function setPrenom($prenom){
+		$this->prenom=$prenom;
 	}
 
 	 public function getLogin(){

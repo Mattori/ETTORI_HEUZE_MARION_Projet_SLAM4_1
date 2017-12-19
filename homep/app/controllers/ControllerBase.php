@@ -1,8 +1,8 @@
 <?php
 namespace controllers;
-use micro\orm\DAO;
-use micro\utils\RequestUtils;
-use micro\controllers\Controller;
+use Ubiquity\orm\DAO;
+use Ubiquity\utils\RequestUtils;
+use Ubiquity\controllers\Controller;
  /**
  * ControllerBase
  * @property JsUtils $jquery
@@ -10,10 +10,10 @@ use micro\controllers\Controller;
 abstract class ControllerBase extends Controller
 {
     /**
-     * <h1>Description de la méthode</h1> Utilisant <b>les Tags HTML</b> et JavaDoc
-     * Pour plus de détails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
+     * <h1>Description de la mÃ©thode</h1> Utilisant <b>les Tags HTML</b> et JavaDoc
+     * Pour plus de dÃ©tails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
      *
-     * Initialise l'utilisateur connecté ainsi que son fond d'écran (dont l'URL est enregistré dans la BDD) en commençant par le Header de la vue concernée.
+     * Initialise l'utilisateur connectÃ© ainsi que son fond d'Ã©cran (dont l'URL est enregistrÃ© dans la BDD) en commenÃ©ant par le Header de la vue concernÃ©e.
      *
      * @author Matteo ETTORI
      * @version 1.0
@@ -26,10 +26,10 @@ abstract class ControllerBase extends Controller
 	}
     
 	/**
-	 * <h1>Description de la méthode</h1> Utilisant <b>les Tags HTML</b> et JavaDoc
-	 * Pour plus de détails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
+	 * <h1>Description de la mÃ©thode</h1> Utilisant <b>les Tags HTML</b> et JavaDoc
+	 * Pour plus de dÃ©tails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
 	 *
-	 * Initialise l'utilisateur connecté ainsi que son fond d'écran (dont l'URL est enregistré dans la BDD) en terminant le Footer de la vue concernée.
+	 * Initialise l'utilisateur connectÃ© ainsi que son fond d'Ã©cran (dont l'URL est enregistrÃ© dans la BDD) en terminant le Footer de la vue concernÃ©e.
 	 *
 	 * @author Matteo ETTORI
 	 * @version 1.0
@@ -42,12 +42,12 @@ abstract class ControllerBase extends Controller
 	}
 	
 	/**
-	 * <h1>Description de la méthode</h1> Utilisant <b>les Tags HTML</b> et JavaDoc </b>
-	 * Pour plus de détails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
+	 * <h1>Description de la mÃ©thode</h1> Utilisant <b>les Tags HTML</b> et JavaDoc </b>
+	 * Pour plus de dÃ©tails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
 	 *
-	 * Crée et génère le formulaire de connexion de l'utilisateur.
+	 * CrÃ©e et gÃ©nÃ©re le formulaire de connexion de l'utilisateur.
 	 *
-	 * @param ctrl : Contrôleur sur lequel effectuer l'action de connexion
+	 * @param ctrl : ContrÃ©leur sur lequel effectuer l'action de connexion
 	 * @param action : Action de retour/renvoi pour la connexion
 	 *
 	 * @author Matteo ETTORI
@@ -61,7 +61,7 @@ abstract class ControllerBase extends Controller
 	    $frm->setCaption("login", "Identifiant");
 	    $frm->setCaption("password", "Mot de passe");
 	    $frm->setCaption("remember", "Se souvenir de moi");
-	    $frm->setCaption("forget", "Mot de passe oublié ?");
+	    $frm->setCaption("forget", "Mot de passe oubliÃ©?");
 	    $frm->setCaption("submit", "Connexion");
 	    echo $frm->asModal();
 	    $this->jquery->exec("$('#modal-connect').modal('show');",true);
@@ -69,10 +69,10 @@ abstract class ControllerBase extends Controller
 	}
 	
 	/**
-	 * <h1>Description de la méthode</h1> Utilisant <b>les Tags HTML</b> et JavaDoc </b>
-	 * Pour plus de détails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
+	 * <h1>Description de la mÃ©thode</h1> Utilisant <b>les Tags HTML</b> et JavaDoc </b>
+	 * Pour plus de dÃ©tails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
 	 *
-	 * Valide la connexion de l'utilisateur et exécute l'affichage du fond d'écran le concernant.
+	 * Valide la connexion de l'utilisateur et exÃ©cute l'affichage du fond d'Ã©cran le concernant.
 	 *
 	 * @author Matteo ETTORI
 	 * @version 1.0
@@ -89,12 +89,12 @@ abstract class ControllerBase extends Controller
 	}
 
 	/**
-	 * <h1>Description de la méthode</h1> Utilisant <b>les Tags HTML</b> et JavaDoc </b>
-	 * Pour plus de détails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
+	 * <h1>Description de la mÃ©thode</h1> Utilisant <b>les Tags HTML</b> et JavaDoc </b>
+	 * Pour plus de dÃ©tails, voir : {@link http://www.dvteclipse.com/documentation/sv/Export_HTML_Documentation.html DVT Documentation}
 	 *
-	 * Met fin à la connexion (déconnexion) d'un utilisateur connecté et retourne à l'index du contrôleur concerné.
+	 * Met fin Ã© la connexion (dÃ©connexion) d'un utilisateur connectÃ© et retourne Ã© l'index du contrÃ©leur concernÃ©.
 	 * 
-	 * @param action : Action de retour/renvoi par le nom du contrôleur concerné
+	 * @param action : Action de retour/renvoi par le nom du contrÃ©leur concernÃ©
 	 *
 	 * @author Matteo ETTORI
 	 * @version 1.0

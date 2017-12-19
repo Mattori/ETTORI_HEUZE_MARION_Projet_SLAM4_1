@@ -3,8 +3,8 @@
 return array(
   '#namespace' => 'controllers',
   '#uses' => array (
-  'DAO' => 'micro\\orm\\DAO',
-  'RequestUtils' => 'micro\\utils\\RequestUtils',
+  'DAO' => 'Ubiquity\\orm\\DAO',
+  'RequestUtils' => 'Ubiquity\\utils\\RequestUtils',
   'models' => 'models',
   'Lienweb' => 'models\\Lienweb',
 ),

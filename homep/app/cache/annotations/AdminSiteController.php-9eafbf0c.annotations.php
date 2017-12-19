@@ -3,8 +3,8 @@
 return array(
   '#namespace' => 'controllers',
   '#uses' => array (
-  'DAO' => 'micro\\orm\\DAO',
-  'RequestUtils' => 'micro\\utils\\RequestUtils',
+  'DAO' => 'Ubiquity\\orm\\DAO',
+  'RequestUtils' => 'Ubiquity\\utils\\RequestUtils',
   'HtmlFormCheckbox' => 'Ajax\\semantic\\html\\collections\\form\\HtmlFormCheckbox',
   'models' => 'models',
   'Moteur' => 'models\\Moteur',

@@ -10,19 +10,23 @@ return array(
   ),
 ),
   'models\\Moteur::$id' => array(
-    array('#name' => 'id', '#type' => 'micro\\annotations\\IdAnnotation')
+    array('#name' => 'id', '#type' => 'Ubiquity\\annotations\\IdAnnotation'),
+    array('#name' => 'column', '#type' => 'Ubiquity\\annotations\\ColumnAnnotation', "name"=>"id","nullable"=>"","dbType"=>"int(11)")
   ),
-  'models\\Moteur::$etablissement' => array(
-    array('#name' => 'manyToOne', '#type' => 'micro\\annotations\\ManyToOneAnnotation'),
-    array('#name' => 'joinColumn', '#type' => 'micro\\annotations\\JoinColumnAnnotation', "className"=>"models\\Etablissement","name"=>"idEtablissement","nullable"=>"")
+  'models\\Moteur::$nom' => array(
+    array('#name' => 'column', '#type' => 'Ubiquity\\annotations\\ColumnAnnotation', "name"=>"nom","nullable"=>1,"dbType"=>"varchar(45)")
   ),
-  'models\\Moteur::$site' => array(
-    array('#name' => 'manyToOne', '#type' => 'micro\\annotations\\ManyToOneAnnotation'),
-    array('#name' => 'joinColumn', '#type' => 'micro\\annotations\\JoinColumnAnnotation', "className"=>"models\\Site","name"=>"idSite","nullable"=>"")
+  'models\\Moteur::$code' => array(
+    array('#name' => 'column', '#type' => 'Ubiquity\\annotations\\ColumnAnnotation', "name"=>"code","nullable"=>1,"dbType"=>"text")
   ),
-  'models\\Moteur::$utilisateur' => array(
-    array('#name' => 'manyToOne', '#type' => 'micro\\annotations\\ManyToOneAnnotation'),
-    array('#name' => 'joinColumn', '#type' => 'micro\\annotations\\JoinColumnAnnotation', "className"=>"models\\Utilisateur","name"=>"idUtilisateur","nullable"=>"")
+  'models\\Moteur::$etablissements' => array(
+    array('#name' => 'oneToMany', '#type' => 'Ubiquity\\annotations\\OneToManyAnnotation', "mappedBy"=>"moteur","className"=>"models\\Etablissement")
+  ),
+  'models\\Moteur::$sites' => array(
+    array('#name' => 'oneToMany', '#type' => 'Ubiquity\\annotations\\OneToManyAnnotation', "mappedBy"=>"moteur","className"=>"models\\Site")
+  ),
+  'models\\Moteur::$utilisateurs' => array(
+    array('#name' => 'oneToMany', '#type' => 'Ubiquity\\annotations\\OneToManyAnnotation', "mappedBy"=>"moteur","className"=>"models\\Utilisateur")
   ),
 );
 
