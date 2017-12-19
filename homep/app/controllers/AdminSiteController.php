@@ -29,7 +29,15 @@ class AdminSiteController extends ControllerBase
         $fond="";
         if(isset($_SESSION["user"])){
             $user=$_SESSION["user"];
-            $fond=$user->getFondEcran();
+            // condition vérifiant les droits de personalisation, 2 correspondants à l'option fond d'ecran
+            if(strpos($user->getSite()->getOptions(),"2") != null)
+            {
+                $fond=$user->getFondEcran();
+            }
+            else
+            {
+                $fond=$user->getSite()->getFondEcran();
+            }
         }
         if(!RequestUtils::isAjax()){
             $this->loadView("main/vHeader.html",["fond"=>$fond]);
@@ -62,6 +70,7 @@ class AdminSiteController extends ControllerBase
             
             $frm->setProperty("action","https://www.google.fr/search?q=");
         } else {
+            // /!\ à faire: condition verifiant les droits avant de savoir quel moteur utiliser
             $moteur=DAO::getOne("models\Utilisateur","idMoteur=".$_SESSION["user"]->getMoteur());
             if($_SESSION["user"]->getStatut()->getId() >=2) {     
                 $menu->addItem("<h4 class='ui header'>Configuration du site</h4>");
@@ -221,12 +230,14 @@ class AdminSiteController extends ControllerBase
         {
             if($siteOptions[$i]!=$recupId[2])
             {
-                // Condition vérifiant si on est éla premiére option
-                if($i == 0)
+                // Condition vérifiant si on est �la premi�re option
+                if($newOptn == "")
                 {
-                    $newOptn = $siteOptions[$i]; // N'afficha pas la virgule
+                    $newOptn = $siteOptions[$i]; // N'affiche pas la virgule
+                }else
+                {
+                    $newOptn = $newOptn . "," . $siteOptions[$i];
                 }
-                $newOptn = $newOptn . "," . $siteOptions[$i];
             }
             $i = $i + 1;
         }

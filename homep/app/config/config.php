@@ -18,6 +18,7 @@ return array(
 		"di"=>["jquery"=>function(){
 							$jquery=new Ajax\php\Ubiquity\JsUtils(["defer"=>true]);
 							$jquery->semantic(new Ajax\Semantic());
+							$jquery->setAjaxLoader('<div class="ui active inverted dimmer"><div class="ui text loader">Loading</div></div><p></p>');
 							return $jquery;
 						}],
 		"cache"=>["directory"=>"cache/","system"=>"Ubiquity\\cache\\system\\ArrayCache","params"=>[]],
