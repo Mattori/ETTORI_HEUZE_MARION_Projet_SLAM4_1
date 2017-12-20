@@ -1,11 +1,11 @@
 <?php
 namespace controllers;
 
+use Ajax\semantic\html\collections\HtmlBreadcrumb;
 use Ubiquity\orm\DAO;
 use Ubiquity\utils\RequestUtils;
 use models;
 use models\Moteur;
-use Ajax\semantic\html\collections\HtmlBreadcrumb;
 
 /**
  * Controller AdminSiteController

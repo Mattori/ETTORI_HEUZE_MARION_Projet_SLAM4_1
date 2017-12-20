@@ -1,11 +1,11 @@
 <?php
 namespace controllers;
 
+use Ajax\semantic\html\collections\HtmlBreadcrumb;
 use Ubiquity\orm\DAO;
 use Ubiquity\utils\RequestUtils;
 use models;
 use models\Lienweb;
-use Ajax\semantic\html\collections\HtmlBreadcrumb;
 
 
 /**
@@ -83,6 +83,16 @@ class UserController extends ControllerBase
             $mess=$semantic->htmlMessage("mess3","Vous êtes désormais connecté, ".$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom(). "!");
             $mess->addHeader("Bienvenue !");
             $mess->setDismissable();
+            
+            $menu2=$semantic->htmlMenu("menu2");
+            if($_SESSION["user"]->getStatut()->getId() >= 3) {
+                $menu2->addDropdownAsItem("Administration",["Globale", "Sites"]);
+                $menu2->setPropertyValues("data-value", ["../SiteController/", "../AdminSiteController/"]);
+            } elseif($_SESSION["user"]->getStatut()->getId() == 2) {
+                $menu2->addDropdownAsItem("Administration",["Sites"]);
+                $menu2->setPropertyValues("data-value", ["../SiteController/"]);
+            }
+            $menu2->setProperty("method","post");
         }
         
         $bc=new HtmlBreadcrumb("bc2", array("Accueil","Utilisateur"));
