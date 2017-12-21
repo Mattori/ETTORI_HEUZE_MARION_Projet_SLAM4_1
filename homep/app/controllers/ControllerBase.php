@@ -3,6 +3,7 @@ namespace controllers;
 use Ubiquity\orm\DAO;
 use Ubiquity\utils\RequestUtils;
 use Ubiquity\controllers\Controller;
+use Ajax\JsUtils;
  /**
  * ControllerBase
  * @property JsUtils $jquery

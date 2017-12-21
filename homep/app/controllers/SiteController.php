@@ -75,6 +75,11 @@ class SiteController extends ControllerBase
             $mess->setDismissable();
         }
         else{
+            $menu2=$semantic->htmlMenu("menu2");
+            $menu2->addItem("<h4 class='ui header'>Administration de sites</h4>");
+            $menu2->addItem("<h4 class='ui header'>Préférences utilisateur</h4>");
+            $menu2->setPropertyValues("href", ["AdminSiteController/", "UserController/"]);
+            
             $title=$semantic->htmlHeader("header5",4);
             $title->asImage("https://semantic-ui.com/images/avatar2/large/patrick.png",$_SESSION["user"]->getNom()." ".$_SESSION["user"]->getPrenom());
 

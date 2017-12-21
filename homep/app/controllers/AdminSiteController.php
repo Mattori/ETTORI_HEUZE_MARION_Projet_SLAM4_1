@@ -72,7 +72,21 @@ class AdminSiteController extends ControllerBase
         } else {
             // /!\ à faire: condition verifiant les droits avant de savoir quel moteur utiliser
             $moteur=DAO::getOne("models\Utilisateur","idMoteur=".$_SESSION["user"]->getMoteur());
-            if($_SESSION["user"]->getStatut()->getId() >=2) {     
+            
+            if($_SESSION["user"]->getStatut()->getId() >= 3) {
+                $menu2=$semantic->htmlMenu("menu2");
+                $menu2->addItem("<h4 class='ui header'>Administration globale</h4>");
+                $menu2->addItem("<h4 class='ui header'>Préférences utilisateur</h4>");
+                $menu2->setPropertyValues("href", ["SiteController/", "UserController/"]);
+            }
+            
+            if($_SESSION["user"]->getStatut()->getId() == 2) {
+                $menu2=$semantic->htmlMenu("menu2");
+                $menu2->addItem("<h4 class='ui header'>Préférences utilisateur</h4>");
+                $menu2->setPropertyValues("href", ["UserController/"]);
+            }
+            
+            if($_SESSION["user"]->getStatut()->getId() >= 2) {     
                 $menu->addItem("<h4 class='ui header'>Configuration du site</h4>");
                 $menu->addItem("<h4 class='ui header'>Moteur de recherche</h4>");
                 $menu->addItem("<h4 class='ui header'>Ordre des éléments</h4>");

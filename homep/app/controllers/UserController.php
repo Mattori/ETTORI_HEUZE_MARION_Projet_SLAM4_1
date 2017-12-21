@@ -84,15 +84,16 @@ class UserController extends ControllerBase
             $mess->addHeader("Bienvenue !");
             $mess->setDismissable();
             
-            $menu2=$semantic->htmlMenu("menu2");
             if($_SESSION["user"]->getStatut()->getId() >= 3) {
-                $menu2->addDropdownAsItem("Administration",["Globale", "Sites"]);
-                $menu2->setPropertyValues("data-value", ["../SiteController/", "../AdminSiteController/"]);
+                $menu2=$semantic->htmlMenu("menu2");
+                $menu2->addItem("<h4 class='ui header'>Administration globale</h4>");
+                $menu2->addItem("<h4 class='ui header'>Administration de sites</h4>");
+                $menu2->setPropertyValues("href", ["SiteController/", "AdminSiteController/"]);
             } elseif($_SESSION["user"]->getStatut()->getId() == 2) {
-                $menu2->addDropdownAsItem("Administration",["Sites"]);
-                $menu2->setPropertyValues("data-value", ["../SiteController/"]);
+                $menu2=$semantic->htmlMenu("menu2");
+                $menu2->addItem("<h4 class='ui header'>Administration de sites</h4>");
+                $menu2->setPropertyValues("href", ["controllers/SiteController/"]);
             }
-            $menu2->setProperty("method","post");
         }
         
         $bc=new HtmlBreadcrumb("bc2", array("Accueil","Utilisateur"));
